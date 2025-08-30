@@ -6,9 +6,8 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearchPostgres"]
+  previewFeatures = ["fullTextSearch"]
 }
-
 
 model Account {
   id                String  @id @default(cuid())
