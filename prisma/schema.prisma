@@ -523,8 +523,8 @@ model BoostedPost {
   
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId    Int      @unique
+  post     Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId   Int    @unique
 }
 
 // Additional enums
