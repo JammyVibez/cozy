@@ -1,7 +1,7 @@
-import { DiscoverPage } from '@/components/DiscoverPage';
+import { DiscoverPage } from "@/components/DiscoverPage";
 
 export const metadata = {
-  title: 'Cozy | Discover',
+  title: "Cozy | Discover",
 };
 
 export default function Discover() {

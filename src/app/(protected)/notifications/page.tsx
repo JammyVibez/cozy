@@ -1,8 +1,8 @@
-import { getServerUser } from '@/lib/getServerUser';
-import { Notifications } from './Notifications';
+import { getServerUser } from "@/lib/getServerUser";
+import { Notifications } from "./Notifications";
 
 export const metadata = {
-  title: 'Cozy | Notifications',
+  title: "Cozy | Notifications",
 };
 
 export default async function Page() {

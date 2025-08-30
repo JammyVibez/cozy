@@ -1,9 +1,9 @@
-import SvgArrowReply from '@/svg_components/ArrowReply';
-import SvgAtSign from '@/svg_components/AtSign';
-import SvgComment from '@/svg_components/Comment';
-import SvgHeart from '@/svg_components/Heart';
-import SvgProfile from '@/svg_components/Profile';
-import { ActivityType } from '@prisma/client';
+import SvgArrowReply from "@/svg_components/ArrowReply";
+import SvgAtSign from "@/svg_components/AtSign";
+import SvgComment from "@/svg_components/Comment";
+import SvgHeart from "@/svg_components/Heart";
+import SvgProfile from "@/svg_components/Profile";
+import { ActivityType } from "@prisma/client";
 
 function CreateFollowNotificationIcon() {
   return (

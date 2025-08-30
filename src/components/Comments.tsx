@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useCallback, useMemo } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { GetComment } from '@/types/definitions';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getComments } from '@/lib/client_data_fetching/getComments';
-import { useSession } from 'next-auth/react';
-import { useShouldAnimate } from '@/hooks/useShouldAnimate';
-import { commentFramerVariants } from '@/lib/framerVariants';
-import { CommentCreate } from './CommentCreate';
-import { Comment } from './Comment';
+import { useCallback, useMemo } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { GetComment } from "@/types/definitions";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getComments } from "@/lib/client_data_fetching/getComments";
+import { useSession } from "next-auth/react";
+import { useShouldAnimate } from "@/hooks/useShouldAnimate";
+import { commentFramerVariants } from "@/lib/framerVariants";
+import { CommentCreate } from "./CommentCreate";
+import { Comment } from "./Comment";
 
 export function Comments({ postId }: { postId: number }) {
   const qc = useQueryClient();
-  const queryKey = useMemo(() => ['posts', postId, 'comments'], [postId]);
+  const queryKey = useMemo(() => ["posts", postId, "comments"], [postId]);
 
   const { data: session } = useSession();
   const { shouldAnimate } = useShouldAnimate();
@@ -37,7 +37,9 @@ export function Comments({ postId }: { postId: number }) {
         const newComments = [...oldComments];
 
         // Find the index of the comment to update
-        const index = newComments.findIndex((comment) => comment.id === commentId);
+        const index = newComments.findIndex(
+          (comment) => comment.id === commentId,
+        );
 
         const oldComment = newComments[index];
 
@@ -65,10 +67,11 @@ export function Comments({ postId }: { postId: number }) {
               comments?.map((comment) => (
                 <motion.div
                   variants={commentFramerVariants}
-                  initial={shouldAnimate ? 'start' : false}
+                  initial={shouldAnimate ? "start" : false}
                   animate="animate"
                   exit="exit"
-                  key={`posts-${postId}-comments-${comment.id}`}>
+                  key={`posts-${postId}-comments-${comment.id}`}
+                >
                   <Comment
                     {...comment}
                     {...{
@@ -80,7 +83,9 @@ export function Comments({ postId }: { postId: number }) {
                 </motion.div>
               ))
             ) : (
-              <p className="py-2 text-muted-foreground">Be the first to comment.</p>
+              <p className="py-2 text-muted-foreground">
+                Be the first to comment.
+              </p>
             )}
           </AnimatePresence>
         )}

@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/auth';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
 
 export async function POST(request: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await request.json();
-    const { badgeType = 'VERIFIED' } = body;
+    const { badgeType = "VERIFIED" } = body;
 
     // In a real implementation, you would:
     // 1. Process payment with Stripe/payment provider
@@ -17,19 +17,19 @@ export async function POST(request: NextRequest) {
     // 3. Update user's badge status
 
     // For now, return success response
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Premium badge purchase initiated',
+    return NextResponse.json({
+      success: true,
+      message: "Premium badge purchase initiated",
       badge: {
         type: badgeType,
-        price: badgeType === 'VERIFIED' ? 2.99 : 4.99,
-      }
+        price: badgeType === "VERIFIED" ? 2.99 : 4.99,
+      },
     });
   } catch (error) {
-    console.error('Error purchasing premium badge:', error);
+    console.error("Error purchasing premium badge:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // In a real implementation, fetch user's badge from database
@@ -47,33 +47,33 @@ export async function GET(request: NextRequest) {
       hasPremiumBadge: false,
       availableBadges: [
         {
-          type: 'VERIFIED',
-          name: 'Verified',
-          description: 'Golden verified badge',
+          type: "VERIFIED",
+          name: "Verified",
+          description: "Golden verified badge",
           price: 2.99,
-          icon: '✨'
+          icon: "✨",
         },
         {
-          type: 'PREMIUM',
-          name: 'Premium',
-          description: 'Premium supporter badge',
+          type: "PREMIUM",
+          name: "Premium",
+          description: "Premium supporter badge",
           price: 4.99,
-          icon: '🏆'
+          icon: "🏆",
         },
         {
-          type: 'CREATOR',
-          name: 'Creator',
-          description: 'Content creator badge',
+          type: "CREATOR",
+          name: "Creator",
+          description: "Content creator badge",
           price: 7.99,
-          icon: '🎨'
-        }
-      ]
+          icon: "🎨",
+        },
+      ],
     });
   } catch (error) {
-    console.error('Error fetching badge info:', error);
+    console.error("Error fetching badge info:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }

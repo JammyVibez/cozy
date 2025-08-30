@@ -1,8 +1,8 @@
-import 'server-only';
+import "server-only";
 // Migrated from S3 to Cloudinary
-import { deleteMedia } from '../cloudinary/deleteMedia';
-import { DeleteObjectCommand } from '@aws-sdk/client-s3';
-import { s3Client } from './s3Client';
+import { deleteMedia } from "../cloudinary/deleteMedia";
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { s3Client } from "./s3Client";
 
 /**
  * Delete media from storage.
@@ -10,7 +10,7 @@ import { s3Client } from './s3Client';
  */
 export async function deleteObject(fileName: string) {
   // Handle legacy S3 files (during migration period)
-  if (fileName.includes('amazonaws.com') || !fileName.includes('/')) {
+  if (fileName.includes("amazonaws.com") || !fileName.includes("/")) {
     try {
       const command = new DeleteObjectCommand({
         Bucket: process.env.S3_BUCKET_NAME,
@@ -18,13 +18,13 @@ export async function deleteObject(fileName: string) {
       });
       await s3Client.send(command);
     } catch (error) {
-      console.error('S3 delete error (legacy file):', error);
+      console.error("S3 delete error (legacy file):", error);
       // Continue with Cloudinary deletion attempt
     }
   }
-  
+
   // Use Cloudinary for new files (Cloudinary public IDs contain forward slashes)
-  if (fileName.includes('/')) {
+  if (fileName.includes("/")) {
     await deleteMedia(fileName);
   }
 }

@@ -4,18 +4,21 @@
  * a comment specified on the :commentId param.
  */
 
-import { convertMentionUsernamesToIds } from '@/lib/convertMentionUsernamesToIds';
-import { getServerUser } from '@/lib/getServerUser';
-import { mentionsActivityLogger } from '@/lib/mentionsActivityLogger';
-import { includeToComment } from '@/lib/prisma/includeToComment';
-import prisma from '@/lib/prisma/prisma';
-import { toGetComment } from '@/lib/prisma/toGetComment';
-import { commentWriteSchema } from '@/lib/validations/comment';
-import { NextResponse } from 'next/server';
-import { GetComment } from '@/types/definitions';
-import { z } from 'zod';
+import { convertMentionUsernamesToIds } from "@/lib/convertMentionUsernamesToIds";
+import { getServerUser } from "@/lib/getServerUser";
+import { mentionsActivityLogger } from "@/lib/mentionsActivityLogger";
+import { includeToComment } from "@/lib/prisma/includeToComment";
+import prisma from "@/lib/prisma/prisma";
+import { toGetComment } from "@/lib/prisma/toGetComment";
+import { commentWriteSchema } from "@/lib/validations/comment";
+import { NextResponse } from "next/server";
+import { GetComment } from "@/types/definitions";
+import { z } from "zod";
 
-export async function POST(request: Request, { params }: { params: { commentId: string } }) {
+export async function POST(
+  request: Request,
+  { params }: { params: { commentId: string } },
+) {
   const [user] = await getServerUser();
   if (!user) return NextResponse.json({}, { status: 401 });
   const userId = user.id;
@@ -39,7 +42,11 @@ export async function POST(request: Request, { params }: { params: { commentId: 
       },
     });
 
-    if (!comment) return NextResponse.json({ error: 'The comment to reply to does not exist.' }, { status: 404 });
+    if (!comment)
+      return NextResponse.json(
+        { error: "The comment to reply to does not exist." },
+        { status: 404 },
+      );
 
     const res = await prisma.comment.create({
       data: {
@@ -56,7 +63,7 @@ export async function POST(request: Request, { params }: { params: { commentId: 
     if (comment) {
       await prisma.activity.create({
         data: {
-          type: 'CREATE_REPLY',
+          type: "CREATE_REPLY",
           sourceId: res.id,
           sourceUserId: userId,
           targetId: commentId,
@@ -69,7 +76,7 @@ export async function POST(request: Request, { params }: { params: { commentId: 
     await mentionsActivityLogger({
       usersMentioned,
       activity: {
-        type: 'REPLY_MENTION',
+        type: "REPLY_MENTION",
         sourceUserId: userId,
         sourceId: res.id,
         targetId: res.parentId,
@@ -82,7 +89,7 @@ export async function POST(request: Request, { params }: { params: { commentId: 
     if (error instanceof z.ZodError) {
       return NextResponse.json(null, {
         status: 422,
-        statusText: error.issues[0].message || 'Input validation error',
+        statusText: error.issues[0].message || "Input validation error",
       });
     }
 

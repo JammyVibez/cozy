@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
-import { cn } from '@/lib/cn';
-import { useToast } from '@/hooks/useToast';
-import Button from './ui/Button';
-import { Close } from '@/svg_components';
+import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/cn";
+import { useToast } from "@/hooks/useToast";
+import Button from "./ui/Button";
+import { Close } from "@/svg_components";
 
 interface CreateEventModalProps {
   communityId: string;
@@ -14,67 +14,102 @@ interface CreateEventModalProps {
 }
 
 const eventTypes = [
-  { value: 'DISCUSSION', label: 'Discussion', emoji: '💬', description: 'Community discussion or Q&A' },
-  { value: 'AMA', label: 'Ask Me Anything', emoji: '❓', description: 'Interactive Q&A session' },
-  { value: 'TOURNAMENT', label: 'Tournament', emoji: '🏆', description: 'Gaming or competition event' },
-  { value: 'WORKSHOP', label: 'Workshop', emoji: '🛠️', description: 'Educational or skill-building session' },
-  { value: 'SOCIAL', label: 'Social Event', emoji: '🎉', description: 'Casual community gathering' },
-  { value: 'OTHER', label: 'Other', emoji: '📝', description: 'Custom event type' },
+  {
+    value: "DISCUSSION",
+    label: "Discussion",
+    emoji: "💬",
+    description: "Community discussion or Q&A",
+  },
+  {
+    value: "AMA",
+    label: "Ask Me Anything",
+    emoji: "❓",
+    description: "Interactive Q&A session",
+  },
+  {
+    value: "TOURNAMENT",
+    label: "Tournament",
+    emoji: "🏆",
+    description: "Gaming or competition event",
+  },
+  {
+    value: "WORKSHOP",
+    label: "Workshop",
+    emoji: "🛠️",
+    description: "Educational or skill-building session",
+  },
+  {
+    value: "SOCIAL",
+    label: "Social Event",
+    emoji: "🎉",
+    description: "Casual community gathering",
+  },
+  {
+    value: "OTHER",
+    label: "Other",
+    emoji: "📝",
+    description: "Custom event type",
+  },
 ];
 
-export function CreateEventModal({ communityId, onClose }: CreateEventModalProps) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [type, setType] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
-  const [location, setLocation] = useState('');
-  const [maxAttendees, setMaxAttendees] = useState('');
-  
+export function CreateEventModal({
+  communityId,
+  onClose,
+}: CreateEventModalProps) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [type, setType] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [location, setLocation] = useState("");
+  const [maxAttendees, setMaxAttendees] = useState("");
+
   const { showToast } = useToast();
   const queryClient = useQueryClient();
 
   const createMutation = useMutation({
     mutationFn: async (data: any) => {
       const response = await fetch(`/api/communities/${communityId}/events`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      
+
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || 'Failed to create event');
+        throw new Error(error.error || "Failed to create event");
       }
-      
+
       return response.json();
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['community-events', communityId] });
-      showToast({ 
-        title: 'Event Created!', 
+      queryClient.invalidateQueries({
+        queryKey: ["community-events", communityId],
+      });
+      showToast({
+        title: "Event Created!",
         message: `${data.event.title} has been scheduled`,
-        type: 'success' 
+        type: "success",
       });
       onClose();
     },
     onError: (error: Error) => {
-      showToast({ 
-        title: 'Error', 
-        message: error.message, 
-        type: 'error' 
+      showToast({
+        title: "Error",
+        message: error.message,
+        type: "error",
       });
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!title.trim() || !type || !startTime) {
-      showToast({ 
-        title: 'Error', 
-        message: 'Please fill in all required fields', 
-        type: 'error' 
+      showToast({
+        title: "Error",
+        message: "Please fill in all required fields",
+        type: "error",
       });
       return;
     }
@@ -82,21 +117,21 @@ export function CreateEventModal({ communityId, onClose }: CreateEventModalProps
     // Validate dates
     const start = new Date(startTime);
     const end = endTime ? new Date(endTime) : null;
-    
+
     if (start <= new Date()) {
-      showToast({ 
-        title: 'Error', 
-        message: 'Event must be scheduled for the future', 
-        type: 'error' 
+      showToast({
+        title: "Error",
+        message: "Event must be scheduled for the future",
+        type: "error",
       });
       return;
     }
 
     if (end && end <= start) {
-      showToast({ 
-        title: 'Error', 
-        message: 'End time must be after start time', 
-        type: 'error' 
+      showToast({
+        title: "Error",
+        message: "End time must be after start time",
+        type: "error",
       });
       return;
     }
@@ -113,7 +148,9 @@ export function CreateEventModal({ communityId, onClose }: CreateEventModalProps
   };
 
   // Get minimum datetime for input (current time + 1 hour)
-  const minDateTime = new Date(Date.now() + 60 * 60 * 1000).toISOString().slice(0, 16);
+  const minDateTime = new Date(Date.now() + 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 16);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
@@ -182,10 +219,10 @@ export function CreateEventModal({ communityId, onClose }: CreateEventModalProps
                   type="button"
                   onClick={() => setType(eventType.value)}
                   className={cn(
-                    'p-4 rounded-lg border text-left transition-colors',
+                    "p-4 rounded-lg border text-left transition-colors",
                     type === eventType.value
-                      ? 'bg-primary text-primary-foreground border-primary'
-                      : 'hover:bg-muted border-input'
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "hover:bg-muted border-input",
                   )}
                 >
                   <div className="flex items-center gap-3">
@@ -216,11 +253,9 @@ export function CreateEventModal({ communityId, onClose }: CreateEventModalProps
                 className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               />
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium mb-2">
-                End Time
-              </label>
+              <label className="block text-sm font-medium mb-2">End Time</label>
               <input
                 type="datetime-local"
                 value={endTime}
@@ -234,9 +269,7 @@ export function CreateEventModal({ communityId, onClose }: CreateEventModalProps
           {/* Location and Capacity */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Location
-              </label>
+              <label className="block text-sm font-medium mb-2">Location</label>
               <input
                 type="text"
                 value={location}
@@ -246,7 +279,7 @@ export function CreateEventModal({ communityId, onClose }: CreateEventModalProps
                 className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               />
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium mb-2">
                 Max Attendees

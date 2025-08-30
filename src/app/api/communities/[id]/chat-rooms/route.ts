@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/auth';
-import prisma from '@/lib/prisma/prisma';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import prisma from "@/lib/prisma/prisma";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const communityId = params.id;
@@ -26,7 +26,7 @@ export async function GET(
     });
 
     if (!membership) {
-      return NextResponse.json({ error: 'Not a member' }, { status: 403 });
+      return NextResponse.json({ error: "Not a member" }, { status: 403 });
     }
 
     const chatRooms = await prisma.communityChatRoom.findMany({
@@ -34,7 +34,7 @@ export async function GET(
         communityId,
         OR: [
           { isPublic: true },
-          { 
+          {
             participants: {
               some: {
                 userId,
@@ -52,7 +52,7 @@ export async function GET(
         },
         messages: {
           orderBy: {
-            createdAt: 'desc',
+            createdAt: "desc",
           },
           take: 1,
           include: {
@@ -67,28 +67,28 @@ export async function GET(
         },
       },
       orderBy: {
-        createdAt: 'asc',
+        createdAt: "asc",
       },
     });
 
     return NextResponse.json({ chatRooms });
   } catch (error) {
-    console.error('Error fetching chat rooms:', error);
+    console.error("Error fetching chat rooms:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const communityId = params.id;
@@ -104,19 +104,25 @@ export async function POST(
       },
     });
 
-    if (!membership || !['ADMIN', 'MODERATOR'].includes(membership.role)) {
-      return NextResponse.json({ 
-        error: 'Only admins and moderators can create chat rooms' 
-      }, { status: 403 });
+    if (!membership || !["ADMIN", "MODERATOR"].includes(membership.role)) {
+      return NextResponse.json(
+        {
+          error: "Only admins and moderators can create chat rooms",
+        },
+        { status: 403 },
+      );
     }
 
     const body = await request.json();
     const { name, description, isPublic } = body;
 
     if (!name || name.trim().length === 0) {
-      return NextResponse.json({ 
-        error: 'Chat room name is required' 
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: "Chat room name is required",
+        },
+        { status: 400 },
+      );
     }
 
     const chatRoom = await prisma.communityChatRoom.create({
@@ -138,10 +144,10 @@ export async function POST(
 
     return NextResponse.json({ success: true, chatRoom });
   } catch (error) {
-    console.error('Error creating chat room:', error);
+    console.error("Error creating chat room:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }

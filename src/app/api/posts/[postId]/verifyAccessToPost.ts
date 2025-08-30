@@ -1,5 +1,5 @@
-import { getServerUser } from '@/lib/getServerUser';
-import prisma from '@/lib/prisma/prisma';
+import { getServerUser } from "@/lib/getServerUser";
+import prisma from "@/lib/prisma/prisma";
 
 export const verifyAccessToPost = async (postId: number) => {
   const [user] = await getServerUser();

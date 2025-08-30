@@ -2,11 +2,13 @@
  * Use this function to convert the result of using the `./selectPost`
  * in a Prisma `post` find query, to the <GetPost> type.
  */
-import { FindPostResult, GetPost, GetVisualMedia } from '@/types/definitions';
-import { convertMentionUsernamesToIds } from '../convertMentionUsernamesToIds';
-import { fileNameToUrl } from '../s3/fileNameToUrl';
+import { FindPostResult, GetPost, GetVisualMedia } from "@/types/definitions";
+import { convertMentionUsernamesToIds } from "../convertMentionUsernamesToIds";
+import { fileNameToUrl } from "../s3/fileNameToUrl";
 
-export async function toGetPost(findPostResult: FindPostResult): Promise<GetPost> {
+export async function toGetPost(
+  findPostResult: FindPostResult,
+): Promise<GetPost> {
   /**
    * Exclude the `postLikes` property as this is not needed in <GetPost>,
    * it is only used to determine whether the user requesting the post
@@ -16,14 +18,16 @@ export async function toGetPost(findPostResult: FindPostResult): Promise<GetPost
 
   // Convert the `@` `id` mentions back to usernames
   const { str } = await convertMentionUsernamesToIds({
-    str: content || '',
+    str: content || "",
     reverse: true,
   });
 
-  const visualMedia: GetVisualMedia[] = rest.visualMedia.map(({ type, fileName }) => ({
-    type,
-    url: fileNameToUrl(fileName) as string,
-  }));
+  const visualMedia: GetVisualMedia[] = rest.visualMedia.map(
+    ({ type, fileName }) => ({
+      type,
+      url: fileNameToUrl(fileName) as string,
+    }),
+  );
 
   return {
     ...rest,

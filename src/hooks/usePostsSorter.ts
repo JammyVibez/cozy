@@ -1,4 +1,4 @@
-import 'server-only';
+import "server-only";
 
 /**
  * Hook to easily filter posts, this allows paginated queries with varying directions ('asc' and 'desc')
@@ -6,9 +6,10 @@ import 'server-only';
  */
 export function usePostsSorter(url: string) {
   const { searchParams } = new URL(url);
-  const limit = parseInt(searchParams.get('limit') || '5', 10);
-  const cursor = parseInt(searchParams.get('cursor') || '0', 10);
-  const sortDirection = (searchParams.get('sort-direction') as 'asc' | 'desc') || 'desc';
+  const limit = parseInt(searchParams.get("limit") || "5", 10);
+  const cursor = parseInt(searchParams.get("cursor") || "0", 10);
+  const sortDirection =
+    (searchParams.get("sort-direction") as "asc" | "desc") || "desc";
 
   /**
    * This is an alternative approach to Prisma's cursor-based pagination
@@ -21,10 +22,10 @@ export function usePostsSorter(url: string) {
   const filters = cursor
     ? {
         id: {
-          ...(sortDirection === 'desc' && {
+          ...(sortDirection === "desc" && {
             lt: cursor,
           }),
-          ...(sortDirection === 'asc' && {
+          ...(sortDirection === "asc" && {
             gt: cursor,
           }),
         },

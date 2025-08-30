@@ -1,10 +1,10 @@
-import { CreatePostModalLauncher } from '@/components/CreatePostModalLauncher';
-import { Posts } from '@/components/Posts';
-import { ThemeSwitch } from '@/components/ui/ThemeSwitch';
-import { getServerUser } from '@/lib/getServerUser';
+import { CreatePostModalLauncher } from "@/components/CreatePostModalLauncher";
+import { Posts } from "@/components/Posts";
+import { ThemeSwitch } from "@/components/ui/ThemeSwitch";
+import { getServerUser } from "@/lib/getServerUser";
 
 export const metadata = {
-  title: 'Cozy | Feed',
+  title: "Cozy | Feed",
 };
 
 export default async function Page() {

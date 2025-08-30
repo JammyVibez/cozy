@@ -73,7 +73,9 @@
       "short_name": "Alerts",
       "description": "View notifications",
       "url": "/notifications",
-      "icons": [{ "src": "/icons/shortcut-notifications.png", "sizes": "96x96" }]
+      "icons": [
+        { "src": "/icons/shortcut-notifications.png", "sizes": "96x96" }
+      ]
     },
     {
       "name": "Discover",

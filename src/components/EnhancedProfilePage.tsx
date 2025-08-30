@@ -1,24 +1,24 @@
-'use client';
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useSession } from 'next-auth/react';
-import { cn } from '@/lib/cn';
-import Button from '@/components/ui/Button';
-import { QuickThemeToggle } from '@/components/AdvancedThemeSwitch';
-import { 
-  TwoPeople, 
-  Heart, 
-  Comment, 
+"use client";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { cn } from "@/lib/cn";
+import Button from "@/components/ui/Button";
+import { QuickThemeToggle } from "@/components/AdvancedThemeSwitch";
+import {
+  TwoPeople,
+  Heart,
+  Comment,
   GridFeedCards,
   DeviceLaptop,
   Send,
   More,
   ActionsPlus,
   Calendar,
-  WorldNet
-} from '@/svg_components';
+  WorldNet,
+} from "@/svg_components";
 
 interface ProfileStats {
   posts: number;
@@ -47,32 +47,38 @@ interface EnhancedProfilePageProps {
   isOwnProfile: boolean;
 }
 
-export function EnhancedProfilePage({ user, stats, isOwnProfile }: EnhancedProfilePageProps) {
+export function EnhancedProfilePage({
+  user,
+  stats,
+  isOwnProfile,
+}: EnhancedProfilePageProps) {
   const { data: session } = useSession();
-  const [activeTab, setActiveTab] = useState<'posts' | 'media' | 'likes'>('posts');
+  const [activeTab, setActiveTab] = useState<"posts" | "media" | "likes">(
+    "posts",
+  );
   const [isFollowing, setIsFollowing] = useState(user.isFollowing || false);
 
   const handleFollow = async () => {
     try {
-      const method = isFollowing ? 'DELETE' : 'POST';
+      const method = isFollowing ? "DELETE" : "POST";
       await fetch(`/api/users/${user.id}/following`, { method });
       setIsFollowing(!isFollowing);
     } catch (error) {
-      console.error('Error following/unfollowing user:', error);
+      console.error("Error following/unfollowing user:", error);
     }
   };
 
   const startChat = async () => {
     try {
-      const response = await fetch('/api/chats', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/chats", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ participantId: user.id }),
       });
       const data = await response.json();
       // Chat will be handled by the RealtimeChat component
     } catch (error) {
-      console.error('Error starting chat:', error);
+      console.error("Error starting chat:", error);
     }
   };
 
@@ -90,10 +96,10 @@ export function EnhancedProfilePage({ user, stats, isOwnProfile }: EnhancedProfi
         ) : (
           <div className="w-full h-full bg-gradient-to-r from-orange-400 via-amber-500 to-orange-600" />
         )}
-        
+
         {/* Glassmorphism overlay */}
         <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px]" />
-        
+
         {/* Theme toggle */}
         <div className="absolute top-4 right-4">
           <QuickThemeToggle />
@@ -137,9 +143,7 @@ export function EnhancedProfilePage({ user, stats, isOwnProfile }: EnhancedProfi
                     Edit Profile
                   </Button>
                 </Link>
-                <Button
-                  className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-6 py-3 font-semibold shadow-lg"
-                >
+                <Button className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-6 py-3 font-semibold shadow-lg">
                   <ActionsPlus className="w-4 h-4 mr-2" />
                   New Post
                 </Button>
@@ -157,14 +161,14 @@ export function EnhancedProfilePage({ user, stats, isOwnProfile }: EnhancedProfi
                 <Button
                   onPress={handleFollow}
                   className={cn(
-                    'px-6 py-3 font-semibold shadow-lg transition-all duration-200',
+                    "px-6 py-3 font-semibold shadow-lg transition-all duration-200",
                     isFollowing
-                      ? 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
-                      : 'bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white'
+                      ? "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
+                      : "bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white",
                   )}
                 >
                   <TwoPeople className="w-4 h-4 mr-2" />
-                  {isFollowing ? 'Following' : 'Follow'}
+                  {isFollowing ? "Following" : "Follow"}
                 </Button>
               </>
             )}
@@ -184,7 +188,9 @@ export function EnhancedProfilePage({ user, stats, isOwnProfile }: EnhancedProfi
                 </div>
               )}
             </div>
-            <p className="text-xl text-gray-600 dark:text-gray-400">@{user.username}</p>
+            <p className="text-xl text-gray-600 dark:text-gray-400">
+              @{user.username}
+            </p>
           </div>
 
           {user.bio && (
@@ -204,9 +210,9 @@ export function EnhancedProfilePage({ user, stats, isOwnProfile }: EnhancedProfi
             {user.website && (
               <div className="flex items-center gap-1">
                 <DeviceLaptop className="w-4 h-4" />
-                <a 
-                  href={user.website} 
-                  target="_blank" 
+                <a
+                  href={user.website}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-orange-600 dark:text-orange-400 hover:underline"
                 >
@@ -216,7 +222,13 @@ export function EnhancedProfilePage({ user, stats, isOwnProfile }: EnhancedProfi
             )}
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
-              <span>Joined {new Date(user.joinedAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+              <span>
+                Joined{" "}
+                {new Date(user.joinedAt).toLocaleDateString("en-US", {
+                  month: "long",
+                  year: "numeric",
+                })}
+              </span>
             </div>
           </div>
 
@@ -235,7 +247,9 @@ export function EnhancedProfilePage({ user, stats, isOwnProfile }: EnhancedProfi
                 <div className="text-2xl font-bold text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
                   {stats.followers.toLocaleString()}
                 </div>
-                <div className="text-gray-600 dark:text-gray-400">Followers</div>
+                <div className="text-gray-600 dark:text-gray-400">
+                  Followers
+                </div>
               </div>
             </Link>
             <Link href={`/${user.username}/following`} className="group">
@@ -243,7 +257,9 @@ export function EnhancedProfilePage({ user, stats, isOwnProfile }: EnhancedProfi
                 <div className="text-2xl font-bold text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
                   {stats.following.toLocaleString()}
                 </div>
-                <div className="text-gray-600 dark:text-gray-400">Following</div>
+                <div className="text-gray-600 dark:text-gray-400">
+                  Following
+                </div>
               </div>
             </Link>
             <div className="text-center">
@@ -260,15 +276,15 @@ export function EnhancedProfilePage({ user, stats, isOwnProfile }: EnhancedProfi
       <div className="sticky top-0 z-40 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
         <div className="px-6">
           <div className="flex space-x-8">
-            {(['posts', 'media', 'likes'] as const).map((tab) => (
+            {(["posts", "media", "likes"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={cn(
-                  'py-4 px-2 border-b-2 transition-colors font-medium capitalize',
+                  "py-4 px-2 border-b-2 transition-colors font-medium capitalize",
                   activeTab === tab
-                    ? 'border-orange-500 text-orange-600 dark:text-orange-400'
-                    : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                    ? "border-orange-500 text-orange-600 dark:text-orange-400"
+                    : "border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200",
                 )}
               >
                 {tab}
@@ -286,7 +302,7 @@ export function EnhancedProfilePage({ user, stats, isOwnProfile }: EnhancedProfi
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          {activeTab === 'posts' && (
+          {activeTab === "posts" && (
             <div className="space-y-6">
               {/* Posts will be loaded here */}
               <div className="text-center py-12 text-gray-500 dark:text-gray-400">
@@ -294,8 +310,8 @@ export function EnhancedProfilePage({ user, stats, isOwnProfile }: EnhancedProfi
               </div>
             </div>
           )}
-          
-          {activeTab === 'media' && (
+
+          {activeTab === "media" && (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {/* Media grid will be loaded here */}
               <div className="col-span-full text-center py-12 text-gray-500 dark:text-gray-400">
@@ -303,8 +319,8 @@ export function EnhancedProfilePage({ user, stats, isOwnProfile }: EnhancedProfi
               </div>
             </div>
           )}
-          
-          {activeTab === 'likes' && (
+
+          {activeTab === "likes" && (
             <div className="space-y-6">
               {/* Liked posts will be loaded here */}
               <div className="text-center py-12 text-gray-500 dark:text-gray-400">

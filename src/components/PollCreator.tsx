@@ -1,10 +1,10 @@
-'use client';
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/cn';
-import Button from '@/components/ui/Button';
-import { TextInput } from '@/components/ui/TextInput';
-import { Close, ActionsPlus } from '@/svg_components';
+"use client";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/cn";
+import Button from "@/components/ui/Button";
+import { TextInput } from "@/components/ui/TextInput";
+import { Close, ActionsPlus } from "@/svg_components";
 
 interface PollOption {
   id: string;
@@ -22,36 +22,42 @@ interface PollCreatorProps {
   className?: string;
 }
 
-export function PollCreator({ onPollCreate, onCancel, className }: PollCreatorProps) {
-  const [question, setQuestion] = useState('');
+export function PollCreator({
+  onPollCreate,
+  onCancel,
+  className,
+}: PollCreatorProps) {
+  const [question, setQuestion] = useState("");
   const [options, setOptions] = useState<PollOption[]>([
-    { id: '1', text: '' },
-    { id: '2', text: '' },
+    { id: "1", text: "" },
+    { id: "2", text: "" },
   ]);
   const [duration, setDuration] = useState(24); // hours
   const [allowMultiple, setAllowMultiple] = useState(false);
 
   const addOption = () => {
     if (options.length < 6) {
-      setOptions([...options, { id: Date.now().toString(), text: '' }]);
+      setOptions([...options, { id: Date.now().toString(), text: "" }]);
     }
   };
 
   const removeOption = (id: string) => {
     if (options.length > 2) {
-      setOptions(options.filter(option => option.id !== id));
+      setOptions(options.filter((option) => option.id !== id));
     }
   };
 
   const updateOption = (id: string, text: string) => {
-    setOptions(options.map(option => 
-      option.id === id ? { ...option, text } : option
-    ));
+    setOptions(
+      options.map((option) =>
+        option.id === id ? { ...option, text } : option,
+      ),
+    );
   };
 
   const handleSubmit = () => {
-    const validOptions = options.filter(option => option.text.trim());
-    
+    const validOptions = options.filter((option) => option.text.trim());
+
     if (question.trim() && validOptions.length >= 2) {
       onPollCreate({
         question: question.trim(),
@@ -62,7 +68,8 @@ export function PollCreator({ onPollCreate, onCancel, className }: PollCreatorPr
     }
   };
 
-  const isValid = question.trim() && options.filter(opt => opt.text.trim()).length >= 2;
+  const isValid =
+    question.trim() && options.filter((opt) => opt.text.trim()).length >= 2;
 
   return (
     <motion.div
@@ -70,8 +77,8 @@ export function PollCreator({ onPollCreate, onCancel, className }: PollCreatorPr
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       className={cn(
-        'bg-white dark:bg-gray-800 rounded-lg shadow-lg border p-6 max-w-md w-full',
-        className
+        "bg-white dark:bg-gray-800 rounded-lg shadow-lg border p-6 max-w-md w-full",
+        className,
       )}
     >
       <div className="flex items-center justify-between mb-4">
@@ -120,7 +127,7 @@ export function PollCreator({ onPollCreate, onCancel, className }: PollCreatorPr
               )}
             </div>
           ))}
-          
+
           {options.length < 6 && (
             <button
               onClick={addOption}
@@ -136,10 +143,14 @@ export function PollCreator({ onPollCreate, onCancel, className }: PollCreatorPr
       {/* Settings */}
       <div className="mb-6 space-y-3">
         <div>
-          <label className="block text-sm font-medium mb-2">Duration (hours)</label>
+          <label className="block text-sm font-medium mb-2">
+            Duration (hours)
+          </label>
           <select
             value={duration}
-            onChange={(e) => setDuration(Number((e.target as HTMLSelectElement).value))}
+            onChange={(e) =>
+              setDuration(Number((e.target as HTMLSelectElement).value))
+            }
             className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700"
           >
             <option value={1}>1 hour</option>
@@ -155,7 +166,9 @@ export function PollCreator({ onPollCreate, onCancel, className }: PollCreatorPr
           <input
             type="checkbox"
             checked={allowMultiple}
-            onChange={(e) => setAllowMultiple((e.target as HTMLInputElement).checked)}
+            onChange={(e) =>
+              setAllowMultiple((e.target as HTMLInputElement).checked)
+            }
             className="rounded"
           />
           <span className="text-sm">Allow multiple choices</span>
@@ -164,18 +177,10 @@ export function PollCreator({ onPollCreate, onCancel, className }: PollCreatorPr
 
       {/* Actions */}
       <div className="flex gap-3">
-        <Button
-          mode="secondary"
-          onPress={onCancel}
-          className="flex-1"
-        >
+        <Button mode="secondary" onPress={onCancel} className="flex-1">
           Cancel
         </Button>
-        <Button
-          onPress={handleSubmit}
-          isDisabled={!isValid}
-          className="flex-1"
-        >
+        <Button onPress={handleSubmit} isDisabled={!isValid} className="flex-1">
           Create Poll
         </Button>
       </div>

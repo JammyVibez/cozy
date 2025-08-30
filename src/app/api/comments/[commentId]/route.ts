@@ -1,2 +1,2 @@
-export { PUT } from './PUT';
-export { DELETE } from './DELETE';
+export { PUT } from "./PUT";
+export { DELETE } from "./DELETE";

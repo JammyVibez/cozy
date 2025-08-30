@@ -1,7 +1,7 @@
-import PusherServer from 'pusher';
+import PusherServer from "pusher";
 
 if (!process.env.PUSHER_APP_ID || !process.env.PUSHER_SECRET) {
-  throw new Error('Missing Pusher server environment variables');
+  throw new Error("Missing Pusher server environment variables");
 }
 
 export const pusher = new PusherServer({

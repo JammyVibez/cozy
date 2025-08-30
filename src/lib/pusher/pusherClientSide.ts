@@ -1,5 +1,5 @@
-'use client';
-import PusherJS from 'pusher-js';
+"use client";
+import PusherJS from "pusher-js";
 
 let pusherClient: PusherJS | null = null;
 

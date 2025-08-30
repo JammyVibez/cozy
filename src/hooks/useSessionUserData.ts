@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useSession } from 'next-auth/react';
-import { useUserQuery } from './queries/useUserQuery';
+import { useSession } from "next-auth/react";
+import { useUserQuery } from "./queries/useUserQuery";
 
 /**
  * Use this hook to get the data of the current logged in user.

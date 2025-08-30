@@ -1,5 +1,5 @@
-import { Blob } from 'buffer';
-import { z } from 'zod';
+import { Blob } from "buffer";
+import { z } from "zod";
 
 const urlSchema = z.string().url();
 export const postWriteSchema = z
@@ -7,8 +7,8 @@ export const postWriteSchema = z
     // `content` is optional, but if it is provided, make sure that
     // it does not only contain spaces
     content: z.optional(
-      z.string().refine((value) => value.trim() !== '', {
-        message: 'Content should not contain only spaces.',
+      z.string().refine((value) => value.trim() !== "", {
+        message: "Content should not contain only spaces.",
       }),
     ),
     // `files` can be a:

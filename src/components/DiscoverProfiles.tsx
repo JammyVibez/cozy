@@ -1,28 +1,48 @@
-'use client';
+"use client";
 
-import { DiscoverProfile } from '@/components/DiscoverProfile';
-import { AllCaughtUp } from '@/components/AllCaughtUp';
-import useOnScreen from '@/hooks/useOnScreen';
-import { InfiniteData, QueryKey, keepPreviousData, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useRef } from 'react';
-import { GetUser } from '@/types/definitions';
-import { AnimatePresence, motion } from 'framer-motion';
-import { SomethingWentWrong } from '@/components/SometingWentWrong';
-import { useShouldAnimate } from '@/hooks/useShouldAnimate';
-import { GenericLoading } from '@/components/GenericLoading';
-import { getDiscoverProfiles } from '@/lib/client_data_fetching/getDiscoverProfiles';
-import { DISCOVER_PROFILES_PER_PAGE } from '@/constants';
-import { cn } from '@/lib/cn';
+import { DiscoverProfile } from "@/components/DiscoverProfile";
+import { AllCaughtUp } from "@/components/AllCaughtUp";
+import useOnScreen from "@/hooks/useOnScreen";
+import {
+  InfiniteData,
+  QueryKey,
+  keepPreviousData,
+  useInfiniteQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useRef } from "react";
+import { GetUser } from "@/types/definitions";
+import { AnimatePresence, motion } from "framer-motion";
+import { SomethingWentWrong } from "@/components/SometingWentWrong";
+import { useShouldAnimate } from "@/hooks/useShouldAnimate";
+import { GenericLoading } from "@/components/GenericLoading";
+import { getDiscoverProfiles } from "@/lib/client_data_fetching/getDiscoverProfiles";
+import { DISCOVER_PROFILES_PER_PAGE } from "@/constants";
+import { cn } from "@/lib/cn";
 
-export function DiscoverProfiles({ followersOf, followingOf }: { followersOf?: string; followingOf?: string }) {
+export function DiscoverProfiles({
+  followersOf,
+  followingOf,
+}: {
+  followersOf?: string;
+  followingOf?: string;
+}) {
   const searchParams = useSearchParams();
   const bottomElRef = useRef<HTMLDivElement>(null);
   const isBottomOnScreen = useOnScreen(bottomElRef);
   const qc = useQueryClient();
   const { shouldAnimate } = useShouldAnimate();
 
-  const { data, isPending, isError, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery<
+  const {
+    data,
+    isPending,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+  } = useInfiniteQuery<
     GetUser[],
     Error,
     InfiniteData<GetUser[], unknown>,
@@ -30,11 +50,11 @@ export function DiscoverProfiles({ followersOf, followingOf }: { followersOf?: s
     number
   >({
     queryKey: [
-      'discover',
+      "discover",
       {
-        search: searchParams.get('search'),
-        gender: searchParams.get('gender'),
-        relationshipStatus: searchParams.get('relationship-status'),
+        search: searchParams.get("search"),
+        gender: searchParams.get("gender"),
+        relationshipStatus: searchParams.get("relationship-status"),
         followersOf,
         followingOf,
       },
@@ -49,7 +69,7 @@ export function DiscoverProfiles({ followersOf, followingOf }: { followersOf?: s
 
       // Update/create a query cache for each of the fetched user data
       for (const user of users) {
-        qc.setQueryData(['users', user.id], user);
+        qc.setQueryData(["users", user.id], user);
       }
       return users;
     },
@@ -109,7 +129,8 @@ export function DiscoverProfiles({ followersOf, followingOf }: { followersOf?: s
                 animate="animate"
                 exit="exit"
                 custom={shouldAnimate}
-                key={profile.id}>
+                key={profile.id}
+              >
                 <DiscoverProfile userId={profile.id} />
               </motion.div>
             ))}
@@ -122,9 +143,11 @@ export function DiscoverProfiles({ followersOf, followingOf }: { followersOf?: s
          * The first page will be initially loaded by React Query
          * so the bottom loader has to be hidden first
          */
-        className={cn('h-6', data ? 'block' : 'hidden')}
+        className={cn("h-6", data ? "block" : "hidden")}
       />
-      {!isError && !isFetching && !isFetchingNextPage && !hasNextPage && <AllCaughtUp />}
+      {!isError && !isFetching && !isFetchingNextPage && !hasNextPage && (
+        <AllCaughtUp />
+      )}
     </>
   );
 }

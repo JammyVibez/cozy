@@ -4,8 +4,8 @@
  * type.
  */
 
-import { FindUserResult, GetUser } from '@/types/definitions';
-import { fileNameToUrl } from '../s3/fileNameToUrl';
+import { FindUserResult, GetUser } from "@/types/definitions";
+import { fileNameToUrl } from "../s3/fileNameToUrl";
 
 export const toGetUser = (findUserResult: FindUserResult): GetUser => {
   const followerCount = findUserResult?._count.followers || 0;

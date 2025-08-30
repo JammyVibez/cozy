@@ -1,24 +1,24 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/auth';
-import prisma from '@/lib/prisma/prisma';
-import { selectPost } from '@/lib/prisma/selectPost';
-import { toGetPost } from '@/lib/prisma/toGetPost';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import prisma from "@/lib/prisma/prisma";
+import { selectPost } from "@/lib/prisma/selectPost";
+import { toGetPost } from "@/lib/prisma/toGetPost";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const communityId = params.id;
     const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get('limit') || '10');
-    const cursor = parseInt(searchParams.get('cursor') || '0');
-    const zoneId = searchParams.get('zoneId');
+    const limit = parseInt(searchParams.get("limit") || "10");
+    const cursor = parseInt(searchParams.get("cursor") || "0");
+    const zoneId = searchParams.get("zoneId");
 
     // Check if user is a member of the community
     const membership = await prisma.communityMember.findUnique({
@@ -31,7 +31,7 @@ export async function GET(
     });
 
     if (!membership) {
-      return NextResponse.json({ error: 'Not a member' }, { status: 403 });
+      return NextResponse.json({ error: "Not a member" }, { status: 403 });
     }
 
     const where: any = {
@@ -45,34 +45,34 @@ export async function GET(
       where,
       select: selectPost(session.user.id),
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
       take: limit,
       skip: cursor,
     });
 
     const formattedPosts = await Promise.all(
-      posts.map(post => toGetPost(post))
+      posts.map((post) => toGetPost(post)),
     );
 
     return NextResponse.json(formattedPosts);
   } catch (error) {
-    console.error('Error fetching community posts:', error);
+    console.error("Error fetching community posts:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const communityId = params.id;
@@ -89,16 +89,19 @@ export async function POST(
     });
 
     if (!membership) {
-      return NextResponse.json({ error: 'Not a member' }, { status: 403 });
+      return NextResponse.json({ error: "Not a member" }, { status: 403 });
     }
 
     const body = await request.json();
     const { content, zoneId, visualMediaUrls } = body;
 
     if (!content && (!visualMediaUrls || visualMediaUrls.length === 0)) {
-      return NextResponse.json({ 
-        error: 'Post must have content or media' 
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: "Post must have content or media",
+        },
+        { status: 400 },
+      );
     }
 
     // Validate zone belongs to community (if specified)
@@ -110,10 +113,13 @@ export async function POST(
         },
       });
 
-      if (!zone || !zone.permissions.includes('POST')) {
-        return NextResponse.json({ 
-          error: 'Invalid zone or no posting permissions' 
-        }, { status: 400 });
+      if (!zone || !zone.permissions.includes("POST")) {
+        return NextResponse.json(
+          {
+            error: "Invalid zone or no posting permissions",
+          },
+          { status: 400 },
+        );
       }
     }
 
@@ -122,16 +128,18 @@ export async function POST(
       data: {
         content,
         userId,
-        visualMedia: visualMediaUrls ? {
-          createMany: {
-            data: visualMediaUrls.map((url: string, index: number) => ({
-              fileName: url,
-              type: url.includes('video') ? 'VIDEO' : 'IMAGE',
-              order: index,
-              userId,
-            })),
-          },
-        } : undefined,
+        visualMedia: visualMediaUrls
+          ? {
+              createMany: {
+                data: visualMediaUrls.map((url: string, index: number) => ({
+                  fileName: url,
+                  type: url.includes("video") ? "VIDEO" : "IMAGE",
+                  order: index,
+                  userId,
+                })),
+              },
+            }
+          : undefined,
       },
       select: selectPost(userId),
     });
@@ -148,10 +156,10 @@ export async function POST(
     const formattedPost = await toGetPost(post);
     return NextResponse.json({ success: true, post: formattedPost });
   } catch (error) {
-    console.error('Error creating community post:', error);
+    console.error("Error creating community post:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }

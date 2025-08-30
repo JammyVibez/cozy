@@ -4,18 +4,21 @@
  * by the :postId.
  */
 
-import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma/prisma';
-import { FindCommentResult } from '@/types/definitions';
-import { commentWriteSchema } from '@/lib/validations/comment';
-import { z } from 'zod';
-import { getServerUser } from '@/lib/getServerUser';
-import { includeToComment } from '@/lib/prisma/includeToComment';
-import { toGetComment } from '@/lib/prisma/toGetComment';
-import { convertMentionUsernamesToIds } from '@/lib/convertMentionUsernamesToIds';
-import { mentionsActivityLogger } from '@/lib/mentionsActivityLogger';
+import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma/prisma";
+import { FindCommentResult } from "@/types/definitions";
+import { commentWriteSchema } from "@/lib/validations/comment";
+import { z } from "zod";
+import { getServerUser } from "@/lib/getServerUser";
+import { includeToComment } from "@/lib/prisma/includeToComment";
+import { toGetComment } from "@/lib/prisma/toGetComment";
+import { convertMentionUsernamesToIds } from "@/lib/convertMentionUsernamesToIds";
+import { mentionsActivityLogger } from "@/lib/mentionsActivityLogger";
 
-export async function POST(request: Request, { params }: { params: { postId: string } }) {
+export async function POST(
+  request: Request,
+  { params }: { params: { postId: string } },
+) {
   const [user] = await getServerUser();
   if (!user) return NextResponse.json({}, { status: 401 });
   const userId = user.id;
@@ -51,7 +54,7 @@ export async function POST(request: Request, { params }: { params: { postId: str
     if (post) {
       await prisma.activity.create({
         data: {
-          type: 'CREATE_COMMENT',
+          type: "CREATE_COMMENT",
           sourceId: res.id,
           sourceUserId: userId,
           targetId: postId,
@@ -64,7 +67,7 @@ export async function POST(request: Request, { params }: { params: { postId: str
     await mentionsActivityLogger({
       usersMentioned,
       activity: {
-        type: 'COMMENT_MENTION',
+        type: "COMMENT_MENTION",
         sourceUserId: userId,
         sourceId: res.id,
         targetId: res.postId,
@@ -77,7 +80,7 @@ export async function POST(request: Request, { params }: { params: { postId: str
     if (error instanceof z.ZodError) {
       return NextResponse.json(null, {
         status: 422,
-        statusText: error.issues[0].message || 'Input validation error',
+        statusText: error.issues[0].message || "Input validation error",
       });
     }
 

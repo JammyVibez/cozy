@@ -1,12 +1,14 @@
-'use client';
+"use client";
 
-import { useSession } from 'next-auth/react';
-import React, { useRef } from 'react';
-import { useDialogs } from './useDialogs';
-import { useToast } from './useToast';
-import { useSessionUserDataMutation } from './mutations/useSessionUserDataMutation';
+import { useSession } from "next-auth/react";
+import React, { useRef } from "react";
+import { useDialogs } from "./useDialogs";
+import { useToast } from "./useToast";
+import { useSessionUserDataMutation } from "./mutations/useSessionUserDataMutation";
 
-export function useUpdateProfileAndCoverPhotoClient(toUpdate: 'profile' | 'cover') {
+export function useUpdateProfileAndCoverPhotoClient(
+  toUpdate: "profile" | "cover",
+) {
   const { data: session } = useSession();
   const userId = session?.user.id;
   const { updateSessionUserPhotosMutation } = useSessionUserDataMutation();
@@ -37,22 +39,22 @@ export function useUpdateProfileAndCoverPhotoClient(toUpdate: 'profile' | 'cover
       {
         onSuccess: () => {
           showToast({
-            title: 'Success!',
+            title: "Success!",
             message: `Your ${toUpdate} photo has been updated.`,
-            type: 'success',
+            type: "success",
           });
         },
         onError: () => {
           alert({
-            title: 'Upload Error',
-            message: 'There was an error uploading your photo.',
+            title: "Upload Error",
+            message: "There was an error uploading your photo.",
           });
         },
       },
     );
 
     if (inputFileRef.current === null) return;
-    inputFileRef.current.value = '';
+    inputFileRef.current.value = "";
   };
 
   return {

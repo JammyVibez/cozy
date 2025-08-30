@@ -1,9 +1,14 @@
-'use client';
+"use client";
 
-import React, { forwardRef } from 'react';
-import { cn } from '@/lib/cn';
-import { useObjectRef } from '@react-aria/utils';
-import { AriaButtonProps, mergeProps, useButton, useFocusRing } from 'react-aria';
+import React, { forwardRef } from "react";
+import { cn } from "@/lib/cn";
+import { useObjectRef } from "@react-aria/utils";
+import {
+  AriaButtonProps,
+  mergeProps,
+  useButton,
+  useFocusRing,
+} from "react-aria";
 
 interface ButtonProps extends AriaButtonProps {
   children: React.ReactNode;
@@ -22,14 +27,15 @@ export const ButtonNaked = forwardRef<HTMLButtonElement, ButtonProps>(
         {...mergeProps(buttonProps, focusProps)}
         ref={ref}
         className={cn(
-          'rounded-sm focus:outline-none',
+          "rounded-sm focus:outline-none",
           className,
-          isFocusVisible && 'ring ring-violet-500 ring-offset-2',
-        )}>
+          isFocusVisible && "ring ring-violet-500 ring-offset-2",
+        )}
+      >
         {children}
       </button>
     );
   },
 );
 
-ButtonNaked.displayName = 'ButtonNaked';
+ButtonNaked.displayName = "ButtonNaked";

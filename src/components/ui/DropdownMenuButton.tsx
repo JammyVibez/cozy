@@ -1,18 +1,22 @@
-import { Key, SVGProps, useMemo, useRef } from 'react';
-import { AriaMenuProps, useMenuTrigger } from 'react-aria';
-import { MenuTriggerProps, useMenuTriggerState } from 'react-stately';
-import { MoreVert } from '@/svg_components';
-import Button from './Button';
-import { Popover } from './Popover';
-import { DropdownMenu } from './DropdownMenu';
+import { Key, SVGProps, useMemo, useRef } from "react";
+import { AriaMenuProps, useMenuTrigger } from "react-aria";
+import { MenuTriggerProps, useMenuTriggerState } from "react-stately";
+import { MoreVert } from "@/svg_components";
+import Button from "./Button";
+import { Popover } from "./Popover";
+import { DropdownMenu } from "./DropdownMenu";
 
-interface MenuButtonProps<T extends object> extends AriaMenuProps<T>, MenuTriggerProps {
+interface MenuButtonProps<T extends object>
+  extends AriaMenuProps<T>,
+    MenuTriggerProps {
   onAction: (key: Key) => void;
   label: string;
   Icon?: (props: SVGProps<SVGSVGElement>) => JSX.Element;
 }
 
-export function DropdownMenuButton<T extends object>(props: MenuButtonProps<T>) {
+export function DropdownMenuButton<T extends object>(
+  props: MenuButtonProps<T>,
+) {
   // Create state based on the incoming props
   const state = useMenuTriggerState(props);
 
@@ -22,8 +26,8 @@ export function DropdownMenuButton<T extends object>(props: MenuButtonProps<T>) 
   const style = useMemo(
     () =>
       ({
-        position: 'relative',
-        display: 'inline-block',
+        position: "relative",
+        display: "inline-block",
       }) as const,
     [],
   );

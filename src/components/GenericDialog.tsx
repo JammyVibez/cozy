@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
-import { AriaDialogProps, useDialog } from 'react-aria';
-import SvgClose from '@/svg_components/Close';
-import { ResponsiveContainer } from './ui/ResponsiveContainer';
-import Button from './ui/Button';
+import React, { useRef } from "react";
+import { AriaDialogProps, useDialog } from "react-aria";
+import SvgClose from "@/svg_components/Close";
+import { ResponsiveContainer } from "./ui/ResponsiveContainer";
+import Button from "./ui/Button";
 
 interface GenericDialogProps extends AriaDialogProps {
   title: string;
@@ -10,7 +10,12 @@ interface GenericDialogProps extends AriaDialogProps {
   children: React.ReactNode;
 }
 
-export function GenericDialog({ title, handleClose, children, ...props }: GenericDialogProps) {
+export function GenericDialog({
+  title,
+  handleClose,
+  children,
+  ...props
+}: GenericDialogProps) {
   const dialogRef = useRef(null);
   const { dialogProps, titleProps } = useDialog(props, dialogRef);
 
@@ -18,7 +23,8 @@ export function GenericDialog({ title, handleClose, children, ...props }: Generi
     <div
       {...dialogProps}
       ref={dialogRef}
-      className="flex h-full w-full flex-col items-center overflow-y-auto p-2 sm:justify-center">
+      className="flex h-full w-full flex-col items-center overflow-y-auto p-2 sm:justify-center"
+    >
       <ResponsiveContainer>
         <div className="mb-6 rounded-xl border border-border bg-popover">
           <div className="relative mb-4 rounded-t-xl border-b border-b-border bg-card py-4">
@@ -26,7 +32,12 @@ export function GenericDialog({ title, handleClose, children, ...props }: Generi
               {title}
             </h3>
             <div className="absolute right-3 top-[50%] translate-y-[-50%]">
-              <Button onPress={handleClose} Icon={SvgClose} mode="ghost" size="small" />
+              <Button
+                onPress={handleClose}
+                Icon={SvgClose}
+                mode="ghost"
+                size="small"
+              />
             </div>
           </div>
           {children}

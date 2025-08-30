@@ -1,5 +1,5 @@
-import { DialogsContext } from '@/contexts/DialogsContext';
-import { useContext } from 'react';
+import { DialogsContext } from "@/contexts/DialogsContext";
+import { useContext } from "react";
 
 export function useDialogs() {
   const { setShown, setDialog } = useContext(DialogsContext);
@@ -10,16 +10,24 @@ export function useDialogs() {
 
   const alert = ({ title, message }: { title: string; message: string }) => {
     setDialog({
-      type: 'alert',
+      type: "alert",
       title,
       message,
     });
     show();
   };
 
-  const confirm = ({ title, message, onConfirm }: { title: string; message: string; onConfirm: () => void }) => {
+  const confirm = ({
+    title,
+    message,
+    onConfirm,
+  }: {
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  }) => {
     setDialog({
-      type: 'confirm',
+      type: "confirm",
       title,
       message,
       onConfirm,
@@ -29,21 +37,21 @@ export function useDialogs() {
 
   const prompt = ({
     title,
-    message = '',
+    message = "",
     promptLabel,
     initialPromptValue,
-    promptType = 'input',
+    promptType = "input",
     onSubmit,
   }: {
     title: string;
     message?: string;
     promptLabel?: string;
     initialPromptValue?: string;
-    promptType?: 'input' | 'textarea';
+    promptType?: "input" | "textarea";
     onSubmit: (value: string) => void;
   }) => {
     setDialog({
-      type: 'prompt',
+      type: "prompt",
       title,
       message,
       promptLabel,

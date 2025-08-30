@@ -1,8 +1,8 @@
-import { FindActivityResults, GetActivities } from '@/types/definitions';
-import { ActivityType } from '@prisma/client';
-import prisma from './prisma';
-import { convertMentionUsernamesToIds } from '../convertMentionUsernamesToIds';
-import { fileNameToUrl } from '../s3/fileNameToUrl';
+import { FindActivityResults, GetActivities } from "@/types/definitions";
+import { ActivityType } from "@prisma/client";
+import prisma from "./prisma";
+import { convertMentionUsernamesToIds } from "../convertMentionUsernamesToIds";
+import { fileNameToUrl } from "../s3/fileNameToUrl";
 
 async function getContentFromPostOrComment(
   type: ActivityType,
@@ -10,10 +10,10 @@ async function getContentFromPostOrComment(
   targetId: number | null,
 ): Promise<string> {
   const entity =
-    type === 'POST_LIKE' || type === 'POST_MENTION'
+    type === "POST_LIKE" || type === "POST_MENTION"
       ? await prisma.post.findUnique({
           where: {
-            id: type === 'POST_LIKE' ? targetId! : sourceId,
+            id: type === "POST_LIKE" ? targetId! : sourceId,
           },
           select: {
             content: true,
@@ -21,7 +21,7 @@ async function getContentFromPostOrComment(
         })
       : await prisma.comment.findFirst({
           where: {
-            id: type.includes('LIKE') ? targetId! : sourceId,
+            id: type.includes("LIKE") ? targetId! : sourceId,
           },
           select: {
             content: true,
@@ -40,7 +40,9 @@ async function getContentFromPostOrComment(
   return `This was deleted by the owner.`;
 }
 
-export async function toGetActivities(findActivityResults: FindActivityResults): Promise<GetActivities> {
+export async function toGetActivities(
+  findActivityResults: FindActivityResults,
+): Promise<GetActivities> {
   const notificationsPromises = findActivityResults.map(async (activity) => {
     const { type, sourceId, targetId, sourceUser, targetUser } = activity;
 
@@ -59,7 +61,7 @@ export async function toGetActivities(findActivityResults: FindActivityResults):
       profilePhoto: fileNameToUrl(targetUser.profilePhoto),
     };
 
-    if (type === 'CREATE_FOLLOW') {
+    if (type === "CREATE_FOLLOW") {
       return {
         ...activity,
         sourceUser: sourceUserWithPhotoUrl,

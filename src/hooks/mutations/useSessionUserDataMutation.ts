@@ -1,8 +1,8 @@
-import { UserAboutSchema } from '@/lib/validations/userAbout';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
-import { GetUser } from '@/types/definitions';
-import { useToast } from '../useToast';
+import { UserAboutSchema } from "@/lib/validations/userAbout";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import { GetUser } from "@/types/definitions";
+import { useToast } from "../useToast";
 
 /**
  * This hook is only used by the profile's profile/cover photo
@@ -17,9 +17,9 @@ export function useSessionUserDataMutation() {
   const updateSessionUserDataMutation = useMutation({
     mutationFn: async ({ data }: { data: UserAboutSchema }) => {
       const res = await fetch(`/api/users/${userId}`, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ ...data }),
       });
@@ -30,7 +30,7 @@ export function useSessionUserDataMutation() {
       return response as GetUser;
     },
     onSuccess: (updatedField) => {
-      qc.setQueryData<GetUser>(['users', userId], (oldUserData) => {
+      qc.setQueryData<GetUser>(["users", userId], (oldUserData) => {
         if (!oldUserData) return oldUserData;
         return {
           ...oldUserData,
@@ -38,19 +38,30 @@ export function useSessionUserDataMutation() {
         };
       });
       showToast({
-        type: 'success',
-        title: 'Success',
-        message: 'Your profile information has been updated.',
+        type: "success",
+        title: "Success",
+        message: "Your profile information has been updated.",
       });
     },
   });
 
   const updateSessionUserPhotosMutation = useMutation({
-    mutationFn: async ({ toUpdate, formData }: { toUpdate: 'profile' | 'cover'; formData: FormData }) => {
-      const res = await fetch(`/api/users/${userId}/${toUpdate === 'profile' ? 'profile-photo' : 'cover-photo'}`, {
-        method: 'POST',
-        body: formData,
-      });
+    mutationFn: async ({
+      toUpdate,
+      formData,
+    }: {
+      toUpdate: "profile" | "cover";
+      formData: FormData;
+    }) => {
+      const res = await fetch(
+        `/api/users/${userId}/${
+          toUpdate === "profile" ? "profile-photo" : "cover-photo"
+        }`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
 
       if (!res.ok) {
         throw new Error(`Error updating ${toUpdate} photo.`);
@@ -63,7 +74,7 @@ export function useSessionUserDataMutation() {
       };
     },
     onSuccess: ({ type, uploadedTo }) => {
-      qc.setQueryData<GetUser>(['users', userId], (oldUserData) => {
+      qc.setQueryData<GetUser>(["users", userId], (oldUserData) => {
         if (!oldUserData) return oldUserData;
         return {
           ...oldUserData,

@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/auth';
-import prisma from '@/lib/prisma/prisma';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import prisma from "@/lib/prisma/prisma";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const communityId = params.id;
@@ -33,14 +33,17 @@ export async function POST(
     });
 
     if (!membership) {
-      return NextResponse.json({ error: 'Not a member' }, { status: 400 });
+      return NextResponse.json({ error: "Not a member" }, { status: 400 });
     }
 
     // Prevent community creator from leaving
     if (membership.community.creatorId === userId) {
-      return NextResponse.json({ 
-        error: 'Community creators cannot leave their own community' 
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: "Community creators cannot leave their own community",
+        },
+        { status: 400 },
+      );
     }
 
     // Remove user from community
@@ -55,10 +58,10 @@ export async function POST(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error leaving community:', error);
+    console.error("Error leaving community:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }

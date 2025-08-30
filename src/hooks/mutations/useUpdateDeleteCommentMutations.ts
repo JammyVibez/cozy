@@ -1,18 +1,28 @@
-import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query';
-import { GetComment } from '@/types/definitions';
-import { useErrorNotifier } from '../useErrorNotifier';
+import { QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
+import { GetComment } from "@/types/definitions";
+import { useErrorNotifier } from "../useErrorNotifier";
 
 // Use this hook for getting the mutations for updating and deleting comments/replies.
-export function useUpdateDeleteCommentMutations({ queryKey }: { queryKey: QueryKey }) {
+export function useUpdateDeleteCommentMutations({
+  queryKey,
+}: {
+  queryKey: QueryKey;
+}) {
   const qc = useQueryClient();
   const { notifyError } = useErrorNotifier();
 
   const updateCommentMutation = useMutation({
-    mutationFn: async ({ commentId, content }: { commentId: number; content: string }) => {
+    mutationFn: async ({
+      commentId,
+      content,
+    }: {
+      commentId: number;
+      content: string;
+    }) => {
       const res = await fetch(`/api/comments/${commentId}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ content }),
       });
@@ -35,7 +45,9 @@ export function useUpdateDeleteCommentMutations({ queryKey }: { queryKey: QueryK
         const newComments = [...oldComments];
 
         // Find the index of the updated comment
-        const index = newComments.findIndex((comment) => comment.id === commentId);
+        const index = newComments.findIndex(
+          (comment) => comment.id === commentId,
+        );
 
         // Update the comment
         newComments[index] = {
@@ -59,10 +71,10 @@ export function useUpdateDeleteCommentMutations({ queryKey }: { queryKey: QueryK
   const deleteCommentMutation = useMutation({
     mutationFn: async ({ commentId }: { commentId: number }) => {
       const res = await fetch(`/api/comments/${commentId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
-      if (!res.ok) throw new Error('Error deleting comment.');
+      if (!res.ok) throw new Error("Error deleting comment.");
       return (await res.json()) as { id: number };
     },
     onMutate: async ({ commentId }) => {

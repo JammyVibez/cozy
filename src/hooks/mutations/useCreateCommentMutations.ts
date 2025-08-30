@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { GetComment } from '@/types/definitions';
-import { useErrorNotifier } from '../useErrorNotifier';
-import { useToast } from '../useToast';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { GetComment } from "@/types/definitions";
+import { useErrorNotifier } from "../useErrorNotifier";
+import { useToast } from "../useToast";
 
 export function useCreateCommentMutations() {
   const qc = useQueryClient();
@@ -9,11 +9,17 @@ export function useCreateCommentMutations() {
   const { notifyError } = useErrorNotifier();
 
   const createCommentMutation = useMutation({
-    mutationFn: async ({ postId, content }: { postId: number; content: string }) => {
+    mutationFn: async ({
+      postId,
+      content,
+    }: {
+      postId: number;
+      content: string;
+    }) => {
       const res = await fetch(`/api/posts/${postId}/comments`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           content,
@@ -24,14 +30,17 @@ export function useCreateCommentMutations() {
       return (await res.json()) as GetComment;
     },
     onSuccess: (createdComment) => {
-      qc.setQueryData<GetComment[]>(['posts', createdComment.postId, 'comments'], (oldComments) => {
-        if (!oldComments) return oldComments;
-        return [...oldComments, createdComment];
-      });
+      qc.setQueryData<GetComment[]>(
+        ["posts", createdComment.postId, "comments"],
+        (oldComments) => {
+          if (!oldComments) return oldComments;
+          return [...oldComments, createdComment];
+        },
+      );
       showToast({
-        title: 'Success',
-        message: 'Your comment has been created.',
-        type: 'success',
+        title: "Success",
+        message: "Your comment has been created.",
+        type: "success",
       });
     },
     onError: (err) => {
@@ -40,11 +49,17 @@ export function useCreateCommentMutations() {
   });
 
   const createReplyMutation = useMutation({
-    mutationFn: async ({ parentId, content }: { parentId: number; content: string }) => {
+    mutationFn: async ({
+      parentId,
+      content,
+    }: {
+      parentId: number;
+      content: string;
+    }) => {
       const res = await fetch(`/api/comments/${parentId}/replies`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           content,
@@ -55,14 +70,17 @@ export function useCreateCommentMutations() {
       return (await res.json()) as GetComment;
     },
     onSuccess: (createdReply) => {
-      qc.setQueryData<GetComment[]>(['comments', createdReply.parentId, 'replies'], (oldReplies) => {
-        if (!oldReplies) return oldReplies;
-        return [...oldReplies, createdReply];
-      });
+      qc.setQueryData<GetComment[]>(
+        ["comments", createdReply.parentId, "replies"],
+        (oldReplies) => {
+          if (!oldReplies) return oldReplies;
+          return [...oldReplies, createdReply];
+        },
+      );
       showToast({
-        title: 'Success',
-        message: 'Your reply has been created.',
-        type: 'success',
+        title: "Success",
+        message: "Your reply has been created.",
+        type: "success",
       });
     },
     onError: (err) => {

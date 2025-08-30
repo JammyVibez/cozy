@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from "react";
 import {
   DndContext,
   closestCenter,
@@ -8,11 +8,16 @@ import {
   useSensors,
   MeasuringStrategy,
   DragEndEvent,
-} from '@dnd-kit/core';
-import { arrayMove, SortableContext, sortableKeyboardCoordinates, rectSortingStrategy } from '@dnd-kit/sortable';
-import { restrictToParentElement } from '@dnd-kit/modifiers';
-import { GetVisualMedia } from '@/types/definitions';
-import { CreatePostSortItem } from './CreatePostSortItem';
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  rectSortingStrategy,
+} from "@dnd-kit/sortable";
+import { restrictToParentElement } from "@dnd-kit/modifiers";
+import { GetVisualMedia } from "@/types/definitions";
+import { CreatePostSortItem } from "./CreatePostSortItem";
 
 const measuringConfig = {
   droppable: {
@@ -55,7 +60,7 @@ export function CreatePostSort({
   const handleRemove = useCallback(
     (id: string) => {
       // Release the object URL when removed
-      if (id.startsWith('blob:')) URL.revokeObjectURL(id);
+      if (id.startsWith("blob:")) URL.revokeObjectURL(id);
 
       setVisualMedia((items) => items.filter((item) => item.url !== id));
     },
@@ -63,7 +68,10 @@ export function CreatePostSort({
   );
 
   // The `url` of <GetVisualMedia> will serve as the ID's of the <SortableContext>.
-  const itemIds = useMemo(() => visualMedia.map((item) => item.url), [visualMedia]);
+  const itemIds = useMemo(
+    () => visualMedia.map((item) => item.url),
+    [visualMedia],
+  );
 
   return (
     <DndContext
@@ -71,11 +79,17 @@ export function CreatePostSort({
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
       modifiers={modifiers}
-      measuring={measuringConfig}>
+      measuring={measuringConfig}
+    >
       <div className="grid grid-cols-2 gap-2 border-t border-t-border p-2">
         <SortableContext items={itemIds} strategy={rectSortingStrategy}>
           {visualMedia.map((item) => (
-            <CreatePostSortItem key={item.url} url={item.url} type={item.type} onRemove={handleRemove} />
+            <CreatePostSortItem
+              key={item.url}
+              url={item.url}
+              type={item.type}
+              onRemove={handleRemove}
+            />
           ))}
         </SortableContext>
       </div>

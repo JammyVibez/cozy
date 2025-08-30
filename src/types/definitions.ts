@@ -1,6 +1,14 @@
-import { VisualMediaType, User, Follow, ActivityType, Gender, VisualMedia, RelationshipStatus } from '@prisma/client';
+import {
+  VisualMediaType,
+  User,
+  Follow,
+  ActivityType,
+  Gender,
+  VisualMedia,
+  RelationshipStatus,
+} from "@prisma/client";
 
-type UserSummary = Pick<User, 'id' | 'username' | 'name' | 'profilePhoto'>;
+type UserSummary = Pick<User, "id" | "username" | "name" | "profilePhoto">;
 /**
  * The `User` type from Prisma indicates that the `username` and `name` fields are nullable,
  * however, after the initial user setup upon user's registration, these two fields will be
@@ -147,11 +155,11 @@ export interface GetComment {
   repliesShown?: boolean;
 }
 
-export type DiscoverFilterKeys = 'gender' | 'relationship-status';
+export type DiscoverFilterKeys = "gender" | "relationship-status";
 
 export interface DiscoverFilters {
   gender?: Gender;
-  'relationship-status'?: RelationshipStatus;
+  "relationship-status"?: RelationshipStatus;
 }
 
 interface FindActivityResult {

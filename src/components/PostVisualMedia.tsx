@@ -1,8 +1,8 @@
-import { cn } from '@/lib/cn';
-import { Play } from '@/svg_components';
-import { VisualMediaType } from '@prisma/client';
-import { useMemo } from 'react';
-import { mergeProps, useFocusRing, usePress } from 'react-aria';
+import { cn } from "@/lib/cn";
+import { Play } from "@/svg_components";
+import { VisualMediaType } from "@prisma/client";
+import { useMemo } from "react";
+import { mergeProps, useFocusRing, usePress } from "react-aria";
 
 export function PostVisualMedia({
   type,
@@ -28,13 +28,21 @@ export function PostVisualMedia({
       role="button"
       tabIndex={0}
       className={cn(
-        'group relative cursor-pointer focus:outline-none',
-        colSpan === 1 ? 'col-span-1' : 'col-span-2',
-        isFocusVisible && 'border-4 border-violet-500',
+        "group relative cursor-pointer focus:outline-none",
+        colSpan === 1 ? "col-span-1" : "col-span-2",
+        isFocusVisible && "border-4 border-violet-500",
       )}
-      style={style}>
-      {type === 'PHOTO' ? (
-        <img src={url} alt="" className={cn('h-full w-full object-cover', isPressed && 'brightness-75')} />
+      style={style}
+    >
+      {type === "PHOTO" ? (
+        <img
+          src={url}
+          alt=""
+          className={cn(
+            "h-full w-full object-cover",
+            isPressed && "brightness-75",
+          )}
+        />
       ) : (
         <>
           <Play

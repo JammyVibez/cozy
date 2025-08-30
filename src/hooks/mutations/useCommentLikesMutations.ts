@@ -1,13 +1,19 @@
-import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
-import { GetComment } from '@/types/definitions';
+import { QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import { GetComment } from "@/types/definitions";
 
 export function useCommentLikesMutations({ queryKey }: { queryKey: QueryKey }) {
   const qc = useQueryClient();
   const { data: session } = useSession();
   const userId = session?.user.id;
 
-  const likeUnlikeOptimisticSetter = ({ commentId, isLiked }: { commentId: number; isLiked: boolean }) => {
+  const likeUnlikeOptimisticSetter = ({
+    commentId,
+    isLiked,
+  }: {
+    commentId: number;
+    isLiked: boolean;
+  }) => {
     qc.setQueryData<GetComment[]>(queryKey, (oldComments) => {
       if (!oldComments) return oldComments;
 
@@ -15,7 +21,9 @@ export function useCommentLikesMutations({ queryKey }: { queryKey: QueryKey }) {
       const newComments = [...oldComments];
 
       // Find the index of the comment to update
-      const index = newComments.findIndex((comment) => comment.id === commentId);
+      const index = newComments.findIndex(
+        (comment) => comment.id === commentId,
+      );
       const oldComment = newComments[index];
 
       // Update the comment's `isLiked` property
@@ -35,10 +43,10 @@ export function useCommentLikesMutations({ queryKey }: { queryKey: QueryKey }) {
   const likeCommentMutation = useMutation({
     mutationFn: async ({ commentId }: { commentId: number }) => {
       const res = await fetch(`/api/users/${userId}/liked-comments`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({ commentId }),
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -49,7 +57,7 @@ export function useCommentLikesMutations({ queryKey }: { queryKey: QueryKey }) {
          * roll back the optimistic LIKE mutation.
          */
         if (res.status === 409) return true;
-        throw Error('Error liking post.');
+        throw Error("Error liking post.");
       }
 
       return true;
@@ -74,9 +82,12 @@ export function useCommentLikesMutations({ queryKey }: { queryKey: QueryKey }) {
 
   const unLikeCommentMutation = useMutation({
     mutationFn: async ({ commentId }: { commentId: number }) => {
-      const res = await fetch(`/api/users/${userId}/liked-comments/${commentId}`, {
-        method: 'DELETE',
-      });
+      const res = await fetch(
+        `/api/users/${userId}/liked-comments/${commentId}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (!res.ok) {
         /**
@@ -85,7 +96,7 @@ export function useCommentLikesMutations({ queryKey }: { queryKey: QueryKey }) {
          * NOT roll back the optimistic UNLIKE mutation.
          */
         if (res.status === 409) return true;
-        throw Error('Error unliking post.');
+        throw Error("Error unliking post.");
       }
 
       return true;

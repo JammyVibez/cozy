@@ -1,14 +1,14 @@
-import Link from 'next/link';
-import { ProfilePhoto } from './ui/ProfilePhoto';
+import Link from "next/link";
+import { ProfilePhoto } from "./ui/ProfilePhoto";
 
 export default function ProfileBlock({
-  type = 'post',
+  type = "post",
   username,
   name,
   time,
   photoUrl,
 }: {
-  type?: 'post' | 'comment';
+  type?: "post" | "comment";
   name: string;
   username: string;
   time: string;
@@ -27,9 +27,13 @@ export default function ProfileBlock({
               {name}
             </Link>
           </h2>
-          {type === 'comment' && <h2 className="text-sm text-muted-foreground/90">{time} ago</h2>}
+          {type === "comment" && (
+            <h2 className="text-sm text-muted-foreground/90">{time} ago</h2>
+          )}
         </div>
-        {type === 'post' && <h2 className="text-sm text-muted-foreground/90">{time} ago</h2>}
+        {type === "post" && (
+          <h2 className="text-sm text-muted-foreground/90">{time} ago</h2>
+        )}
       </div>
     </div>
   );

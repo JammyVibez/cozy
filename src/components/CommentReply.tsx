@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { GetComment } from '@/types/definitions';
-import { Key, memo, useCallback } from 'react';
-import { isEqual } from 'lodash';
-import SvgHeart from '@/svg_components/Heart';
-import { useSearchParams } from 'next/navigation';
-import { Item, Section } from 'react-stately';
-import { ToggleStepper } from './ui/ToggleStepper';
-import { CommentContent } from './CommentContent';
-import { DropdownMenuButton } from './ui/DropdownMenuButton';
-import { ProfilePhoto } from './ui/ProfilePhoto';
+import { GetComment } from "@/types/definitions";
+import { Key, memo, useCallback } from "react";
+import { isEqual } from "lodash";
+import SvgHeart from "@/svg_components/Heart";
+import { useSearchParams } from "next/navigation";
+import { Item, Section } from "react-stately";
+import { ToggleStepper } from "./ui/ToggleStepper";
+import { CommentContent } from "./CommentContent";
+import { DropdownMenuButton } from "./ui/DropdownMenuButton";
+import { ProfilePhoto } from "./ui/ProfilePhoto";
 
 export const CommentReply = memo(
   ({
@@ -33,12 +33,13 @@ export const CommentReply = memo(
   }) => {
     const numberOfLikes = _count.commentLikes;
     const handleLikeClick = useCallback(
-      () => (!isLiked ? likeComment({ commentId }) : unLikeComment({ commentId })),
+      () =>
+        !isLiked ? likeComment({ commentId }) : unLikeComment({ commentId }),
       [isLiked, likeComment, unLikeComment, commentId],
     );
     const onDropdownAction = useCallback(
       (key: Key) => {
-        if (key === 'edit') {
+        if (key === "edit") {
           handleEdit({ commentId, content });
         } else {
           handleDelete({ commentId });
@@ -49,12 +50,17 @@ export const CommentReply = memo(
 
     const searchParams = useSearchParams();
     // Highlight comment if the `commentId` is equal to the `comment-id` search param
-    const shouldHighlight = searchParams.get('comment-id') === commentId.toString();
+    const shouldHighlight =
+      searchParams.get("comment-id") === commentId.toString();
 
     return (
       <div className="mt-2 flex gap-4">
         <div className="h-10 w-10 flex-shrink-0">
-          <ProfilePhoto name={author.name} username={author.username} photoUrl={author.profilePhoto} />
+          <ProfilePhoto
+            name={author.name}
+            username={author.username}
+            photoUrl={author.profilePhoto}
+          />
         </div>
 
         <div>
@@ -67,12 +73,18 @@ export const CommentReply = memo(
           />
 
           <div className="flex origin-left">
-            <ToggleStepper isSelected={isLiked} onPress={handleLikeClick} Icon={SvgHeart} quantity={numberOfLikes} />
+            <ToggleStepper
+              isSelected={isLiked}
+              onPress={handleLikeClick}
+              Icon={SvgHeart}
+              quantity={numberOfLikes}
+            />
             {isOwnReply && (
               <DropdownMenuButton
                 key={`replies-${commentId}-options`}
                 label="Reply options"
-                onAction={onDropdownAction}>
+                onAction={onDropdownAction}
+              >
                 <Section>
                   <Item key="edit">Edit reply</Item>
                   <Item key="delete">Delete reply</Item>
@@ -87,4 +99,4 @@ export const CommentReply = memo(
   (oldProps, newProps) => isEqual(oldProps, newProps),
 );
 
-CommentReply.displayName = 'CommentReply';
+CommentReply.displayName = "CommentReply";

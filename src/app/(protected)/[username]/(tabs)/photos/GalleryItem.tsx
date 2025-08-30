@@ -1,9 +1,17 @@
-import { cn } from '@/lib/cn';
-import { Play } from '@/svg_components';
-import { VisualMediaType } from '@prisma/client';
-import { mergeProps, useFocusRing, usePress } from 'react-aria';
+import { cn } from "@/lib/cn";
+import { Play } from "@/svg_components";
+import { VisualMediaType } from "@prisma/client";
+import { mergeProps, useFocusRing, usePress } from "react-aria";
 
-export function GalleryItem({ type, url, onClick }: { type: VisualMediaType; url: string; onClick: () => void }) {
+export function GalleryItem({
+  type,
+  url,
+  onClick,
+}: {
+  type: VisualMediaType;
+  url: string;
+  onClick: () => void;
+}) {
   const { pressProps, isPressed } = usePress({
     onPress: onClick,
   });
@@ -15,9 +23,20 @@ export function GalleryItem({ type, url, onClick }: { type: VisualMediaType; url
       role="button"
       tabIndex={0}
       aria-label="Open visual media"
-      className={cn('group relative focus:outline-none', isFocusVisible && 'border-4 border-violet-500')}>
-      {type === 'PHOTO' ? (
-        <img src={url} className={cn('h-full w-full object-cover', isPressed && 'brightness-75')} alt="Gallery" />
+      className={cn(
+        "group relative focus:outline-none",
+        isFocusVisible && "border-4 border-violet-500",
+      )}
+    >
+      {type === "PHOTO" ? (
+        <img
+          src={url}
+          className={cn(
+            "h-full w-full object-cover",
+            isPressed && "brightness-75",
+          )}
+          alt="Gallery"
+        />
       ) : (
         <>
           <Play

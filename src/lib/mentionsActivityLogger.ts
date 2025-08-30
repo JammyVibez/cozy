@@ -1,5 +1,5 @@
-import 'server-only';
-import prisma from './prisma/prisma';
+import "server-only";
+import prisma from "./prisma/prisma";
 
 export async function mentionsActivityLogger({
   usersMentioned,
@@ -11,7 +11,7 @@ export async function mentionsActivityLogger({
     username: string | null;
   }[];
   activity: {
-    type: 'POST_MENTION' | 'COMMENT_MENTION' | 'REPLY_MENTION';
+    type: "POST_MENTION" | "COMMENT_MENTION" | "REPLY_MENTION";
     sourceUserId: string;
     sourceId: number;
     targetId?: number | null;

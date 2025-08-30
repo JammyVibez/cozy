@@ -1,34 +1,35 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Button from '@/components/ui/Button';
-import { Close, DeviceLaptop } from '@/svg_components';
-import { cn } from '@/lib/cn';
+"use client";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Button from "@/components/ui/Button";
+import { Close, DeviceLaptop } from "@/svg_components";
+import { cn } from "@/lib/cn";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
   userChoice: Promise<{
-    outcome: 'accepted' | 'dismissed';
+    outcome: "accepted" | "dismissed";
     platform: string;
   }>;
 }
 
 export function PWAInstaller() {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
     // Check if app is already installed
-    setIsStandalone(window.matchMedia('(display-mode: standalone)').matches);
-    setIsInstalled(localStorage.getItem('pwa-installed') === 'true');
+    setIsStandalone(window.matchMedia("(display-mode: standalone)").matches);
+    setIsInstalled(localStorage.getItem("pwa-installed") === "true");
 
     // Listen for beforeinstallprompt event
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      
+
       // Show install prompt after a delay if not already installed
       if (!isInstalled && !isStandalone) {
         setTimeout(() => {
@@ -41,15 +42,18 @@ export function PWAInstaller() {
     const handleAppInstalled = () => {
       setIsInstalled(true);
       setShowInstallPrompt(false);
-      localStorage.setItem('pwa-installed', 'true');
+      localStorage.setItem("pwa-installed", "true");
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    window.addEventListener('appinstalled', handleAppInstalled);
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.addEventListener("appinstalled", handleAppInstalled);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      window.removeEventListener('appinstalled', handleAppInstalled);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt,
+      );
+      window.removeEventListener("appinstalled", handleAppInstalled);
     };
   }, [isInstalled, isStandalone]);
 
@@ -59,22 +63,22 @@ export function PWAInstaller() {
     try {
       await deferredPrompt.prompt();
       const choiceResult = await deferredPrompt.userChoice;
-      
-      if (choiceResult.outcome === 'accepted') {
+
+      if (choiceResult.outcome === "accepted") {
         setIsInstalled(true);
-        localStorage.setItem('pwa-installed', 'true');
+        localStorage.setItem("pwa-installed", "true");
       }
-      
+
       setDeferredPrompt(null);
       setShowInstallPrompt(false);
     } catch (error) {
-      console.error('Error installing PWA:', error);
+      console.error("Error installing PWA:", error);
     }
   };
 
   const handleDismiss = () => {
     setShowInstallPrompt(false);
-    localStorage.setItem('pwa-dismissed', 'true');
+    localStorage.setItem("pwa-dismissed", "true");
   };
 
   // Don't show if already installed or in standalone mode
@@ -158,16 +162,19 @@ export function usePWAStatus() {
   const [canInstall, setCanInstall] = useState(false);
 
   useEffect(() => {
-    setIsStandalone(window.matchMedia('(display-mode: standalone)').matches);
-    setIsInstalled(localStorage.getItem('pwa-installed') === 'true');
+    setIsStandalone(window.matchMedia("(display-mode: standalone)").matches);
+    setIsInstalled(localStorage.getItem("pwa-installed") === "true");
 
     const handleBeforeInstallPrompt = () => {
       setCanInstall(true);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt,
+      );
     };
   }, []);
 

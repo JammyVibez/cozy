@@ -3,13 +3,17 @@
  * - Allows an authenticated user to remove a user
  * from their following list / unfollow the :targetUserId.
  */
-import { getServerUser } from '@/lib/getServerUser';
-import prisma from '@/lib/prisma/prisma';
-import { NextResponse } from 'next/server';
+import { getServerUser } from "@/lib/getServerUser";
+import prisma from "@/lib/prisma/prisma";
+import { NextResponse } from "next/server";
 
-export async function DELETE(request: Request, { params }: { params: { userId: string; targetUserId: string } }) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: { userId: string; targetUserId: string } },
+) {
   const [user] = await getServerUser();
-  if (!user || user.id !== params.userId) return NextResponse.json({}, { status: 403 });
+  if (!user || user.id !== params.userId)
+    return NextResponse.json({}, { status: 403 });
 
   const isFollowing = await prisma.follow.count({
     where: {
@@ -31,7 +35,7 @@ export async function DELETE(request: Request, { params }: { params: { userId: s
     // Delete the associated 'CREATE_FOLLOW' activity
     await prisma.activity.deleteMany({
       where: {
-        type: 'CREATE_FOLLOW',
+        type: "CREATE_FOLLOW",
         sourceId: res.id,
         sourceUserId: user.id,
         targetUserId: params.targetUserId,
@@ -40,5 +44,8 @@ export async function DELETE(request: Request, { params }: { params: { userId: s
 
     return NextResponse.json({ unfollowed: true });
   }
-  return NextResponse.json({ error: 'You are not following this user.' }, { status: 409 });
+  return NextResponse.json(
+    { error: "You are not following this user." },
+    { status: 409 },
+  );
 }

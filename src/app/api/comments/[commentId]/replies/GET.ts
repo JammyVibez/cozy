@@ -3,14 +3,17 @@
  * - Returns the replies of a comment specified by the
  * :commentId parameter.
  */
-import { getServerUser } from '@/lib/getServerUser';
-import { includeToComment } from '@/lib/prisma/includeToComment';
-import prisma from '@/lib/prisma/prisma';
-import { toGetComment } from '@/lib/prisma/toGetComment';
-import { NextResponse } from 'next/server';
-import { FindCommentResult } from '@/types/definitions';
+import { getServerUser } from "@/lib/getServerUser";
+import { includeToComment } from "@/lib/prisma/includeToComment";
+import prisma from "@/lib/prisma/prisma";
+import { toGetComment } from "@/lib/prisma/toGetComment";
+import { NextResponse } from "next/server";
+import { FindCommentResult } from "@/types/definitions";
 
-export async function GET(request: Request, { params }: { params: { commentId: string } }) {
+export async function GET(
+  request: Request,
+  { params }: { params: { commentId: string } },
+) {
   /**
    * The `userId` will only be used to check whether the user
    * requesting the comments has liked them or not.
@@ -24,7 +27,7 @@ export async function GET(request: Request, { params }: { params: { commentId: s
     },
     include: includeToComment(userId),
     orderBy: {
-      id: 'asc',
+      id: "asc",
     },
   });
 

@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/auth';
-import prisma from '@/lib/prisma/prisma';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import prisma from "@/lib/prisma/prisma";
 
 export async function GET() {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const chats = await prisma.chat.findMany({
@@ -28,7 +28,7 @@ export async function GET() {
         },
         messages: {
           orderBy: {
-            createdAt: 'desc',
+            createdAt: "desc",
           },
           take: 1,
           include: {
@@ -54,7 +54,7 @@ export async function GET() {
         },
       },
       orderBy: {
-        updatedAt: 'desc',
+        updatedAt: "desc",
       },
     });
 
@@ -67,8 +67,11 @@ export async function GET() {
 
     return NextResponse.json({ chats: formattedChats });
   } catch (error) {
-    console.error('Error fetching chats:', error);
-    return NextResponse.json({ error: 'Failed to fetch chats' }, { status: 500 });
+    console.error("Error fetching chats:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch chats" },
+      { status: 500 },
+    );
   }
 }
 
@@ -76,13 +79,16 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { participantId } = await request.json();
 
     if (!participantId || participantId === session.user.id) {
-      return NextResponse.json({ error: 'Invalid participant' }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid participant" },
+        { status: 400 },
+      );
     }
 
     // Check if chat already exists
@@ -138,7 +144,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ chat: newChat });
   } catch (error) {
-    console.error('Error creating chat:', error);
-    return NextResponse.json({ error: 'Failed to create chat' }, { status: 500 });
+    console.error("Error creating chat:", error);
+    return NextResponse.json(
+      { error: "Failed to create chat" },
+      { status: 500 },
+    );
   }
 }

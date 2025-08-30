@@ -1,7 +1,7 @@
 export const getAvatarFallback = (name: string) =>
   name
-    .split(' ')
+    .split(" ")
     .slice(0, 2)
     .map((item) => item[0])
-    .join('')
+    .join("")
     .toUpperCase();

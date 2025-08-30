@@ -1,8 +1,13 @@
-import { useToggleState } from 'react-stately';
-import { AriaSwitchProps, useFocusRing, useSwitch, VisuallyHidden } from 'react-aria';
-import React, { useMemo, useRef } from 'react';
-import { cn } from '@/lib/cn';
-import { motion } from 'framer-motion';
+import { useToggleState } from "react-stately";
+import {
+  AriaSwitchProps,
+  useFocusRing,
+  useSwitch,
+  VisuallyHidden,
+} from "react-aria";
+import React, { useMemo, useRef } from "react";
+import { cn } from "@/lib/cn";
+import { motion } from "framer-motion";
 
 interface SwitchProps extends AriaSwitchProps {
   children?: React.ReactNode;
@@ -16,7 +21,7 @@ export function Switch({ children, renderIcon, ...props }: SwitchProps) {
   const { isFocusVisible, focusProps } = useFocusRing();
   const sprintTransition = useMemo(
     () => ({
-      type: 'spring',
+      type: "spring",
       stiffness: 700,
       damping: 30,
     }),
@@ -24,23 +29,32 @@ export function Switch({ children, renderIcon, ...props }: SwitchProps) {
   );
 
   return (
-    <label className={cn('flex cursor-pointer items-center', props.isDisabled && 'opacity-40')}>
+    <label
+      className={cn(
+        "flex cursor-pointer items-center",
+        props.isDisabled && "opacity-40",
+      )}
+    >
       <VisuallyHidden>
         <input {...inputProps} {...focusProps} ref={ref} />
       </VisuallyHidden>
       <div
         className={cn(
-          'flex h-9 w-16 rounded-[40px] p-[2px] hover:opacity-90',
-          props.isSelected ? 'justify-end bg-primary-accent' : 'justify-start bg-muted',
-          isFocusVisible && 'ring-2 ring-violet-500 ring-offset-2',
-        )}>
+          "flex h-9 w-16 rounded-[40px] p-[2px] hover:opacity-90",
+          props.isSelected
+            ? "justify-end bg-primary-accent"
+            : "justify-start bg-muted",
+          isFocusVisible && "ring-2 ring-violet-500 ring-offset-2",
+        )}
+      >
         <motion.div
           layout
           transition={sprintTransition}
           className={cn(
-            'grid h-8 w-8 place-items-center rounded-[200px]',
-            props.isSelected ? 'bg-primary-foreground' : 'bg-muted-foreground',
-          )}>
+            "grid h-8 w-8 place-items-center rounded-[200px]",
+            props.isSelected ? "bg-primary-foreground" : "bg-muted-foreground",
+          )}
+        >
           {renderIcon !== undefined && renderIcon()}
         </motion.div>
       </div>

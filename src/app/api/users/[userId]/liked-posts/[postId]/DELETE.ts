@@ -4,13 +4,17 @@
  * from their liked posts.
  */
 
-import { getServerUser } from '@/lib/getServerUser';
-import prisma from '@/lib/prisma/prisma';
-import { NextResponse } from 'next/server';
+import { getServerUser } from "@/lib/getServerUser";
+import prisma from "@/lib/prisma/prisma";
+import { NextResponse } from "next/server";
 
-export async function DELETE(request: Request, { params }: { params: { userId: string; postId: string } }) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: { userId: string; postId: string } },
+) {
   const [user] = await getServerUser();
-  if (!user || params.userId !== user.id) return NextResponse.json({}, { status: 401 });
+  if (!user || params.userId !== user.id)
+    return NextResponse.json({}, { status: 401 });
 
   const postId = parseInt(params.postId, 10);
 
@@ -38,7 +42,7 @@ export async function DELETE(request: Request, { params }: { params: { userId: s
   // Delete the associated 'POST_LIKE' activity
   await prisma.activity.deleteMany({
     where: {
-      type: 'POST_LIKE',
+      type: "POST_LIKE",
       sourceUserId: user.id,
       sourceId: res.id,
       targetId: postId,

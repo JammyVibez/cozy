@@ -1,20 +1,20 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import Link from 'next/link';
-import Image from 'next/image';
-import { cn } from '@/lib/cn';
-import Button from '@/components/ui/Button';
-import { 
-  Heart, 
-  TwoPeople, 
-  Comment, 
+"use client";
+import { useState, useEffect } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import Link from "next/link";
+import Image from "next/image";
+import { cn } from "@/lib/cn";
+import Button from "@/components/ui/Button";
+import {
+  Heart,
+  TwoPeople,
+  Comment,
   ActionsPlus,
   DeviceLaptop,
   WorldNet,
   Search,
-  GridFeedCards
-} from '@/svg_components';
+  GridFeedCards,
+} from "@/svg_components";
 
 export default function LandingPage() {
   const [currentFeature, setCurrentFeature] = useState(0);
@@ -25,28 +25,32 @@ export default function LandingPage() {
   const features = [
     {
       icon: TwoPeople,
-      title: 'Explore Communities',
-      description: 'Join vibrant communities for developers, gamers, crypto enthusiasts, news readers, and more. Find your tribe.',
-      color: 'from-blue-500 to-cyan-500'
+      title: "Explore Communities",
+      description:
+        "Join vibrant communities for developers, gamers, crypto enthusiasts, news readers, and more. Find your tribe.",
+      color: "from-blue-500 to-cyan-500",
     },
     {
       icon: Comment,
-      title: 'Chat & Connect Instantly',
-      description: 'DM friends, join group chats, send voice notes, share files, and react with emojis in real-time.',
-      color: 'from-pink-500 to-rose-500'
+      title: "Chat & Connect Instantly",
+      description:
+        "DM friends, join group chats, send voice notes, share files, and react with emojis in real-time.",
+      color: "from-pink-500 to-rose-500",
     },
     {
       icon: ActionsPlus,
-      title: 'Earn & Customize',
-      description: 'Get premium badges, unlock custom themes, tip creators, boost your posts, and personalize your profile.',
-      color: 'from-purple-500 to-violet-500'
+      title: "Earn & Customize",
+      description:
+        "Get premium badges, unlock custom themes, tip creators, boost your posts, and personalize your profile.",
+      color: "from-purple-500 to-violet-500",
     },
     {
       icon: DeviceLaptop,
-      title: 'Responsive Everywhere',
-      description: 'Beautiful experience on desktop, tablet, and mobile with adaptive layouts and smooth animations.',
-      color: 'from-orange-500 to-amber-500'
-    }
+      title: "Responsive Everywhere",
+      description:
+        "Beautiful experience on desktop, tablet, and mobile with adaptive layouts and smooth animations.",
+      color: "from-orange-500 to-amber-500",
+    },
   ];
 
   useEffect(() => {
@@ -61,11 +65,11 @@ export default function LandingPage() {
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         {/* Background Elements */}
-        <motion.div 
+        <motion.div
           style={{ y: y1 }}
           className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-orange-200 to-amber-200 dark:from-orange-800 dark:to-amber-800 rounded-full blur-3xl opacity-30"
         />
-        <motion.div 
+        <motion.div
           style={{ y: y2 }}
           className="absolute top-40 right-10 w-96 h-96 bg-gradient-to-r from-purple-200 to-pink-200 dark:from-purple-800 dark:to-pink-800 rounded-full blur-3xl opacity-20"
         />
@@ -94,7 +98,7 @@ export default function LandingPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white leading-tight"
             >
-              Your space to{' '}
+              Your space to{" "}
               <span className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
                 connect
               </span>
@@ -109,8 +113,9 @@ export default function LandingPage() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed"
             >
-              Where communities feel like home. Join developers, gamers, crypto traders, and news enthusiasts 
-              in a space designed for authentic connection and meaningful conversations.
+              Where communities feel like home. Join developers, gamers, crypto
+              traders, and news enthusiasts in a space designed for authentic
+              connection and meaningful conversations.
             </motion.p>
 
             {/* CTA Buttons */}
@@ -122,7 +127,7 @@ export default function LandingPage() {
             >
               <Link href="/register">
                 <Button
-                  size="large" 
+                  size="large"
                   className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-8 py-4 text-lg font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200"
                 >
                   Join Cozy Now
@@ -153,13 +158,14 @@ export default function LandingPage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              Everything you need to{' '}
+              Everything you need to{" "}
               <span className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
                 stay connected
               </span>
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Built for communities, designed for connection. Experience social media the cozy way.
+              Built for communities, designed for connection. Experience social
+              media the cozy way.
             </p>
           </motion.div>
 
@@ -170,7 +176,7 @@ export default function LandingPage() {
               {features.map((feature, index) => {
                 const Icon = feature.icon;
                 const isActive = currentFeature === index;
-                
+
                 return (
                   <motion.div
                     key={index}
@@ -179,19 +185,21 @@ export default function LandingPage() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     className={cn(
-                      'p-6 rounded-2xl border-2 transition-all duration-500 cursor-pointer',
-                      isActive 
-                        ? 'bg-gradient-to-r from-white to-orange-50 dark:from-gray-700 dark:to-orange-900/20 border-orange-300 shadow-xl scale-105' 
-                        : 'bg-white/80 dark:bg-gray-700/80 border-gray-200 dark:border-gray-600 hover:border-orange-200 hover:shadow-lg'
+                      "p-6 rounded-2xl border-2 transition-all duration-500 cursor-pointer",
+                      isActive
+                        ? "bg-gradient-to-r from-white to-orange-50 dark:from-gray-700 dark:to-orange-900/20 border-orange-300 shadow-xl scale-105"
+                        : "bg-white/80 dark:bg-gray-700/80 border-gray-200 dark:border-gray-600 hover:border-orange-200 hover:shadow-lg",
                     )}
                     onClick={() => setCurrentFeature(index)}
                   >
                     <div className="flex items-start gap-4">
-                      <div className={cn(
-                        'p-3 rounded-xl bg-gradient-to-r',
-                        feature.color,
-                        isActive ? 'shadow-lg scale-110' : ''
-                      )}>
+                      <div
+                        className={cn(
+                          "p-3 rounded-xl bg-gradient-to-r",
+                          feature.color,
+                          isActive ? "shadow-lg scale-110" : "",
+                        )}
+                      >
                         <Icon className="w-6 h-6 text-white" />
                       </div>
                       <div className="flex-1">
@@ -249,10 +257,12 @@ export default function LandingPage() {
                     <div className="space-y-4">
                       <div className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
                         <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                        <span className="text-green-700 dark:text-green-300 font-medium">Alex is typing...</span>
+                        <span className="text-green-700 dark:text-green-300 font-medium">
+                          Alex is typing...
+                        </span>
                       </div>
                       <div className="bg-blue-500 text-white p-3 rounded-2xl rounded-bl-md max-w-xs">
-                        Check out this new feature! 🎉 <br/>
+                        Check out this new feature! 🎉 <br />
                         <div className="text-xs mt-1">🎵 voice-note.mp3</div>
                       </div>
                       <div className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 p-3 rounded-2xl rounded-br-md max-w-xs ml-auto">
@@ -266,15 +276,21 @@ export default function LandingPage() {
                       <div className="space-y-3">
                         <div className="flex items-center gap-2 p-2 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900 dark:to-orange-900 rounded-lg">
                           <span className="text-xl">🏆</span>
-                          <span className="text-sm font-medium">Premium Badge Unlocked!</span>
+                          <span className="text-sm font-medium">
+                            Premium Badge Unlocked!
+                          </span>
                         </div>
                         <div className="flex items-center gap-2 p-2 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 rounded-lg">
                           <span className="text-xl">🎨</span>
-                          <span className="text-sm font-medium">Dark Neon Theme Available</span>
+                          <span className="text-sm font-medium">
+                            Dark Neon Theme Available
+                          </span>
                         </div>
                         <div className="flex items-center gap-2 p-2 bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900 dark:to-emerald-900 rounded-lg">
                           <span className="text-xl">💰</span>
-                          <span className="text-sm font-medium">Received 5 tips today</span>
+                          <span className="text-sm font-medium">
+                            Received 5 tips today
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -345,13 +361,14 @@ export default function LandingPage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              Earn, Customize, and{' '}
+              Earn, Customize, and{" "}
               <span className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
                 Stand Out
               </span>
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Express yourself with premium features, support creators you love, and make your profile uniquely yours.
+              Express yourself with premium features, support creators you love,
+              and make your profile uniquely yours.
             </p>
           </motion.div>
 
@@ -365,9 +382,12 @@ export default function LandingPage() {
               className="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-2xl p-8 border border-yellow-200 dark:border-yellow-800"
             >
               <div className="text-4xl mb-4">🏆</div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Premium Badges</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                Premium Badges
+              </h3>
               <p className="text-gray-600 dark:text-gray-300 mb-4">
-                Get verified with a golden badge. Stand out in communities and show your commitment to the platform.
+                Get verified with a golden badge. Stand out in communities and
+                show your commitment to the platform.
               </p>
               <div className="flex items-center gap-2">
                 <span className="text-sm bg-yellow-200 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 px-2 py-1 rounded">
@@ -386,9 +406,12 @@ export default function LandingPage() {
               className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-8 border border-purple-200 dark:border-purple-800"
             >
               <div className="text-4xl mb-4">🎨</div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Custom Themes</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                Custom Themes
+              </h3>
               <p className="text-gray-600 dark:text-gray-300 mb-4">
-                Unlock exclusive themes, animated profile frames, and custom emojis to personalize your experience.
+                Unlock exclusive themes, animated profile frames, and custom
+                emojis to personalize your experience.
               </p>
               <div className="flex flex-wrap gap-2">
                 <span className="text-xs bg-purple-200 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-2 py-1 rounded">
@@ -412,9 +435,12 @@ export default function LandingPage() {
               className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-8 border border-green-200 dark:border-green-800"
             >
               <div className="text-4xl mb-4">💰</div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Tip Creators</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                Tip Creators
+              </h3>
               <p className="text-gray-600 dark:text-gray-300 mb-4">
-                Support helpful posts and amazing content creators with our lightweight tipping system using Cozy coins.
+                Support helpful posts and amazing content creators with our
+                lightweight tipping system using Cozy coins.
               </p>
               <div className="flex items-center gap-2">
                 <span className="text-sm bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 px-2 py-1 rounded">
@@ -438,13 +464,14 @@ export default function LandingPage() {
             className="space-y-8"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
-              Ready to make Cozy your{' '}
+              Ready to make Cozy your{" "}
               <span className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
                 digital home?
               </span>
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Join thousands of people building meaningful connections in a space designed for authentic community.
+              Join thousands of people building meaningful connections in a
+              space designed for authentic community.
             </p>
             <Link href="/register">
               <Button

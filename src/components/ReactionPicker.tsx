@@ -1,7 +1,7 @@
-'use client';
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/cn';
+"use client";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/cn";
 
 interface ReactionPickerProps {
   onReactionSelect: (reaction: string) => void;
@@ -11,15 +11,20 @@ interface ReactionPickerProps {
 }
 
 const reactions = [
-  { emoji: '❤️', name: 'love', color: 'text-red-500' },
-  { emoji: '😂', name: 'laugh', color: 'text-yellow-500' },
-  { emoji: '😮', name: 'wow', color: 'text-blue-500' },
-  { emoji: '😢', name: 'sad', color: 'text-blue-400' },
-  { emoji: '😡', name: 'angry', color: 'text-red-600' },
-  { emoji: '👍', name: 'like', color: 'text-green-500' },
+  { emoji: "❤️", name: "love", color: "text-red-500" },
+  { emoji: "😂", name: "laugh", color: "text-yellow-500" },
+  { emoji: "😮", name: "wow", color: "text-blue-500" },
+  { emoji: "😢", name: "sad", color: "text-blue-400" },
+  { emoji: "😡", name: "angry", color: "text-red-600" },
+  { emoji: "👍", name: "like", color: "text-green-500" },
 ];
 
-export function ReactionPicker({ onReactionSelect, isOpen, onClose, className }: ReactionPickerProps) {
+export function ReactionPicker({
+  onReactionSelect,
+  isOpen,
+  onClose,
+  className,
+}: ReactionPickerProps) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -32,16 +37,16 @@ export function ReactionPicker({ onReactionSelect, isOpen, onClose, className }:
             className="fixed inset-0 z-40 bg-black/20"
             onClick={onClose}
           />
-          
+
           {/* Reaction picker */}
           <motion.div
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            transition={{ type: 'spring', duration: 0.3 }}
+            transition={{ type: "spring", duration: 0.3 }}
             className={cn(
-              'absolute z-50 bg-white dark:bg-gray-800 rounded-full shadow-lg border p-2 flex gap-1',
-              className
+              "absolute z-50 bg-white dark:bg-gray-800 rounded-full shadow-lg border p-2 flex gap-1",
+              className,
             )}
           >
             {reactions.map((reaction, index) => (
@@ -57,9 +62,9 @@ export function ReactionPicker({ onReactionSelect, isOpen, onClose, className }:
                   onClose();
                 }}
                 className={cn(
-                  'w-12 h-12 rounded-full flex items-center justify-center text-2xl',
-                  'hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors',
-                  reaction.color
+                  "w-12 h-12 rounded-full flex items-center justify-center text-2xl",
+                  "hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors",
+                  reaction.color,
                 )}
                 title={reaction.name}
               >
@@ -76,36 +81,36 @@ export function ReactionPicker({ onReactionSelect, isOpen, onClose, className }:
 // Hook for managing reactions
 export function useReactions(postId: string, commentId?: string) {
   const [showPicker, setShowPicker] = useState(false);
-  
+
   const addReaction = async (reaction: string) => {
     try {
-      const endpoint = commentId 
+      const endpoint = commentId
         ? `/api/comments/${commentId}/reactions`
         : `/api/posts/${postId}/reactions`;
-        
+
       await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reaction }),
       });
     } catch (error) {
-      console.error('Error adding reaction:', error);
+      console.error("Error adding reaction:", error);
     }
   };
 
   const removeReaction = async (reaction: string) => {
     try {
-      const endpoint = commentId 
+      const endpoint = commentId
         ? `/api/comments/${commentId}/reactions`
         : `/api/posts/${postId}/reactions`;
-        
+
       await fetch(endpoint, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reaction }),
       });
     } catch (error) {
-      console.error('Error removing reaction:', error);
+      console.error("Error removing reaction:", error);
     }
   };
 

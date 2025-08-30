@@ -7,18 +7,23 @@ import {
   useEffect,
   useRef,
   useState,
-} from 'react';
-import { resizeTextAreaHeight } from '@/lib/resizeTextAreaHeight';
-import { useQuery } from '@tanstack/react-query';
-import { replaceWordAtCursor } from '@/lib/replaceWordAtCursor';
-import { cn } from '@/lib/cn';
-import { AriaTextFieldProps, mergeProps, useKeyboard, useTextField } from 'react-aria';
-import { useOverlayTriggerState } from 'react-stately';
-import { useClickOutside } from '@/hooks/useClickOutside';
-import { getUsers } from '@/lib/client_data_fetching/getUsers';
-import { Popover } from './ui/Popover';
-import { TextAreaMentionItem } from './TextAreaMentionItem';
-import { HighlightedMentionsAndHashTags } from './HighlightedMentionsAndHashTags';
+} from "react";
+import { resizeTextAreaHeight } from "@/lib/resizeTextAreaHeight";
+import { useQuery } from "@tanstack/react-query";
+import { replaceWordAtCursor } from "@/lib/replaceWordAtCursor";
+import { cn } from "@/lib/cn";
+import {
+  AriaTextFieldProps,
+  mergeProps,
+  useKeyboard,
+  useTextField,
+} from "react-aria";
+import { useOverlayTriggerState } from "react-stately";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import { getUsers } from "@/lib/client_data_fetching/getUsers";
+import { Popover } from "./ui/Popover";
+import { TextAreaMentionItem } from "./TextAreaMentionItem";
+import { HighlightedMentionsAndHashTags } from "./HighlightedMentionsAndHashTags";
 
 interface TextAreaWithMentionsAndHashTagsProps extends AriaTextFieldProps {
   content: string;
@@ -33,15 +38,15 @@ export function TextAreaWithMentionsAndHashTags({
   shouldFocusOnMount = true,
   ...rest
 }: TextAreaWithMentionsAndHashTagsProps) {
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const [focused, setFocused] = useState<string>('');
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [focused, setFocused] = useState<string>("");
 
   const posOfActiveAt = useRef(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { inputProps, labelProps, errorMessageProps } = useTextField(
-    { ...rest, inputElementType: 'textarea', label: placeholder },
+    { ...rest, inputElementType: "textarea", label: placeholder },
     textareaRef,
   );
   const { errorMessage } = rest;
@@ -51,7 +56,7 @@ export function TextAreaWithMentionsAndHashTags({
 
   // This query will refetch every time the `searchKeyword` state changess
   const { data, isPending, isError } = useQuery({
-    queryKey: ['mentions', 'search', { keyword: searchKeyword }],
+    queryKey: ["mentions", "search", { keyword: searchKeyword }],
     queryFn: async () => getUsers({ searchKeyword }),
     staleTime: 60000 * 10,
     enabled: !!searchKeyword,
@@ -60,13 +65,13 @@ export function TextAreaWithMentionsAndHashTags({
   // Focus the first item when `data` changes
   useEffect(() => {
     if (!data) return;
-    setFocused(data[0]?.username || '');
+    setFocused(data[0]?.username || "");
   }, [data]);
 
   const closeMentions = useCallback(() => {
-    setSearchKeyword('');
+    setSearchKeyword("");
     setMentionsShown(false);
-    setFocused('');
+    setFocused("");
     posOfActiveAt.current = 0;
   }, [setMentionsShown]);
 
@@ -95,7 +100,9 @@ export function TextAreaWithMentionsAndHashTags({
     closeMentions();
   };
 
-  const handleTextareaChange: ChangeEventHandler<HTMLTextAreaElement> = (event) => {
+  const handleTextareaChange: ChangeEventHandler<HTMLTextAreaElement> = (
+    event,
+  ) => {
     const { target } = event;
     setContent(target.value);
   };
@@ -116,7 +123,7 @@ export function TextAreaWithMentionsAndHashTags({
      * username validation i.e. alphanumeric and underscore characters only, then
      * show the mentions section, otherwise hide it
      */
-    if (currentWord.startsWith('@')) {
+    if (currentWord.startsWith("@")) {
       const keyword = currentWord.slice(1);
       if (/^\w+$/.test(keyword)) {
         setSearchKeyword(keyword);
@@ -131,7 +138,8 @@ export function TextAreaWithMentionsAndHashTags({
   // Since the `TextArea` is in `absolute` position, the container won't auto-resize
   // according to the height of the `TextArea`, we can set it manually instead
   useEffect(() => {
-    if (containerRef.current) containerRef.current.style.height = `${textareaRef.current?.scrollHeight}px`;
+    if (containerRef.current)
+      containerRef.current.style.height = `${textareaRef.current?.scrollHeight}px`;
   }, [content]);
 
   useEffect(() => {
@@ -156,25 +164,36 @@ export function TextAreaWithMentionsAndHashTags({
       const lastIndex = length - 1;
 
       // If the focused index is the first index, the `prevIndex` must be the `lastIndex`
-      const prevIndex = focusedIndex === firstIndex ? lastIndex : focusedIndex - 1;
+      const prevIndex =
+        focusedIndex === firstIndex ? lastIndex : focusedIndex - 1;
       // If the focused index is the last index, the `nextIndex` must be 0
       const nextIndex = focusedIndex === lastIndex ? 0 : focusedIndex + 1;
 
-      if (['Escape', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter', 'Tab'].includes(e.key)) {
+      if (
+        [
+          "Escape",
+          "ArrowUp",
+          "ArrowDown",
+          "Home",
+          "End",
+          "Enter",
+          "Tab",
+        ].includes(e.key)
+      ) {
         e.preventDefault();
       }
-      if (e.key === 'Escape') return closeMentions();
-      if (e.key === 'ArrowUp') return setFocused(data[prevIndex].username!);
-      if (e.key === 'ArrowDown') return setFocused(data[nextIndex].username!);
-      if (e.key === 'Home') return setFocused(data[firstIndex].username!);
-      if (e.key === 'End') return setFocused(data[lastIndex].username!);
-      if (['Enter', 'Tab'].includes(e.key)) {
+      if (e.key === "Escape") return closeMentions();
+      if (e.key === "ArrowUp") return setFocused(data[prevIndex].username!);
+      if (e.key === "ArrowDown") return setFocused(data[nextIndex].username!);
+      if (e.key === "Home") return setFocused(data[firstIndex].username!);
+      if (e.key === "End") return setFocused(data[lastIndex].username!);
+      if (["Enter", "Tab"].includes(e.key)) {
         handleSelectUserToMention(data[focusedIndex].username!);
       }
       return null;
     },
     onKeyUp: (e) => {
-      if (e.key === 'Escape') return;
+      if (e.key === "Escape") return;
       handleToggleMentions();
     },
   });
@@ -188,7 +207,8 @@ export function TextAreaWithMentionsAndHashTags({
           state={popoverState}
           isNonModal
           placement="top"
-          className="min-w-[200px]">
+          className="min-w-[200px]"
+        >
           <ul className="max-h-[242px] w-full overflow-auto border border-border bg-popover outline-none">
             {isPending ? (
               <li>Loading...</li>
@@ -227,8 +247,9 @@ export function TextAreaWithMentionsAndHashTags({
             placeholder,
           })}
           className={cn(
-            'absolute top-0 block w-full resize-none overflow-hidden break-words bg-transparent text-transparent caret-foreground outline-none',
-            rest.errorMessage && 'rounded-sm ring-2 ring-red-900 ring-offset-4 placeholder:text-red-900',
+            "absolute top-0 block w-full resize-none overflow-hidden break-words bg-transparent text-transparent caret-foreground outline-none",
+            rest.errorMessage &&
+              "rounded-sm ring-2 ring-red-900 ring-offset-4 placeholder:text-red-900",
           )}
         />
         <p className="whitespace-pre-wrap break-words bg-transparent">

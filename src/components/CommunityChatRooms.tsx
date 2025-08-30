@@ -1,30 +1,35 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { format } from 'date-fns';
-import { cn } from '@/lib/cn';
-import Button from './ui/Button';
-import { GenericLoading } from './GenericLoading';
-import { SomethingWentWrong } from './SometingWentWrong';
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { cn } from "@/lib/cn";
+import Button from "./ui/Button";
+import { GenericLoading } from "./GenericLoading";
+import { SomethingWentWrong } from "./SometingWentWrong";
 
 interface CommunityChatRoomsProps {
   communityId: string;
   canCreateRooms?: boolean;
 }
 
-export function CommunityChatRooms({ communityId, canCreateRooms = false }: CommunityChatRoomsProps) {
+export function CommunityChatRooms({
+  communityId,
+  canCreateRooms = false,
+}: CommunityChatRoomsProps) {
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['community-chat-rooms', communityId],
+    queryKey: ["community-chat-rooms", communityId],
     queryFn: async () => {
-      const response = await fetch(`/api/communities/${communityId}/chat-rooms`);
+      const response = await fetch(
+        `/api/communities/${communityId}/chat-rooms`,
+      );
       if (!response.ok) {
         if (response.status === 403) {
-          throw new Error('You must be a member to view chat rooms');
+          throw new Error("You must be a member to view chat rooms");
         }
-        throw new Error('Failed to fetch chat rooms');
+        throw new Error("Failed to fetch chat rooms");
       }
       return response.json();
     },
@@ -45,11 +50,9 @@ export function CommunityChatRooms({ communityId, canCreateRooms = false }: Comm
             Connect with community members in real-time
           </p>
         </div>
-        
+
         {canCreateRooms && (
-          <Button className="sm:ml-auto">
-            Create Chat Room
-          </Button>
+          <Button className="sm:ml-auto">Create Chat Room</Button>
         )}
       </div>
 
@@ -60,8 +63,8 @@ export function CommunityChatRooms({ communityId, canCreateRooms = false }: Comm
           <h3 className="text-lg font-medium mb-2">No Chat Rooms Yet</h3>
           <p className="text-muted-foreground">
             {canCreateRooms
-              ? 'Create the first chat room to get conversations started!'
-              : 'Chat rooms will appear here when they\'re created by community moderators.'}
+              ? "Create the first chat room to get conversations started!"
+              : "Chat rooms will appear here when they're created by community moderators."}
           </p>
         </div>
       ) : (
@@ -82,9 +85,12 @@ export function CommunityChatRooms({ communityId, canCreateRooms = false }: Comm
         <div className="bg-card border rounded-xl p-6">
           <div className="text-center">
             <div className="text-4xl mb-3">🚧</div>
-            <h3 className="text-lg font-medium mb-2">Chat Interface Coming Soon</h3>
+            <h3 className="text-lg font-medium mb-2">
+              Chat Interface Coming Soon
+            </h3>
             <p className="text-muted-foreground">
-              Real-time messaging, reactions, and file sharing features are being developed.
+              Real-time messaging, reactions, and file sharing features are
+              being developed.
             </p>
           </div>
         </div>
@@ -107,20 +113,18 @@ function ChatRoomCard({ room, isSelected, onSelect }: ChatRoomCardProps) {
     <div
       onClick={onSelect}
       className={cn(
-        'bg-card border rounded-xl p-6 cursor-pointer transition-all hover:shadow-md',
-        isSelected && 'ring-2 ring-primary border-primary'
+        "bg-card border rounded-xl p-6 cursor-pointer transition-all hover:shadow-md",
+        isSelected && "ring-2 ring-primary border-primary",
       )}
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
             <div className="flex items-center gap-2">
-              <span className="text-lg">
-                {room.isPublic ? '🌍' : '🔒'}
-              </span>
+              <span className="text-lg">{room.isPublic ? "🌍" : "🔒"}</span>
               <h3 className="font-semibold">{room.name}</h3>
             </div>
-            
+
             {!room.isPublic && (
               <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded">
                 Private
@@ -139,7 +143,7 @@ function ChatRoomCard({ room, isSelected, onSelect }: ChatRoomCardProps) {
               <span>👥</span>
               {room._count.participants} members
             </div>
-            
+
             <div className="flex items-center gap-1">
               <span>💬</span>
               {room._count.messages} messages
@@ -151,13 +155,13 @@ function ChatRoomCard({ room, isSelected, onSelect }: ChatRoomCardProps) {
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <span>💭</span>
                 <span>
-                  <strong>@{lastMessage.sender.username}:</strong>{' '}
+                  <strong>@{lastMessage.sender.username}:</strong>{" "}
                   {lastMessage.content.slice(0, 50)}
-                  {lastMessage.content.length > 50 ? '...' : ''}
+                  {lastMessage.content.length > 50 ? "..." : ""}
                 </span>
               </div>
               <div className="text-xs text-muted-foreground mt-1">
-                {format(new Date(lastMessage.createdAt), 'MMM d, h:mm a')}
+                {format(new Date(lastMessage.createdAt), "MMM d, h:mm a")}
               </div>
             </div>
           )}

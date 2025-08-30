@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import Button from '@/components/ui/Button';
-import { FallbackProfilePhoto } from '@/components/ui/FallbackProfilePhoto';
-import { useUpdateProfileAndCoverPhotoClient } from '@/hooks/useUpdateProfileAndCoverPhotoClient';
-import { useVisualMediaModal } from '@/hooks/useVisualMediaModal';
-import { Camera } from '@/svg_components';
-import { useCallback } from 'react';
+import Button from "@/components/ui/Button";
+import { FallbackProfilePhoto } from "@/components/ui/FallbackProfilePhoto";
+import { useUpdateProfileAndCoverPhotoClient } from "@/hooks/useUpdateProfileAndCoverPhotoClient";
+import { useVisualMediaModal } from "@/hooks/useVisualMediaModal";
+import { Camera } from "@/svg_components";
+import { useCallback } from "react";
 
 export default function ProfilePhoto({
   isOwnProfile,
@@ -16,13 +16,14 @@ export default function ProfilePhoto({
   name: string;
   photoUrl: string | null;
 }) {
-  const { inputFileRef, openInput, handleChange, isPending } = useUpdateProfileAndCoverPhotoClient('profile');
+  const { inputFileRef, openInput, handleChange, isPending } =
+    useUpdateProfileAndCoverPhotoClient("profile");
   const { showVisualMediaModal } = useVisualMediaModal();
   const showProfilePhotoModal = useCallback(() => {
     showVisualMediaModal({
       visualMedia: [
         {
-          type: 'PHOTO',
+          type: "PHOTO",
           url: photoUrl as string,
         },
       ],
@@ -33,7 +34,11 @@ export default function ProfilePhoto({
   return (
     <div className="absolute bottom-[-88px] h-44 w-44 border-white bg-cover">
       {photoUrl && (
-        <img src={photoUrl} alt="Profile" className="absolute h-full w-full rounded-full border-4 object-cover" />
+        <img
+          src={photoUrl}
+          alt="Profile"
+          className="absolute h-full w-full rounded-full border-4 object-cover"
+        />
       )}
       {photoUrl ? (
         <button
@@ -56,7 +61,12 @@ export default function ProfilePhoto({
               className="hidden"
               accept="image/png, image/jpg, image/jpeg"
             />
-            <Button Icon={Camera} onPress={openInput} size="small" loading={isPending} />
+            <Button
+              Icon={Camera}
+              onPress={openInput}
+              size="small"
+              loading={isPending}
+            />
           </div>
         </label>
       )}

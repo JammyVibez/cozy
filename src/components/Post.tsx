@@ -1,23 +1,23 @@
-'use client';
+"use client";
 
-import { memo, useCallback, useMemo } from 'react';
-import { useSession } from 'next-auth/react';
-import { cn } from '@/lib/cn';
-import formatDistanceStrict from 'date-fns/formatDistanceStrict';
-import SvgComment from '@/svg_components/Comment';
-import { AnimatePresence, motion } from 'framer-motion';
-import { GetPost, PostId } from '@/types/definitions';
-import { isEqual } from 'lodash';
-import SvgHeart from '@/svg_components/Heart';
-import { useQuery } from '@tanstack/react-query';
-import { usePostLikesMutations } from '@/hooks/mutations/usePostLikesMutations';
-import { ToggleStepper } from './ui/ToggleStepper';
-import { Comments } from './Comments';
-import { PostVisualMediaContainer } from './PostVisualMediaContainer';
-import ProfileBlock from './ProfileBlock';
-import { HighlightedMentionsAndHashTags } from './HighlightedMentionsAndHashTags';
-import { PostOptions } from './PostOptions';
-import { TipButton } from './TipButton';
+import { memo, useCallback, useMemo } from "react";
+import { useSession } from "next-auth/react";
+import { cn } from "@/lib/cn";
+import formatDistanceStrict from "date-fns/formatDistanceStrict";
+import SvgComment from "@/svg_components/Comment";
+import { AnimatePresence, motion } from "framer-motion";
+import { GetPost, PostId } from "@/types/definitions";
+import { isEqual } from "lodash";
+import SvgHeart from "@/svg_components/Heart";
+import { useQuery } from "@tanstack/react-query";
+import { usePostLikesMutations } from "@/hooks/mutations/usePostLikesMutations";
+import { ToggleStepper } from "./ui/ToggleStepper";
+import { Comments } from "./Comments";
+import { PostVisualMediaContainer } from "./PostVisualMediaContainer";
+import ProfileBlock from "./ProfileBlock";
+import { HighlightedMentionsAndHashTags } from "./HighlightedMentionsAndHashTags";
+import { PostOptions } from "./PostOptions";
+import { TipButton } from "./TipButton";
 
 export const Post = memo(
   ({
@@ -32,11 +32,11 @@ export const Post = memo(
     const { likeMutation, unLikeMutation } = usePostLikesMutations({ postId });
 
     const { data, isPending, isError } = useQuery<GetPost>({
-      queryKey: ['posts', postId],
+      queryKey: ["posts", postId],
       queryFn: async () => {
         const res = await fetch(`/api/posts/${postId}`);
         if (!res.ok) {
-          throw new Error('Error getting post');
+          throw new Error("Error getting post");
         }
         return (await res.json()) as GetPost;
       },
@@ -44,7 +44,10 @@ export const Post = memo(
     });
 
     const likePost = useCallback(() => likeMutation.mutate(), [likeMutation]);
-    const unLikePost = useCallback(() => unLikeMutation.mutate(), [unLikeMutation]);
+    const unLikePost = useCallback(
+      () => unLikeMutation.mutate(),
+      [unLikeMutation],
+    );
     const handleLikeToggle = useCallback(
       (isSelected: boolean) => {
         if (isSelected) {
@@ -61,12 +64,12 @@ export const Post = memo(
     const variants = useMemo(
       () => ({
         animate: {
-          height: 'auto',
-          overflow: 'visible',
+          height: "auto",
+          overflow: "visible",
         },
         exit: {
           height: 0,
-          overflow: 'hidden',
+          overflow: "hidden",
         },
       }),
       [],
@@ -77,7 +80,14 @@ export const Post = memo(
     if (!data) return <p>This post no longer exists.</p>;
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { content, createdAt, user: author, visualMedia, isLiked, _count } = data;
+    const {
+      content,
+      createdAt,
+      user: author,
+      visualMedia,
+      isLiked,
+      _count,
+    } = data;
     const isOwnPost = userId === author.id;
     const numberOfLikes = _count.postLikes;
 
@@ -90,7 +100,13 @@ export const Post = memo(
             time={formatDistanceStrict(new Date(createdAt), new Date())}
             photoUrl={author.profilePhoto!}
           />
-          {isOwnPost && <PostOptions postId={postId} content={content} visualMedia={visualMedia} />}
+          {isOwnPost && (
+            <PostOptions
+              postId={postId}
+              content={content}
+              visualMedia={visualMedia}
+            />
+          )}
         </div>
         {content && (
           <p className="mb-4 mt-5 text-lg text-muted-foreground">
@@ -104,9 +120,10 @@ export const Post = memo(
         )}
         <div
           className={cn([
-            'flex justify-start gap-2 border-y border-y-border py-2',
-            !commentsShown && 'border-b-transparent',
-          ])}>
+            "flex justify-start gap-2 border-y border-y-border py-2",
+            !commentsShown && "border-b-transparent",
+          ])}
+        >
           <ToggleStepper
             isSelected={isLiked}
             onChange={handleLikeToggle}
@@ -123,8 +140,8 @@ export const Post = memo(
             // noun="Comment"
           />
           {!isOwnPost && (
-            <TipButton 
-              receiverId={author.id} 
+            <TipButton
+              receiverId={author.id}
               postId={postId}
               className="ml-2"
             />
@@ -133,7 +150,13 @@ export const Post = memo(
 
         <AnimatePresence>
           {commentsShown && (
-            <motion.div key={`${postId}-comments`} variants={variants} initial={false} animate="animate" exit="exit">
+            <motion.div
+              key={`${postId}-comments`}
+              variants={variants}
+              initial={false}
+              animate="animate"
+              exit="exit"
+            >
               <Comments postId={postId} />
             </motion.div>
           )}
@@ -144,4 +167,4 @@ export const Post = memo(
   (oldProps, newProps) => isEqual(oldProps, newProps),
 );
 
-Post.displayName = 'Post';
+Post.displayName = "Post";

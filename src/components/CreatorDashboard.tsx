@@ -1,7 +1,7 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Line, Bar, Doughnut } from 'react-chartjs-2';
+"use client";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Line, Bar, Doughnut } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,9 +13,15 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { cn } from '@/lib/cn';
-import { TwoPeople, Heart, Comment, View, DeviceLaptop } from '@/svg_components';
+} from "chart.js";
+import { cn } from "@/lib/cn";
+import {
+  TwoPeople,
+  Heart,
+  Comment,
+  View,
+  DeviceLaptop,
+} from "@/svg_components";
 
 ChartJS.register(
   CategoryScale,
@@ -26,7 +32,7 @@ ChartJS.register(
   ArcElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 interface AnalyticsData {
@@ -61,8 +67,10 @@ interface AnalyticsData {
 }
 
 export function CreatorDashboard() {
-  const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
-  const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d'>('30d');
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(
+    null,
+  );
+  const [timeRange, setTimeRange] = useState<"7d" | "30d" | "90d">("30d");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -76,7 +84,7 @@ export function CreatorDashboard() {
       const data = await response.json();
       setAnalyticsData(data);
     } catch (error) {
-      console.error('Error fetching analytics:', error);
+      console.error("Error fetching analytics:", error);
     } finally {
       setLoading(false);
     }
@@ -105,12 +113,12 @@ export function CreatorDashboard() {
     );
   }
 
-  const StatCard = ({ 
-    title, 
-    value, 
-    growth, 
-    icon: Icon, 
-    color = 'blue' 
+  const StatCard = ({
+    title,
+    value,
+    growth,
+    icon: Icon,
+    color = "blue",
   }: {
     title: string;
     value: string | number;
@@ -120,21 +128,26 @@ export function CreatorDashboard() {
   }) => (
     <div className="bg-card rounded-lg border p-6">
       <div className="flex items-center justify-between mb-4">
-        <div className={cn(
-          'p-3 rounded-lg',
-          color === 'blue' && 'bg-blue-100 text-blue-600',
-          color === 'green' && 'bg-green-100 text-green-600',
-          color === 'purple' && 'bg-purple-100 text-purple-600',
-          color === 'orange' && 'bg-orange-100 text-orange-600'
-        )}>
+        <div
+          className={cn(
+            "p-3 rounded-lg",
+            color === "blue" && "bg-blue-100 text-blue-600",
+            color === "green" && "bg-green-100 text-green-600",
+            color === "purple" && "bg-purple-100 text-purple-600",
+            color === "orange" && "bg-orange-100 text-orange-600",
+          )}
+        >
           <Icon className="w-6 h-6" />
         </div>
         {growth !== undefined && (
-          <span className={cn(
-            'text-sm font-medium',
-            growth >= 0 ? 'text-green-600' : 'text-red-600'
-          )}>
-            {growth >= 0 ? '+' : ''}{growth}%
+          <span
+            className={cn(
+              "text-sm font-medium",
+              growth >= 0 ? "text-green-600" : "text-red-600",
+            )}
+          >
+            {growth >= 0 ? "+" : ""}
+            {growth}%
           </span>
         )}
       </div>
@@ -146,13 +159,22 @@ export function CreatorDashboard() {
   );
 
   const followerChartData = {
-    labels: ['7 days ago', '6 days ago', '5 days ago', '4 days ago', '3 days ago', '2 days ago', 'Yesterday', 'Today'],
+    labels: [
+      "7 days ago",
+      "6 days ago",
+      "5 days ago",
+      "4 days ago",
+      "3 days ago",
+      "2 days ago",
+      "Yesterday",
+      "Today",
+    ],
     datasets: [
       {
-        label: 'Followers',
+        label: "Followers",
         data: analyticsData.followers.chartData,
-        borderColor: 'rgb(59, 130, 246)',
-        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        borderColor: "rgb(59, 130, 246)",
+        backgroundColor: "rgba(59, 130, 246, 0.1)",
         tension: 0.4,
         fill: true,
       },
@@ -160,7 +182,7 @@ export function CreatorDashboard() {
   };
 
   const engagementChartData = {
-    labels: ['Likes', 'Comments', 'Shares'],
+    labels: ["Likes", "Comments", "Shares"],
     datasets: [
       {
         data: [
@@ -169,9 +191,9 @@ export function CreatorDashboard() {
           analyticsData.engagement.shares,
         ],
         backgroundColor: [
-          'rgba(239, 68, 68, 0.8)',
-          'rgba(34, 197, 94, 0.8)',
-          'rgba(168, 85, 247, 0.8)',
+          "rgba(239, 68, 68, 0.8)",
+          "rgba(34, 197, 94, 0.8)",
+          "rgba(168, 85, 247, 0.8)",
         ],
         borderWidth: 0,
       },
@@ -194,7 +216,7 @@ export function CreatorDashboard() {
       },
       y: {
         grid: {
-          color: 'rgba(0, 0, 0, 0.1)',
+          color: "rgba(0, 0, 0, 0.1)",
         },
       },
     },
@@ -210,21 +232,25 @@ export function CreatorDashboard() {
             Track your content performance and audience growth
           </p>
         </div>
-        
+
         {/* Time Range Selector */}
         <div className="flex bg-muted rounded-lg p-1">
-          {(['7d', '30d', '90d'] as const).map((range) => (
+          {(["7d", "30d", "90d"] as const).map((range) => (
             <button
               key={range}
               onClick={() => setTimeRange(range)}
               className={cn(
-                'px-4 py-2 rounded-md transition-all duration-200 font-medium',
+                "px-4 py-2 rounded-md transition-all duration-200 font-medium",
                 timeRange === range
-                  ? 'bg-white dark:bg-gray-700 shadow-sm'
-                  : 'hover:bg-white/50 dark:hover:bg-gray-600'
+                  ? "bg-white dark:bg-gray-700 shadow-sm"
+                  : "hover:bg-white/50 dark:hover:bg-gray-600",
               )}
             >
-              {range === '7d' ? '7 days' : range === '30d' ? '30 days' : '90 days'}
+              {range === "7d"
+                ? "7 days"
+                : range === "30d"
+                ? "30 days"
+                : "90 days"}
             </button>
           ))}
         </div>
@@ -274,17 +300,17 @@ export function CreatorDashboard() {
         <div className="bg-card rounded-lg border p-6">
           <h3 className="text-lg font-semibold mb-4">Engagement Breakdown</h3>
           <div className="h-64">
-            <Doughnut 
-              data={engagementChartData} 
+            <Doughnut
+              data={engagementChartData}
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
                   legend: {
-                    position: 'bottom' as const,
+                    position: "bottom" as const,
                   },
                 },
-              }} 
+              }}
             />
           </div>
         </div>
@@ -295,7 +321,10 @@ export function CreatorDashboard() {
         <h3 className="text-lg font-semibold mb-4">Top Performing Posts</h3>
         <div className="space-y-4">
           {analyticsData.topPosts.map((post, index) => (
-            <div key={post.id} className="flex items-center gap-4 p-4 bg-muted rounded-lg">
+            <div
+              key={post.id}
+              className="flex items-center gap-4 p-4 bg-muted rounded-lg"
+            >
               <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold text-sm">
                 {index + 1}
               </div>
@@ -327,14 +356,25 @@ export function CreatorDashboard() {
           <h3 className="text-lg font-semibold mb-4">Audience by Age</h3>
           <div className="space-y-3">
             {analyticsData.demographics.ageGroups.map((group) => (
-              <div key={group.label} className="flex items-center justify-between">
+              <div
+                key={group.label}
+                className="flex items-center justify-between"
+              >
                 <span className="text-sm">{group.label}</span>
                 <div className="flex items-center gap-2">
                   <div className="w-24 h-2 bg-muted rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className="h-full bg-primary"
-                      style={{ 
-                        width: `${(group.count / Math.max(...analyticsData.demographics.ageGroups.map(g => g.count))) * 100}%` 
+                      style={{
+                        width: `${
+                          (group.count /
+                            Math.max(
+                              ...analyticsData.demographics.ageGroups.map(
+                                (g) => g.count,
+                              ),
+                            )) *
+                          100
+                        }%`,
                       }}
                     />
                   </div>
@@ -350,24 +390,37 @@ export function CreatorDashboard() {
         <div className="bg-card rounded-lg border p-6">
           <h3 className="text-lg font-semibold mb-4">Top Locations</h3>
           <div className="space-y-3">
-            {analyticsData.demographics.locations.slice(0, 5).map((location) => (
-              <div key={location.country} className="flex items-center justify-between">
-                <span className="text-sm">{location.country}</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-24 h-2 bg-muted rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-secondary"
-                      style={{ 
-                        width: `${(location.count / Math.max(...analyticsData.demographics.locations.map(l => l.count))) * 100}%` 
-                      }}
-                    />
+            {analyticsData.demographics.locations
+              .slice(0, 5)
+              .map((location) => (
+                <div
+                  key={location.country}
+                  className="flex items-center justify-between"
+                >
+                  <span className="text-sm">{location.country}</span>
+                  <div className="flex items-center gap-2">
+                    <div className="w-24 h-2 bg-muted rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-secondary"
+                        style={{
+                          width: `${
+                            (location.count /
+                              Math.max(
+                                ...analyticsData.demographics.locations.map(
+                                  (l) => l.count,
+                                ),
+                              )) *
+                            100
+                          }%`,
+                        }}
+                      />
+                    </div>
+                    <span className="text-sm font-medium w-12 text-right">
+                      {location.count}%
+                    </span>
                   </div>
-                  <span className="text-sm font-medium w-12 text-right">
-                    {location.count}%
-                  </span>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </div>

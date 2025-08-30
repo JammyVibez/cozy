@@ -1,28 +1,28 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/auth';
-import prisma from '@/lib/prisma/prisma';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import prisma from "@/lib/prisma/prisma";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const communityId = params.id;
     const { searchParams } = new URL(request.url);
-    const type = searchParams.get('type');
-    const upcoming = searchParams.get('upcoming') === 'true';
+    const type = searchParams.get("type");
+    const upcoming = searchParams.get("upcoming") === "true";
 
     const where: any = { communityId };
-    
-    if (type && type !== 'ALL') {
+
+    if (type && type !== "ALL") {
       where.type = type;
     }
-    
+
     if (upcoming) {
       where.startTime = {
         gte: new Date(),
@@ -53,28 +53,28 @@ export async function GET(
         },
       },
       orderBy: {
-        startTime: 'asc',
+        startTime: "asc",
       },
     });
 
     return NextResponse.json({ events });
   } catch (error) {
-    console.error('Error fetching events:', error);
+    console.error("Error fetching events:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const communityId = params.id;
@@ -90,19 +90,33 @@ export async function POST(
       },
     });
 
-    if (!membership || !['ADMIN', 'MODERATOR'].includes(membership.role)) {
-      return NextResponse.json({ 
-        error: 'Only admins and moderators can create events' 
-      }, { status: 403 });
+    if (!membership || !["ADMIN", "MODERATOR"].includes(membership.role)) {
+      return NextResponse.json(
+        {
+          error: "Only admins and moderators can create events",
+        },
+        { status: 403 },
+      );
     }
 
     const body = await request.json();
-    const { title, description, eventType, startTime, endTime, location, maxAttendees } = body;
+    const {
+      title,
+      description,
+      eventType,
+      startTime,
+      endTime,
+      location,
+      maxAttendees,
+    } = body;
 
     if (!title || !eventType || !startTime) {
-      return NextResponse.json({ 
-        error: 'Title, event type, and start time are required' 
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: "Title, event type, and start time are required",
+        },
+        { status: 400 },
+      );
     }
 
     const event = await prisma.communityEvent.create({
@@ -142,10 +156,10 @@ export async function POST(
 
     return NextResponse.json({ success: true, event });
   } catch (error) {
-    console.error('Error creating event:', error);
+    console.error("Error creating event:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }

@@ -1,5 +1,5 @@
-import 'server-only';
-import { S3Client } from '@aws-sdk/client-s3';
+import "server-only";
+import { S3Client } from "@aws-sdk/client-s3";
 
 // https://github.com/aws/aws-sdk-net/issues/1713
 export const s3Client = new S3Client({

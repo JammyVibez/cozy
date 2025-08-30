@@ -7,16 +7,20 @@
  * }
  */
 
-import { getServerUser } from '@/lib/getServerUser';
-import prisma from '@/lib/prisma/prisma';
-import { followPostSchema } from '@/lib/validations/follow';
-import { Prisma } from '@prisma/client';
-import { NextResponse } from 'next/server';
-import { z } from 'zod';
+import { getServerUser } from "@/lib/getServerUser";
+import prisma from "@/lib/prisma/prisma";
+import { followPostSchema } from "@/lib/validations/follow";
+import { Prisma } from "@prisma/client";
+import { NextResponse } from "next/server";
+import { z } from "zod";
 
-export async function POST(request: Request, { params }: { params: { userId: string } }) {
+export async function POST(
+  request: Request,
+  { params }: { params: { userId: string } },
+) {
   const [user] = await getServerUser();
-  if (!user || user.id !== params.userId) return NextResponse.json({}, { status: 403 });
+  if (!user || user.id !== params.userId)
+    return NextResponse.json({}, { status: 403 });
 
   try {
     const { userIdToFollow } = followPostSchema.parse(await request.json());
@@ -30,7 +34,7 @@ export async function POST(request: Request, { params }: { params: { userId: str
     // Record a 'CREATE_FOLLOW' activity
     await prisma.activity.create({
       data: {
-        type: 'CREATE_FOLLOW',
+        type: "CREATE_FOLLOW",
         sourceId: res.id,
         sourceUserId: user.id,
         targetUserId: userIdToFollow,
@@ -40,8 +44,11 @@ export async function POST(request: Request, { params }: { params: { userId: str
     return NextResponse.json({ followed: true }, { status: 200 });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === 'P2002') {
-        return NextResponse.json({ error: 'You are already following this user.' }, { status: 409 });
+      if (error.code === "P2002") {
+        return NextResponse.json(
+          { error: "You are already following this user." },
+          { status: 409 },
+        );
       }
     }
 

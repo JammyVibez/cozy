@@ -1,21 +1,21 @@
-'use client';
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar } from '@/components/ui/Calendar';
-import { TextInput } from '@/components/ui/TextInput';
-import { Textarea } from '@/components/ui/Textarea';
-import Button from '@/components/ui/Button';
-import { cn } from '@/lib/cn';
-import { Calendar as CalendarIcon, ActionsPlus, Close } from '@/svg_components';
+"use client";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Calendar } from "@/components/ui/Calendar";
+import { TextInput } from "@/components/ui/TextInput";
+import { Textarea } from "@/components/ui/Textarea";
+import Button from "@/components/ui/Button";
+import { cn } from "@/lib/cn";
+import { Calendar as CalendarIcon, ActionsPlus, Close } from "@/svg_components";
 
 interface ScheduledPost {
   id: string;
   content: string;
   scheduledFor: Date;
-  status: 'scheduled' | 'published' | 'failed';
+  status: "scheduled" | "published" | "failed";
   media?: {
     url: string;
-    type: 'image' | 'video';
+    type: "image" | "video";
   }[];
 }
 
@@ -29,10 +29,14 @@ interface PostSchedulerProps {
   className?: string;
 }
 
-export function PostScheduler({ onSchedule, onCancel, className }: PostSchedulerProps) {
-  const [content, setContent] = useState('');
+export function PostScheduler({
+  onSchedule,
+  onCancel,
+  className,
+}: PostSchedulerProps) {
+  const [content, setContent] = useState("");
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [selectedTime, setSelectedTime] = useState('12:00');
+  const [selectedTime, setSelectedTime] = useState("12:00");
   const [media, setMedia] = useState<File[]>([]);
   const [showCalendar, setShowCalendar] = useState(false);
 
@@ -45,18 +49,18 @@ export function PostScheduler({ onSchedule, onCancel, className }: PostScheduler
 
   const handleMediaUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    setMedia(prev => [...prev, ...files].slice(0, 4)); // Max 4 files
+    setMedia((prev) => [...prev, ...files].slice(0, 4)); // Max 4 files
   };
 
   const removeMedia = (index: number) => {
-    setMedia(prev => prev.filter((_, i) => i !== index));
+    setMedia((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSchedule = () => {
     if (!content.trim()) return;
 
     // Combine date and time
-    const [hours, minutes] = selectedTime.split(':').map(Number);
+    const [hours, minutes] = selectedTime.split(":").map(Number);
     const scheduledDate = new Date(selectedDate);
     scheduledDate.setHours(hours, minutes);
 
@@ -75,8 +79,8 @@ export function PostScheduler({ onSchedule, onCancel, className }: PostScheduler
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       className={cn(
-        'bg-white dark:bg-gray-800 rounded-lg shadow-lg border p-6 max-w-2xl w-full',
-        className
+        "bg-white dark:bg-gray-800 rounded-lg shadow-lg border p-6 max-w-2xl w-full",
+        className,
       )}
     >
       <div className="flex items-center justify-between mb-6">
@@ -109,7 +113,9 @@ export function PostScheduler({ onSchedule, onCancel, className }: PostScheduler
 
         {/* Media Upload */}
         <div>
-          <label className="block text-sm font-medium mb-2">Media (optional)</label>
+          <label className="block text-sm font-medium mb-2">
+            Media (optional)
+          </label>
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
             <input
               type="file"
@@ -123,13 +129,15 @@ export function PostScheduler({ onSchedule, onCancel, className }: PostScheduler
             <label
               htmlFor="media-upload"
               className={cn(
-                'cursor-pointer flex flex-col items-center gap-2',
-                media.length >= 4 && 'opacity-50 cursor-not-allowed'
+                "cursor-pointer flex flex-col items-center gap-2",
+                media.length >= 4 && "opacity-50 cursor-not-allowed",
               )}
             >
               <ActionsPlus className="w-8 h-8 text-gray-400" />
               <span className="text-sm text-gray-500">
-                {media.length >= 4 ? 'Maximum 4 files' : 'Click to upload media'}
+                {media.length >= 4
+                  ? "Maximum 4 files"
+                  : "Click to upload media"}
               </span>
             </label>
           </div>
@@ -140,7 +148,7 @@ export function PostScheduler({ onSchedule, onCancel, className }: PostScheduler
               {media.map((file, index) => (
                 <div key={index} className="relative group">
                   <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                    {file.type.startsWith('image/') ? (
+                    {file.type.startsWith("image/") ? (
                       <img
                         src={URL.createObjectURL(file)}
                         alt="Preview"
@@ -178,7 +186,7 @@ export function PostScheduler({ onSchedule, onCancel, className }: PostScheduler
                 <CalendarIcon className="w-4 h-4" />
                 {selectedDate.toLocaleDateString()}
               </button>
-              
+
               <AnimatePresence>
                 {showCalendar && (
                   <motion.div
@@ -211,13 +219,13 @@ export function PostScheduler({ onSchedule, onCancel, className }: PostScheduler
         {/* Preview scheduled time */}
         <div className="bg-muted rounded-lg p-3">
           <p className="text-sm">
-            <span className="font-medium">Scheduled for:</span>{' '}
+            <span className="font-medium">Scheduled for:</span>{" "}
             {new Date(
               selectedDate.getFullYear(),
               selectedDate.getMonth(),
               selectedDate.getDate(),
-              parseInt(selectedTime.split(':')[0]),
-              parseInt(selectedTime.split(':')[1])
+              parseInt(selectedTime.split(":")[0]),
+              parseInt(selectedTime.split(":")[1]),
             ).toLocaleString()}
           </p>
         </div>
@@ -225,11 +233,7 @@ export function PostScheduler({ onSchedule, onCancel, className }: PostScheduler
 
       {/* Actions */}
       <div className="flex gap-3 mt-6">
-        <Button
-          mode="secondary"
-          onPress={onCancel}
-          className="flex-1"
-        >
+        <Button mode="secondary" onPress={onCancel} className="flex-1">
           Cancel
         </Button>
         <Button
@@ -251,11 +255,11 @@ export function ScheduledPostsList() {
 
   const fetchScheduledPosts = async () => {
     try {
-      const response = await fetch('/api/posts/scheduled');
+      const response = await fetch("/api/posts/scheduled");
       const data = await response.json();
       setScheduledPosts(data.posts || []);
     } catch (error) {
-      console.error('Error fetching scheduled posts:', error);
+      console.error("Error fetching scheduled posts:", error);
     } finally {
       setLoading(false);
     }
@@ -264,11 +268,11 @@ export function ScheduledPostsList() {
   const cancelScheduledPost = async (postId: string) => {
     try {
       await fetch(`/api/posts/scheduled/${postId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
-      setScheduledPosts(prev => prev.filter(post => post.id !== postId));
+      setScheduledPosts((prev) => prev.filter((post) => post.id !== postId));
     } catch (error) {
-      console.error('Error canceling scheduled post:', error);
+      console.error("Error canceling scheduled post:", error);
     }
   };
 
@@ -295,17 +299,20 @@ export function ScheduledPostsList() {
                 <span>
                   Scheduled: {new Date(post.scheduledFor).toLocaleString()}
                 </span>
-                <span className={cn(
-                  'px-2 py-1 rounded-full text-xs font-medium',
-                  post.status === 'scheduled' && 'bg-blue-100 text-blue-700',
-                  post.status === 'published' && 'bg-green-100 text-green-700',
-                  post.status === 'failed' && 'bg-red-100 text-red-700'
-                )}>
+                <span
+                  className={cn(
+                    "px-2 py-1 rounded-full text-xs font-medium",
+                    post.status === "scheduled" && "bg-blue-100 text-blue-700",
+                    post.status === "published" &&
+                      "bg-green-100 text-green-700",
+                    post.status === "failed" && "bg-red-100 text-red-700",
+                  )}
+                >
                   {post.status}
                 </span>
               </div>
             </div>
-            {post.status === 'scheduled' && (
+            {post.status === "scheduled" && (
               <Button
                 mode="ghost"
                 size="small"

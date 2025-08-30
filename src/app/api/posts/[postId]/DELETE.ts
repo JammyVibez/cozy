@@ -3,15 +3,18 @@
  * - Allows an authenticated user to delete a post.
  */
 
-import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma/prisma';
-import { deleteObject } from '@/lib/s3/deleteObject';
-import { verifyAccessToPost } from './verifyAccessToPost';
+import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma/prisma";
+import { deleteObject } from "@/lib/s3/deleteObject";
+import { verifyAccessToPost } from "./verifyAccessToPost";
 
-export async function DELETE(request: Request, { params }: { params: { postId: string } }) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: { postId: string } },
+) {
   const postId = parseInt(params.postId, 10);
   if (!verifyAccessToPost(postId)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
   // Delete the `post` and the associated `visualMedia` from the database

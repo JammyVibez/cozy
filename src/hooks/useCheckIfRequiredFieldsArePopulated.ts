@@ -1,8 +1,8 @@
-import 'server-only';
+import "server-only";
 
-import { getServerUser } from '@/lib/getServerUser';
-import prisma from '@/lib/prisma/prisma';
-import { redirect } from 'next/navigation';
+import { getServerUser } from "@/lib/getServerUser";
+import prisma from "@/lib/prisma/prisma";
+import { redirect } from "next/navigation";
 
 /**
  * Use this hook to verify if the required fields for a user is populated,
@@ -26,7 +26,7 @@ export async function useCheckIfRequiredFieldsArePopulated() {
 
     if (!res) return;
     if (!res.username || !res.name) {
-      redirect('/setup');
+      redirect("/setup");
     }
   }
 }

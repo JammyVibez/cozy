@@ -1,13 +1,13 @@
-import 'server-only';
+import "server-only";
 
-import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma/prisma';
-import { v4 as uuid } from 'uuid';
-import { uploadObject } from '@/lib/s3/uploadObject';
-import { fileNameToUrl } from '@/lib/s3/fileNameToUrl';
-import { getServerUser } from '@/lib/getServerUser';
+import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma/prisma";
+import { v4 as uuid } from "uuid";
+import { uploadObject } from "@/lib/s3/uploadObject";
+import { fileNameToUrl } from "@/lib/s3/fileNameToUrl";
+import { getServerUser } from "@/lib/getServerUser";
 
-const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
+const ALLOWED_FILE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 export async function useUpdateProfileAndCoverPhoto({
   request,
   userIdParam,
@@ -15,7 +15,7 @@ export async function useUpdateProfileAndCoverPhoto({
 }: {
   request: Request;
   userIdParam: string;
-  toUpdate: 'profilePhoto' | 'coverPhoto';
+  toUpdate: "profilePhoto" | "coverPhoto";
 }) {
   const [user] = await getServerUser();
   if (!user || user.id !== userIdParam) {
@@ -24,16 +24,22 @@ export async function useUpdateProfileAndCoverPhoto({
   const userId = user.id;
 
   const formData = await request.formData();
-  const file = formData.get('file') as Blob | null;
+  const file = formData.get("file") as Blob | null;
 
   if (!file) {
-    return NextResponse.json({ error: 'File blob is required.' }, { status: 400 });
+    return NextResponse.json(
+      { error: "File blob is required." },
+      { status: 400 },
+    );
   }
 
   try {
-    const fileExtension = file.type.split('/')[1];
+    const fileExtension = file.type.split("/")[1];
     if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-      return NextResponse.json({ error: 'Unsupported file type.' }, { status: 400 });
+      return NextResponse.json(
+        { error: "Unsupported file type." },
+        { status: 400 },
+      );
     }
 
     // Upload image to S3
@@ -53,13 +59,14 @@ export async function useUpdateProfileAndCoverPhoto({
     await prisma.post.create({
       data: {
         userId,
-        content: toUpdate === 'profilePhoto' ? '#NewProfilePhoto' : '#NewCoverPhoto',
+        content:
+          toUpdate === "profilePhoto" ? "#NewProfilePhoto" : "#NewCoverPhoto",
         visualMedia: {
           create: [
             {
               userId,
               fileName,
-              type: 'PHOTO',
+              type: "PHOTO",
             },
           ],
         },
@@ -70,6 +77,6 @@ export async function useUpdateProfileAndCoverPhoto({
 
     return NextResponse.json({ uploadedTo });
   } catch (error) {
-    return NextResponse.json({ error: 'Server error.' }, { status: 500 });
+    return NextResponse.json({ error: "Server error." }, { status: 500 });
   }
 }

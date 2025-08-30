@@ -1,17 +1,23 @@
-'use client';
+"use client";
 
-import Button from '@/components/ui/Button';
-import { TextInput } from '@/components/ui/TextInput';
-import { useToast } from '@/hooks/useToast';
-import { AtSign, Facebook, Github, Google, LogInSquare } from '@/svg_components';
-import { signIn } from 'next-auth/react';
-import { useSearchParams } from 'next/navigation';
-import { useCallback, useState } from 'react';
-import { z } from 'zod';
+import Button from "@/components/ui/Button";
+import { TextInput } from "@/components/ui/TextInput";
+import { useToast } from "@/hooks/useToast";
+import {
+  AtSign,
+  Facebook,
+  Github,
+  Google,
+  LogInSquare,
+} from "@/svg_components";
+import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useState } from "react";
+import { z } from "zod";
 
 const emailSchema = z.string().trim().email();
-export function UserAuthForm({ mode }: { mode: 'login' | 'register' }) {
-  const [email, setEmail] = useState('');
+export function UserAuthForm({ mode }: { mode: "login" | "register" }) {
+  const [email, setEmail] = useState("");
   const [inputError, setInputError] = useState<string | null>(null);
   const [loading, setLoading] = useState({
     email: false,
@@ -20,9 +26,10 @@ export function UserAuthForm({ mode }: { mode: 'login' | 'register' }) {
     google: false,
   });
   // Disable buttons when loading
-  const areButtonsDisabled = loading.email || loading.github || loading.facebook || loading.google;
+  const areButtonsDisabled =
+    loading.email || loading.github || loading.facebook || loading.google;
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('from') || '/feed';
+  const callbackUrl = searchParams.get("from") || "/feed";
   const { showToast } = useToast();
 
   const onEmailChange = useCallback((text: string) => {
@@ -37,7 +44,7 @@ export function UserAuthForm({ mode }: { mode: 'login' | 'register' }) {
 
     const validateEmail = emailSchema.safeParse(email);
     if (validateEmail.success) {
-      const signInResult = await signIn('email', {
+      const signInResult = await signIn("email", {
         email: email.toLowerCase(),
         redirect: false,
         callbackUrl,
@@ -48,13 +55,13 @@ export function UserAuthForm({ mode }: { mode: 'login' | 'register' }) {
         email: false,
       }));
       if (!signInResult?.ok) {
-        showToast({ type: 'error', title: 'Something went wrong' });
+        showToast({ type: "error", title: "Something went wrong" });
         return;
       }
       showToast({
-        type: 'success',
-        title: 'Email Sent',
-        message: 'Please check your email to sign in.',
+        type: "success",
+        title: "Email Sent",
+        message: "Please check your email to sign in.",
       });
     } else {
       setInputError(validateEmail.error.issues[0].message);
@@ -66,7 +73,7 @@ export function UserAuthForm({ mode }: { mode: 'login' | 'register' }) {
   }, [email, callbackUrl, showToast]);
 
   const signInWithProvider = useCallback(
-    (provider: 'github' | 'google' | 'facebook') => async () => {
+    (provider: "github" | "google" | "facebook") => async () => {
       setLoading((prev) => ({
         ...prev,
         [provider]: true,
@@ -79,7 +86,7 @@ export function UserAuthForm({ mode }: { mode: 'login' | 'register' }) {
         [provider]: false,
       }));
       if (signInResult?.error) {
-        showToast({ type: 'error', title: 'Something went wrong' });
+        showToast({ type: "error", title: "Something went wrong" });
       }
     },
     [callbackUrl, showToast],
@@ -103,8 +110,9 @@ export function UserAuthForm({ mode }: { mode: 'login' | 'register' }) {
           expand="full"
           Icon={LogInSquare}
           loading={loading.email}
-          isDisabled={areButtonsDisabled}>
-          {mode === 'login' ? 'Login' : 'Sign up'} with Email
+          isDisabled={areButtonsDisabled}
+        >
+          {mode === "login" ? "Login" : "Sign up"} with Email
         </Button>
       </div>
       <div className="relative mb-4">
@@ -112,39 +120,44 @@ export function UserAuthForm({ mode }: { mode: 'login' | 'register' }) {
           <span className="w-full border-t border-muted" />
         </div>
         <div className="relative flex justify-center">
-          <span className="bg-background px-3 text-muted-foreground">OR CONTINUE WITH</span>
+          <span className="bg-background px-3 text-muted-foreground">
+            OR CONTINUE WITH
+          </span>
         </div>
       </div>
       <div className="mb-4 flex flex-col gap-3">
         <Button
-          onPress={signInWithProvider('github')}
+          onPress={signInWithProvider("github")}
           shape="pill"
           expand="full"
           mode="subtle"
           Icon={Github}
           loading={loading.github}
-          isDisabled={areButtonsDisabled}>
+          isDisabled={areButtonsDisabled}
+        >
           Github
         </Button>
         <div className="flex gap-2">
           <Button
-            onPress={signInWithProvider('google')}
+            onPress={signInWithProvider("google")}
             shape="pill"
             expand="full"
             mode="subtle"
             Icon={Google}
             loading={loading.google}
-            isDisabled={areButtonsDisabled}>
+            isDisabled={areButtonsDisabled}
+          >
             Google
           </Button>
           <Button
-            onPress={signInWithProvider('facebook')}
+            onPress={signInWithProvider("facebook")}
             shape="pill"
             expand="full"
             mode="subtle"
             Icon={Facebook}
             loading={loading.facebook}
-            isDisabled={areButtonsDisabled}>
+            isDisabled={areButtonsDisabled}
+          >
             Facebook
           </Button>
         </div>

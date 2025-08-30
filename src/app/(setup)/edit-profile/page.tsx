@@ -1,8 +1,8 @@
-import { EditProfileForm } from '@/components/EditProfileForm';
-import { ResponsiveContainer } from '@/components/ui/ResponsiveContainer';
+import { EditProfileForm } from "@/components/EditProfileForm";
+import { ResponsiveContainer } from "@/components/ui/ResponsiveContainer";
 
 export const metadata = {
-  title: 'Cozy | Edit Profile',
+  title: "Cozy | Edit Profile",
 };
 
 export default function Page() {

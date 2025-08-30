@@ -1,1 +1,1 @@
-export { POST } from './POST';
+export { POST } from "./POST";

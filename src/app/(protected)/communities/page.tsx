@@ -1,9 +1,9 @@
-import { CommunityDiscovery } from '@/components/CommunityDiscovery';
-import { CreateCommunityButton } from '@/components/CreateCommunityButton';
+import { CommunityDiscovery } from "@/components/CommunityDiscovery";
+import { CreateCommunityButton } from "@/components/CreateCommunityButton";
 
 export const metadata = {
-  title: 'Communities - Discover Your Tribe',
-  description: 'Find and join communities that match your interests on Cozy',
+  title: "Communities - Discover Your Tribe",
+  description: "Find and join communities that match your interests on Cozy",
 };
 
 export default function CommunitiesPage() {
@@ -18,7 +18,7 @@ export default function CommunitiesPage() {
         </div>
         <CreateCommunityButton />
       </div>
-      
+
       <CommunityDiscovery />
     </div>
   );

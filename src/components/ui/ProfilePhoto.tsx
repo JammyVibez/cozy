@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import { FallbackProfilePhoto } from './FallbackProfilePhoto';
+import Link from "next/link";
+import { FallbackProfilePhoto } from "./FallbackProfilePhoto";
 
 export function ProfilePhoto({
   name,

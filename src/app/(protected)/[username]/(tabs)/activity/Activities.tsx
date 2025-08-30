@@ -1,26 +1,37 @@
-'use client';
+"use client";
 
-import { AllCaughtUp } from '@/components/AllCaughtUp';
-import useOnScreen from '@/hooks/useOnScreen';
-import { InfiniteData, QueryKey, useInfiniteQuery } from '@tanstack/react-query';
-import { useEffect, useMemo, useRef } from 'react';
-import { GetActivity } from '@/types/definitions';
-import { Activity } from '@/components/Activity';
-import { SomethingWentWrong } from '@/components/SometingWentWrong';
-import { GenericLoading } from '@/components/GenericLoading';
-import { getActivities } from '@/lib/client_data_fetching/getActivities';
+import { AllCaughtUp } from "@/components/AllCaughtUp";
+import useOnScreen from "@/hooks/useOnScreen";
+import {
+  InfiniteData,
+  QueryKey,
+  useInfiniteQuery,
+} from "@tanstack/react-query";
+import { useEffect, useMemo, useRef } from "react";
+import { GetActivity } from "@/types/definitions";
+import { Activity } from "@/components/Activity";
+import { SomethingWentWrong } from "@/components/SometingWentWrong";
+import { GenericLoading } from "@/components/GenericLoading";
+import { getActivities } from "@/lib/client_data_fetching/getActivities";
 
 export function Activities({ userId }: { userId: string }) {
   const bottomElRef = useRef<HTMLDivElement>(null);
   const isBottomOnScreen = useOnScreen(bottomElRef);
-  const { data, isPending, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<
+  const {
+    data,
+    isPending,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<
     GetActivity[],
     Error,
     InfiniteData<GetActivity[], unknown>,
     QueryKey,
     number
   >({
-    queryKey: ['users', userId, 'activity'],
+    queryKey: ["users", userId, "activity"],
     defaultPageParam: 0,
     queryFn: async ({ pageParam: cursor }) => getActivities({ userId, cursor }),
     getNextPageParam: (lastPage, pages) => {
@@ -41,7 +52,10 @@ export function Activities({ userId }: { userId: string }) {
     if (isBottomOnScreen && hasNextPage) fetchNextPage();
   }, [isBottomOnScreen, hasNextPage, fetchNextPage]);
 
-  const bottomLoaderStyle = useMemo(() => ({ display: data ? 'block' : 'none' }), [data]);
+  const bottomLoaderStyle = useMemo(
+    () => ({ display: data ? "block" : "none" }),
+    [data],
+  );
 
   return (
     <>
@@ -50,7 +64,9 @@ export function Activities({ userId }: { userId: string }) {
       ) : isError ? (
         <SomethingWentWrong />
       ) : (
-        data.pages.flat().map((activity) => <Activity key={activity.id} {...activity} />)
+        data.pages
+          .flat()
+          .map((activity) => <Activity key={activity.id} {...activity} />)
       )}
 
       <div
@@ -60,11 +76,16 @@ export function Activities({ userId }: { userId: string }) {
          * The first page will be initially loaded by React Query
          * so the bottom loader has to be hidden first
          */
-        style={bottomLoaderStyle}>
-        {hasNextPage && <GenericLoading>Loading more notifications</GenericLoading>}
+        style={bottomLoaderStyle}
+      >
+        {hasNextPage && (
+          <GenericLoading>Loading more notifications</GenericLoading>
+        )}
       </div>
       {isError && <SomethingWentWrong />}
-      {!isError && !isPending && !isFetchingNextPage && !hasNextPage && <AllCaughtUp />}
+      {!isError && !isPending && !isFetchingNextPage && !hasNextPage && (
+        <AllCaughtUp />
+      )}
     </>
   );
 }

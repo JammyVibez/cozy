@@ -1,11 +1,11 @@
-import { notFound } from 'next/navigation';
-import { auth } from '@/auth';
-import prisma from '@/lib/prisma/prisma';
-import { CommunityHeader } from '@/components/CommunityHeader';
-import { CommunityTabs } from '@/components/CommunityTabs';
-import { CommunityPosts } from '@/components/CommunityPosts';
-import { CommunityEvents } from '@/components/CommunityEvents';
-import { CommunityChatRooms } from '@/components/CommunityChatRooms';
+import { notFound } from "next/navigation";
+import { auth } from "@/auth";
+import prisma from "@/lib/prisma/prisma";
+import { CommunityHeader } from "@/components/CommunityHeader";
+import { CommunityTabs } from "@/components/CommunityTabs";
+import { CommunityPosts } from "@/components/CommunityPosts";
+import { CommunityEvents } from "@/components/CommunityEvents";
+import { CommunityChatRooms } from "@/components/CommunityChatRooms";
 
 interface CommunityPageProps {
   params: { id: string };
@@ -35,7 +35,7 @@ async function getCommunity(id: string, userId: string) {
         },
       },
       zones: {
-        orderBy: { order: 'asc' },
+        orderBy: { order: "asc" },
       },
       _count: {
         select: {
@@ -58,7 +58,10 @@ async function getCommunity(id: string, userId: string) {
   };
 }
 
-export default async function CommunityPage({ params, searchParams }: CommunityPageProps) {
+export default async function CommunityPage({
+  params,
+  searchParams,
+}: CommunityPageProps) {
   const session = await auth();
   if (!session?.user?.id) {
     notFound();
@@ -69,38 +72,44 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
     notFound();
   }
 
-  const activeTab = searchParams.tab || 'posts';
+  const activeTab = searchParams.tab || "posts";
 
   return (
     <div className="space-y-6">
       <CommunityHeader community={community} />
       <CommunityTabs communityId={community.id} activeTab={activeTab} />
-      
-      {activeTab === 'posts' && (
-        <CommunityPosts 
-          communityId={community.id} 
-          zones={community.zones.map(zone => ({
+
+      {activeTab === "posts" && (
+        <CommunityPosts
+          communityId={community.id}
+          zones={community.zones.map((zone) => ({
             ...zone,
-            emoji: zone.emoji || undefined
+            emoji: zone.emoji || undefined,
           }))}
         />
       )}
-      
-      {activeTab === 'events' && (
-        <CommunityEvents 
-          communityId={community.id} 
-          canCreateEvents={community.isCreator || ['ADMIN', 'MODERATOR'].includes(community.userRole || '')}
+
+      {activeTab === "events" && (
+        <CommunityEvents
+          communityId={community.id}
+          canCreateEvents={
+            community.isCreator ||
+            ["ADMIN", "MODERATOR"].includes(community.userRole || "")
+          }
         />
       )}
-      
-      {activeTab === 'chat' && (
-        <CommunityChatRooms 
-          communityId={community.id} 
-          canCreateRooms={community.isCreator || ['ADMIN', 'MODERATOR'].includes(community.userRole || '')}
+
+      {activeTab === "chat" && (
+        <CommunityChatRooms
+          communityId={community.id}
+          canCreateRooms={
+            community.isCreator ||
+            ["ADMIN", "MODERATOR"].includes(community.userRole || "")
+          }
         />
       )}
-      
-      {activeTab === 'members' && (
+
+      {activeTab === "members" && (
         <div className="text-center py-12">
           <div className="text-6xl mb-4">👥</div>
           <h3 className="text-lg font-medium mb-2">Members List Coming Soon</h3>
@@ -109,8 +118,8 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
           </p>
         </div>
       )}
-      
-      {activeTab === 'about' && (
+
+      {activeTab === "about" && (
         <div className="text-center py-12">
           <div className="text-6xl mb-4">ℹ️</div>
           <h3 className="text-lg font-medium mb-2">Community Info</h3>

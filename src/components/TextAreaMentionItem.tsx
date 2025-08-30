@@ -1,7 +1,7 @@
-import { UserSummaryAfterSetUp } from '@/types/definitions';
-import { cn } from '@/lib/cn';
-import { useCallback, useEffect, useRef } from 'react';
-import { ProfilePhoto } from './ui/ProfilePhoto';
+import { UserSummaryAfterSetUp } from "@/types/definitions";
+import { cn } from "@/lib/cn";
+import { useCallback, useEffect, useRef } from "react";
+import { ProfilePhoto } from "./ui/ProfilePhoto";
 
 export function TextAreaMentionItem({
   username,
@@ -14,14 +14,17 @@ export function TextAreaMentionItem({
   focused?: boolean;
 }) {
   const ref = useRef<HTMLLIElement>(null);
-  const onClick = useCallback(() => handleSelectUserToMention(username!), [handleSelectUserToMention, username]);
+  const onClick = useCallback(
+    () => handleSelectUserToMention(username!),
+    [handleSelectUserToMention, username],
+  );
 
   useEffect(() => {
     if (!focused) return;
     ref.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest',
-      inline: 'start',
+      behavior: "smooth",
+      block: "nearest",
+      inline: "start",
     });
   }, [focused]);
 
@@ -32,7 +35,11 @@ export function TextAreaMentionItem({
       ref={ref}
       onClick={onClick}
       onKeyDown={onClick}
-      className={cn('flex cursor-pointer items-center gap-3 px-4 py-2 hover:bg-accent', focused && 'bg-accent')}>
+      className={cn(
+        "flex cursor-pointer items-center gap-3 px-4 py-2 hover:bg-accent",
+        focused && "bg-accent",
+      )}
+    >
       <div className="h-8 w-8">
         <ProfilePhoto photoUrl={profilePhoto} username={username} name={name} />
       </div>

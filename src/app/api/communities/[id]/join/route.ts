@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/auth';
-import prisma from '@/lib/prisma/prisma';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import prisma from "@/lib/prisma/prisma";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const communityId = params.id;
@@ -21,11 +21,17 @@ export async function POST(
     });
 
     if (!community) {
-      return NextResponse.json({ error: 'Community not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: "Community not found" },
+        { status: 404 },
+      );
     }
 
     if (!community.isPublic) {
-      return NextResponse.json({ error: 'Community is private' }, { status: 403 });
+      return NextResponse.json(
+        { error: "Community is private" },
+        { status: 403 },
+      );
     }
 
     // Check if user is already a member
@@ -39,7 +45,7 @@ export async function POST(
     });
 
     if (existingMembership) {
-      return NextResponse.json({ error: 'Already a member' }, { status: 400 });
+      return NextResponse.json({ error: "Already a member" }, { status: 400 });
     }
 
     // Add user to community
@@ -47,23 +53,23 @@ export async function POST(
       data: {
         userId,
         communityId,
-        role: 'MEMBER',
+        role: "MEMBER",
       },
     });
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       membership: {
         id: membership.id,
         role: membership.role,
         joinedAt: membership.joinedAt,
-      }
+      },
     });
   } catch (error) {
-    console.error('Error joining community:', error);
+    console.error("Error joining community:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }

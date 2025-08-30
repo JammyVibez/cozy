@@ -17,13 +17,13 @@ export function searchUser(search: string):
         | {
             name: {
               startsWith: string;
-              mode: 'insensitive';
+              mode: "insensitive";
             };
           }
         | {
             username: {
               startsWith: string;
-              mode: 'insensitive';
+              mode: "insensitive";
             };
           }
       )[];
@@ -33,19 +33,19 @@ export function searchUser(search: string):
     OR: [
       {
         name: {
-          search: search.trim().replace(/ +/g, ' ').replaceAll(' ', '|'),
+          search: search.trim().replace(/ +/g, " ").replaceAll(" ", "|"),
         },
       },
       {
         name: {
           startsWith: search.trim(),
-          mode: 'insensitive',
+          mode: "insensitive",
         },
       },
       {
         username: {
           startsWith: search.trim(),
-          mode: 'insensitive',
+          mode: "insensitive",
         },
       },
     ],

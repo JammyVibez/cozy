@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { SVGProps } from 'react';
+import * as React from "react";
+import { SVGProps } from "react";
 
 function SvgFacebook(props: SVGProps<SVGSVGElement>) {
   return (
@@ -10,7 +10,8 @@ function SvgFacebook(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 8 19"
       width="1em"
       height="1em"
-      {...props}>
+      {...props}
+    >
       <path
         fillRule="evenodd"
         d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z"

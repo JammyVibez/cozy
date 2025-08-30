@@ -1,4 +1,4 @@
-import { GetUser } from '@/types/definitions';
+import { GetUser } from "@/types/definitions";
 
 export async function getUser(userId?: string) {
   const res = await fetch(`/api/users/${userId}`);

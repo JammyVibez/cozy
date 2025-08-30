@@ -3,9 +3,9 @@
  * - Returns the number of the unread notifications of an
  * authenticated user.
  */
-import { getServerUser } from '@/lib/getServerUser';
-import prisma from '@/lib/prisma/prisma';
-import { NextResponse } from 'next/server';
+import { getServerUser } from "@/lib/getServerUser";
+import prisma from "@/lib/prisma/prisma";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   const [user] = await getServerUser();

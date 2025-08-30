@@ -1,16 +1,16 @@
-'use client';
-import { motion } from 'framer-motion';
-import { useTheme } from './ThemeProvider';
-import { WeatherSun, WeatherMoon, DeviceLaptop } from '@/svg_components';
-import { cn } from '@/lib/cn';
+"use client";
+import { motion } from "framer-motion";
+import { useTheme } from "./ThemeProvider";
+import { WeatherSun, WeatherMoon, DeviceLaptop } from "@/svg_components";
+import { cn } from "@/lib/cn";
 
 export function AdvancedThemeSwitch() {
   const { theme, setTheme, actualTheme } = useTheme();
 
   const themes = [
-    { key: 'light', icon: WeatherSun, label: 'Light' },
-    { key: 'dark', icon: WeatherMoon, label: 'Dark' },
-    { key: 'system', icon: DeviceLaptop, label: 'System' },
+    { key: "light", icon: WeatherSun, label: "Light" },
+    { key: "dark", icon: WeatherMoon, label: "Dark" },
+    { key: "system", icon: DeviceLaptop, label: "System" },
   ] as const;
 
   return (
@@ -20,11 +20,11 @@ export function AdvancedThemeSwitch() {
           key={key}
           onClick={() => setTheme(key)}
           className={cn(
-            'relative flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-200',
-            'text-sm font-medium min-w-0 flex-1 justify-center',
+            "relative flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-200",
+            "text-sm font-medium min-w-0 flex-1 justify-center",
             theme === key
-              ? 'text-foreground'
-              : 'text-muted-foreground hover:text-foreground'
+              ? "text-foreground"
+              : "text-muted-foreground hover:text-foreground",
           )}
         >
           {theme === key && (
@@ -50,8 +50,8 @@ export function QuickThemeToggle() {
     <button
       onClick={toggleTheme}
       className={cn(
-        'p-2 rounded-lg transition-colors',
-        'hover:bg-muted active:scale-95 transition-transform'
+        "p-2 rounded-lg transition-colors",
+        "hover:bg-muted active:scale-95 transition-transform",
       )}
       aria-label="Toggle theme"
     >
@@ -61,7 +61,7 @@ export function QuickThemeToggle() {
         animate={{ rotate: 0, opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        {actualTheme === 'light' ? (
+        {actualTheme === "light" ? (
           <WeatherMoon className="w-5 h-5" />
         ) : (
           <WeatherSun className="w-5 h-5" />

@@ -1,93 +1,97 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
-import { cn } from '@/lib/cn';
-import { useToast } from '@/hooks/useToast';
-import Button from './ui/Button';
-import { Close } from '@/svg_components';
+import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/cn";
+import { useToast } from "@/hooks/useToast";
+import Button from "./ui/Button";
+import { Close } from "@/svg_components";
 
 interface CreateCommunityModalProps {
   onClose: () => void;
 }
 
 const categories = [
-  { value: 'TECHNOLOGY', label: 'Technology', emoji: '💻' },
-  { value: 'GAMING', label: 'Gaming', emoji: '🎮' },
-  { value: 'CRYPTOCURRENCY', label: 'Crypto', emoji: '₿' },
-  { value: 'NEWS', label: 'News', emoji: '📰' },
-  { value: 'ENTERTAINMENT', label: 'Entertainment', emoji: '🎬' },
-  { value: 'SPORTS', label: 'Sports', emoji: '⚽' },
-  { value: 'EDUCATION', label: 'Education', emoji: '📚' },
-  { value: 'BUSINESS', label: 'Business', emoji: '💼' },
-  { value: 'LIFESTYLE', label: 'Lifestyle', emoji: '✨' },
-  { value: 'SCIENCE', label: 'Science', emoji: '🔬' },
-  { value: 'ART', label: 'Art', emoji: '🎨' },
-  { value: 'MUSIC', label: 'Music', emoji: '🎵' },
-  { value: 'OTHER', label: 'Other', emoji: '🔗' },
+  { value: "TECHNOLOGY", label: "Technology", emoji: "💻" },
+  { value: "GAMING", label: "Gaming", emoji: "🎮" },
+  { value: "CRYPTOCURRENCY", label: "Crypto", emoji: "₿" },
+  { value: "NEWS", label: "News", emoji: "📰" },
+  { value: "ENTERTAINMENT", label: "Entertainment", emoji: "🎬" },
+  { value: "SPORTS", label: "Sports", emoji: "⚽" },
+  { value: "EDUCATION", label: "Education", emoji: "📚" },
+  { value: "BUSINESS", label: "Business", emoji: "💼" },
+  { value: "LIFESTYLE", label: "Lifestyle", emoji: "✨" },
+  { value: "SCIENCE", label: "Science", emoji: "🔬" },
+  { value: "ART", label: "Art", emoji: "🎨" },
+  { value: "MUSIC", label: "Music", emoji: "🎵" },
+  { value: "OTHER", label: "Other", emoji: "🔗" },
 ];
 
 const themes = [
-  { value: 'DEFAULT', label: 'Default', description: 'Clean and modern' },
-  { value: 'DEVELOPER', label: 'Developer', description: 'Dark neon theme' },
-  { value: 'GAMER', label: 'Gaming', description: 'Gaming inspired' },
-  { value: 'CRYPTO', label: 'Crypto', description: 'Financial/trading theme' },
-  { value: 'NEWS', label: 'News', description: 'Clean news style' },
-  { value: 'CREATIVE', label: 'Creative', description: 'Artistic and colorful' },
+  { value: "DEFAULT", label: "Default", description: "Clean and modern" },
+  { value: "DEVELOPER", label: "Developer", description: "Dark neon theme" },
+  { value: "GAMER", label: "Gaming", description: "Gaming inspired" },
+  { value: "CRYPTO", label: "Crypto", description: "Financial/trading theme" },
+  { value: "NEWS", label: "News", description: "Clean news style" },
+  {
+    value: "CREATIVE",
+    label: "Creative",
+    description: "Artistic and colorful",
+  },
 ];
 
 export function CreateCommunityModal({ onClose }: CreateCommunityModalProps) {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
-  const [theme, setTheme] = useState('DEFAULT');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [theme, setTheme] = useState("DEFAULT");
   const [isPublic, setIsPublic] = useState(true);
-  
+
   const { showToast } = useToast();
   const queryClient = useQueryClient();
 
   const createMutation = useMutation({
     mutationFn: async (data: any) => {
-      const response = await fetch('/api/communities/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/communities/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      
+
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || 'Failed to create community');
+        throw new Error(error.error || "Failed to create community");
       }
-      
+
       return response.json();
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['communities'] });
-      showToast({ 
-        title: 'Community Created!', 
+      queryClient.invalidateQueries({ queryKey: ["communities"] });
+      showToast({
+        title: "Community Created!",
         message: `${data.community.name} is ready for members`,
-        type: 'success' 
+        type: "success",
       });
       onClose();
     },
     onError: (error: Error) => {
-      showToast({ 
-        title: 'Error', 
-        message: error.message, 
-        type: 'error' 
+      showToast({
+        title: "Error",
+        message: error.message,
+        type: "error",
       });
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!name.trim() || !category) {
-      showToast({ 
-        title: 'Error', 
-        message: 'Please fill in all required fields', 
-        type: 'error' 
+      showToast({
+        title: "Error",
+        message: "Please fill in all required fields",
+        type: "error",
       });
       return;
     }
@@ -168,10 +172,10 @@ export function CreateCommunityModal({ onClose }: CreateCommunityModalProps) {
                   type="button"
                   onClick={() => setCategory(cat.value)}
                   className={cn(
-                    'flex items-center gap-2 p-3 rounded-lg border transition-colors text-left',
+                    "flex items-center gap-2 p-3 rounded-lg border transition-colors text-left",
                     category === cat.value
-                      ? 'bg-primary text-primary-foreground border-primary'
-                      : 'hover:bg-muted border-input'
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "hover:bg-muted border-input",
                   )}
                 >
                   <span>{cat.emoji}</span>
@@ -183,9 +187,7 @@ export function CreateCommunityModal({ onClose }: CreateCommunityModalProps) {
 
           {/* Theme */}
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Theme
-            </label>
+            <label className="block text-sm font-medium mb-2">Theme</label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {themes.map((themeOption) => (
                 <button
@@ -193,10 +195,10 @@ export function CreateCommunityModal({ onClose }: CreateCommunityModalProps) {
                   type="button"
                   onClick={() => setTheme(themeOption.value)}
                   className={cn(
-                    'p-4 rounded-lg border text-left transition-colors',
+                    "p-4 rounded-lg border text-left transition-colors",
                     theme === themeOption.value
-                      ? 'bg-primary text-primary-foreground border-primary'
-                      : 'hover:bg-muted border-input'
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "hover:bg-muted border-input",
                   )}
                 >
                   <div className="font-medium">{themeOption.label}</div>
@@ -210,18 +212,16 @@ export function CreateCommunityModal({ onClose }: CreateCommunityModalProps) {
 
           {/* Privacy Setting */}
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Privacy
-            </label>
+            <label className="block text-sm font-medium mb-2">Privacy</label>
             <div className="space-y-2">
               <button
                 type="button"
                 onClick={() => setIsPublic(true)}
                 className={cn(
-                  'w-full p-4 rounded-lg border text-left transition-colors',
+                  "w-full p-4 rounded-lg border text-left transition-colors",
                   isPublic
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'hover:bg-muted border-input'
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "hover:bg-muted border-input",
                 )}
               >
                 <div className="flex items-center gap-3">
@@ -238,10 +238,10 @@ export function CreateCommunityModal({ onClose }: CreateCommunityModalProps) {
                 type="button"
                 onClick={() => setIsPublic(false)}
                 className={cn(
-                  'w-full p-4 rounded-lg border text-left transition-colors',
+                  "w-full p-4 rounded-lg border text-left transition-colors",
                   !isPublic
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'hover:bg-muted border-input'
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "hover:bg-muted border-input",
                 )}
               >
                 <div className="flex items-center gap-3">

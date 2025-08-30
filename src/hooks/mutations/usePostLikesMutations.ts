@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
-import { GetPost } from '@/types/definitions';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import { GetPost } from "@/types/definitions";
 
 export function usePostLikesMutations({ postId }: { postId: number }) {
   const qc = useQueryClient();
-  const queryKey = ['posts', postId];
+  const queryKey = ["posts", postId];
   const { data: session } = useSession();
 
   const likeMutation = useMutation({
     mutationFn: async () => {
       // Add the post to the liked posts of the user doing the action
       const res = await fetch(`/api/users/${session?.user?.id}/liked-posts`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({ postId }),
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -27,7 +27,7 @@ export function usePostLikesMutations({ postId }: { postId: number }) {
          * roll back the optimistic LIKE mutation.
          */
         if (res.status === 409) return true;
-        throw Error('Error liking post.');
+        throw Error("Error liking post.");
       }
 
       return true;
@@ -64,9 +64,12 @@ export function usePostLikesMutations({ postId }: { postId: number }) {
   const unLikeMutation = useMutation({
     mutationFn: async () => {
       // Remove the post from the liked posts of the user doing the action
-      const res = await fetch(`/api/users/${session?.user?.id}/liked-posts/${postId}`, {
-        method: 'DELETE',
-      });
+      const res = await fetch(
+        `/api/users/${session?.user?.id}/liked-posts/${postId}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (!res.ok) {
         /**
@@ -75,7 +78,7 @@ export function usePostLikesMutations({ postId }: { postId: number }) {
          * NOT roll back the optimistic UNLIKE mutation.
          */
         if (res.status === 409) return true;
-        throw Error('Error unliking post.');
+        throw Error("Error unliking post.");
       }
 
       return true;

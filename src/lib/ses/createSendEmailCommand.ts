@@ -1,6 +1,11 @@
-import { SendEmailCommand } from '@aws-sdk/client-ses';
+import { SendEmailCommand } from "@aws-sdk/client-ses";
 
-export const createSendEmailCommand = (toAddress: string, fromAddress: string, subject: string, body: string) =>
+export const createSendEmailCommand = (
+  toAddress: string,
+  fromAddress: string,
+  subject: string,
+  body: string,
+) =>
   new SendEmailCommand({
     Destination: {
       /* required */
@@ -17,7 +22,7 @@ export const createSendEmailCommand = (toAddress: string, fromAddress: string, s
       Body: {
         /* required */
         Html: {
-          Charset: 'UTF-8',
+          Charset: "UTF-8",
           Data: body,
         },
         // Text: {
@@ -26,7 +31,7 @@ export const createSendEmailCommand = (toAddress: string, fromAddress: string, s
         // },
       },
       Subject: {
-        Charset: 'UTF-8',
+        Charset: "UTF-8",
         Data: subject,
       },
     },

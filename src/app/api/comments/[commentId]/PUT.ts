@@ -3,26 +3,29 @@
  * - Allows an authenticated user to edit a comment on a post.
  */
 
-import prisma from '@/lib/prisma/prisma';
-import { NextResponse } from 'next/server';
-import { commentWriteSchema } from '@/lib/validations/comment';
-import { FindCommentResult, GetComment } from '@/types/definitions';
-import { getServerUser } from '@/lib/getServerUser';
-import { includeToComment } from '@/lib/prisma/includeToComment';
-import { toGetComment } from '@/lib/prisma/toGetComment';
-import { convertMentionUsernamesToIds } from '@/lib/convertMentionUsernamesToIds';
-import { mentionsActivityLogger } from '@/lib/mentionsActivityLogger';
-import { z } from 'zod';
-import { verifyAccessToComment } from './verifyAccessToComment';
+import prisma from "@/lib/prisma/prisma";
+import { NextResponse } from "next/server";
+import { commentWriteSchema } from "@/lib/validations/comment";
+import { FindCommentResult, GetComment } from "@/types/definitions";
+import { getServerUser } from "@/lib/getServerUser";
+import { includeToComment } from "@/lib/prisma/includeToComment";
+import { toGetComment } from "@/lib/prisma/toGetComment";
+import { convertMentionUsernamesToIds } from "@/lib/convertMentionUsernamesToIds";
+import { mentionsActivityLogger } from "@/lib/mentionsActivityLogger";
+import { z } from "zod";
+import { verifyAccessToComment } from "./verifyAccessToComment";
 
-export async function PUT(request: Request, { params }: { params: { commentId: string } }) {
+export async function PUT(
+  request: Request,
+  { params }: { params: { commentId: string } },
+) {
   const [user] = await getServerUser();
   if (!user) return NextResponse.json({}, { status: 401 });
   const userId = user?.id;
   const commentId = parseInt(params.commentId, 10);
 
   if (!verifyAccessToComment(commentId)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
   try {
@@ -47,7 +50,7 @@ export async function PUT(request: Request, { params }: { params: { commentId: s
     await mentionsActivityLogger({
       usersMentioned,
       activity: {
-        type: res.parentId ? 'REPLY_MENTION' : 'COMMENT_MENTION',
+        type: res.parentId ? "REPLY_MENTION" : "COMMENT_MENTION",
         sourceUserId: userId,
         sourceId: res.id,
         targetId: res.parentId || res.postId,
@@ -60,7 +63,7 @@ export async function PUT(request: Request, { params }: { params: { commentId: s
     if (error instanceof z.ZodError) {
       return NextResponse.json(null, {
         status: 422,
-        statusText: error.issues[0].message || 'Input validation error',
+        statusText: error.issues[0].message || "Input validation error",
       });
     }
 

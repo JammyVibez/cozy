@@ -1,11 +1,14 @@
-import React, { useRef } from 'react';
-import { AriaDialogProps, useDialog } from 'react-aria';
+import React, { useRef } from "react";
+import { AriaDialogProps, useDialog } from "react-aria";
 
 interface VisualMediaDialogProps extends AriaDialogProps {
   children: React.ReactNode;
 }
 
-export function VisualMediaDialog({ children, ...rest }: VisualMediaDialogProps) {
+export function VisualMediaDialog({
+  children,
+  ...rest
+}: VisualMediaDialogProps) {
   const ref = useRef(null);
   const { dialogProps } = useDialog(rest, ref);
 

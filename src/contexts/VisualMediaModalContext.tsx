@@ -1,12 +1,18 @@
-'use client';
+"use client";
 
-import React, { Dispatch, SetStateAction, createContext, useMemo, useState } from 'react';
-import { useOverlayTriggerState } from 'react-stately';
-import { VisualMediaModalType } from '@/types/definitions';
-import { AnimatePresence } from 'framer-motion';
-import { Modal } from '@/components/Modal';
-import { VisualMediaDialog } from '@/components/VisualMediaDialog';
-import VisualMediaSlider from '@/components/VisualMediaSlider';
+import React, {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useMemo,
+  useState,
+} from "react";
+import { useOverlayTriggerState } from "react-stately";
+import { VisualMediaModalType } from "@/types/definitions";
+import { AnimatePresence } from "framer-motion";
+import { Modal } from "@/components/Modal";
+import { VisualMediaDialog } from "@/components/VisualMediaDialog";
+import VisualMediaSlider from "@/components/VisualMediaSlider";
 
 const VisualMediaModalContextApi = createContext<{
   show: () => void;
@@ -16,7 +22,11 @@ const VisualMediaModalContextApi = createContext<{
   setModal: () => {},
 });
 
-function VisualMediaModalContextProvider({ children }: { children: React.ReactNode }) {
+function VisualMediaModalContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const state = useOverlayTriggerState({});
   const [modal, setModal] = useState<VisualMediaModalType>({
     visualMedia: [],

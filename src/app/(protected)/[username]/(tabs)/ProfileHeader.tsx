@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { ProfileActionButtons } from '@/components/ProfileActionButtons';
-import { GetUser } from '@/types/definitions';
-import { useUserQuery } from '@/hooks/queries/useUserQuery';
-import Link from 'next/link';
-import { Ellipse } from '@/svg_components';
-import { ButtonLink } from '@/components/ui/ButtonLink';
-import Tabs from './Tabs';
-import CoverPhoto from './CoverPhoto';
-import ProfilePhoto from './ProfilePhoto';
+import { ProfileActionButtons } from "@/components/ProfileActionButtons";
+import { GetUser } from "@/types/definitions";
+import { useUserQuery } from "@/hooks/queries/useUserQuery";
+import Link from "next/link";
+import { Ellipse } from "@/svg_components";
+import { ButtonLink } from "@/components/ui/ButtonLink";
+import Tabs from "./Tabs";
+import CoverPhoto from "./CoverPhoto";
+import ProfilePhoto from "./ProfilePhoto";
 
 export function ProfileHeader({
   isOwnProfile,
@@ -26,9 +26,16 @@ export function ProfileHeader({
     <>
       <div className="relative mb-[88px] md:pt-6">
         <div className="h-60 overflow-hidden bg-muted/30 drop-shadow-xl md:rounded-3xl">
-          <CoverPhoto isOwnProfile={isOwnProfile} photoUrl={profile.coverPhoto} />
+          <CoverPhoto
+            isOwnProfile={isOwnProfile}
+            photoUrl={profile.coverPhoto}
+          />
         </div>
-        <ProfilePhoto isOwnProfile={isOwnProfile} photoUrl={profile.profilePhoto} name={initialProfileData.name!} />
+        <ProfilePhoto
+          isOwnProfile={isOwnProfile}
+          photoUrl={profile.profilePhoto}
+          name={initialProfileData.name!}
+        />
         <div className="absolute -bottom-20 right-2 md:right-0">
           {isOwnProfile ? (
             <ButtonLink shape="pill" mode="subtle" href="/edit-profile">
@@ -48,16 +55,18 @@ export function ProfileHeader({
           <Link
             href={`/${profile.username}/followers`}
             className="link"
-            title={`${initialProfileData.name}&apos; followers`}>
-            <span className="font-semibold">{profile.followerCount}</span>{' '}
+            title={`${initialProfileData.name}&apos; followers`}
+          >
+            <span className="font-semibold">{profile.followerCount}</span>{" "}
             <span className="font-medium text-muted-foreground">Followers</span>
           </Link>
           <Ellipse className="h-1 w-1 fill-foreground" />
           <Link
             href={`/${profile.username}/following`}
             className="link"
-            title={`${initialProfileData.name}&apos; followed users`}>
-            <span className="font-semibold">{profile.followingCount}</span>{' '}
+            title={`${initialProfileData.name}&apos; followed users`}
+          >
+            <span className="font-semibold">{profile.followingCount}</span>{" "}
             <span className="font-medium text-muted-foreground">Following</span>
           </Link>
         </div>

@@ -3,9 +3,9 @@
  * - Allows an authenticated to mark one of their notification,
  * specified by the `notificationId`, as read.
  */
-import { getServerUser } from '@/lib/getServerUser';
-import prisma from '@/lib/prisma/prisma';
-import { NextResponse } from 'next/server';
+import { getServerUser } from "@/lib/getServerUser";
+import prisma from "@/lib/prisma/prisma";
+import { NextResponse } from "next/server";
 
 async function verifyAccessToNotification(notificationId: number) {
   const [user] = await getServerUser();
@@ -19,9 +19,13 @@ async function verifyAccessToNotification(notificationId: number) {
   return count > 0;
 }
 
-export async function PATCH(request: Request, { params }: { params: { userId: string; notificationId: string } }) {
+export async function PATCH(
+  request: Request,
+  { params }: { params: { userId: string; notificationId: string } },
+) {
   const notificationId = parseInt(params.notificationId, 10);
-  if (!verifyAccessToNotification(notificationId)) return NextResponse.json({}, { status: 403 });
+  if (!verifyAccessToNotification(notificationId))
+    return NextResponse.json({}, { status: 403 });
 
   await prisma.activity.update({
     where: {

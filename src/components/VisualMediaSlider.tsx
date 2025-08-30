@@ -1,14 +1,14 @@
 /* eslint-disable react-perf/jsx-no-new-object-as-prop */
-import { Swiper, SwiperSlide, SwiperClass } from 'swiper/react';
-import { Zoom, Navigation, Pagination, Keyboard } from 'swiper';
-import { useCallback, useMemo, useEffect, useState } from 'react';
-import { cn } from '@/lib/cn';
-import { motion } from 'framer-motion';
-import { Close } from '@/svg_components';
-import { useFocusManager } from 'react-aria';
-import { GetVisualMedia } from '@/types/definitions';
-import Button from './ui/Button';
-import { VisualMediaModalNavigationButton } from './VisualMediaModalNavigationButton';
+import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
+import { Zoom, Navigation, Pagination, Keyboard } from "swiper";
+import { useCallback, useMemo, useEffect, useState } from "react";
+import { cn } from "@/lib/cn";
+import { motion } from "framer-motion";
+import { Close } from "@/svg_components";
+import { useFocusManager } from "react-aria";
+import { GetVisualMedia } from "@/types/definitions";
+import Button from "./ui/Button";
+import { VisualMediaModalNavigationButton } from "./VisualMediaModalNavigationButton";
 
 export default function VisualMediaSlider({
   visualMedia,
@@ -35,30 +35,48 @@ export default function VisualMediaSlider({
     setIsBeginning(swiper.isBeginning);
     setIsEnd(swiper.isEnd);
   }, []);
-  const swiperModules = useMemo(() => [Zoom, Navigation, Pagination, Keyboard], []);
+  const swiperModules = useMemo(
+    () => [Zoom, Navigation, Pagination, Keyboard],
+    [],
+  );
 
   return (
     <Swiper
       onSlideChange={onSlideChange}
-      className={cn('h-full w-full transition-opacity duration-500')}
+      className={cn("h-full w-full transition-opacity duration-500")}
       zoom
       pagination={{
         clickable: true,
       }}
       keyboard={{ enabled: true }}
       modules={swiperModules}
-      initialSlide={initialSlide}>
+      initialSlide={initialSlide}
+    >
       <motion.div
-        initial={{ top: '-56px' }}
-        animate={{ top: '16px' }}
-        exit={{ top: '-56px' }}
-        className="fixed right-4 z-20">
-        <Button onPress={onClose} Icon={Close} mode="ghost" className="bg-secondary" />
+        initial={{ top: "-56px" }}
+        animate={{ top: "16px" }}
+        exit={{ top: "-56px" }}
+        className="fixed right-4 z-20"
+      >
+        <Button
+          onPress={onClose}
+          Icon={Close}
+          mode="ghost"
+          className="bg-secondary"
+        />
       </motion.div>
       {visualMedia.length > 1 && (
         <>
-          <VisualMediaModalNavigationButton type="prev" isBeginning={isBeginning} isEnd={isEnd} />
-          <VisualMediaModalNavigationButton type="next" isBeginning={isBeginning} isEnd={isEnd} />
+          <VisualMediaModalNavigationButton
+            type="prev"
+            isBeginning={isBeginning}
+            isEnd={isEnd}
+          />
+          <VisualMediaModalNavigationButton
+            type="next"
+            isBeginning={isBeginning}
+            isEnd={isEnd}
+          />
         </>
       )}
 
@@ -66,7 +84,7 @@ export default function VisualMediaSlider({
         return (
           <SwiperSlide key={url}>
             <div className="swiper-zoom-container">
-              {type === 'PHOTO' ? (
+              {type === "PHOTO" ? (
                 <img src={url} alt="Post" className="max-h-full" />
               ) : (
                 // eslint-disable-next-line jsx-a11y/media-has-caption

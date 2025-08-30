@@ -1,7 +1,7 @@
-import { PrismaClient } from '@prisma/client';
-import { faker } from '@faker-js/faker';
-import { subHours } from 'date-fns';
-import { createId } from '@paralleldrive/cuid2';
+import { PrismaClient } from "@prisma/client";
+import { faker } from "@faker-js/faker";
+import { subHours } from "date-fns";
+import { createId } from "@paralleldrive/cuid2";
 
 const prisma = new PrismaClient();
 
@@ -42,25 +42,25 @@ function createRandomUser() {
   const id = createId();
   const username = faker.internet
     .userName({ firstName, lastName })
-    .replace(/[.-]/g, '_')
+    .replace(/[.-]/g, "_")
     .toLowerCase();
   const email = faker.internet.email({ firstName, lastName });
-  const birthDate = faker.date.birthdate({ min: 18, max: 65, mode: 'age' });
+  const birthDate = faker.date.birthdate({ min: 18, max: 65, mode: "age" });
   const bio = faker.person.bio();
   const website = faker.internet.domainName();
   const phoneNumber = faker.phone.number();
   const address = faker.location.streetAddress({ useFullAddress: true });
   const relationshipStatus = faker.helpers.arrayElement([
-    'SINGLE',
-    'IN_A_RELATIONSHIP',
-    'ENGAGED',
-    'MARRIED',
+    "SINGLE",
+    "IN_A_RELATIONSHIP",
+    "ENGAGED",
+    "MARRIED",
   ]);
 
   // Get a random profile picture from maleAvatars or femaleAvatars
   // depending on gender, then, remove the returned profile picture
   const randomProfilePhoto = `${getRandomItemAndRemove(
-    gender === 'male' ? maleAvatars : femaleAvatars,
+    gender === "male" ? maleAvatars : femaleAvatars,
   )}.png`;
   // Reset avatars array when all values are consumed
   if (maleAvatars.length === 0) maleAvatars = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -81,7 +81,7 @@ function createRandomUser() {
       username,
       name: fullName,
       email,
-      gender: isGenderNonBinary ? 'NONBINARY' : gender.toUpperCase(),
+      gender: isGenderNonBinary ? "NONBINARY" : gender.toUpperCase(),
       birthDate,
       bio,
       website,

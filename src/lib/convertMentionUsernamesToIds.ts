@@ -1,6 +1,6 @@
-import 'server-only';
-import { uniq } from 'lodash';
-import prisma from './prisma/prisma';
+import "server-only";
+import { uniq } from "lodash";
+import prisma from "./prisma/prisma";
 
 /**
  * Converts the `@` `username` mentions to the `id`s of the users. It is
@@ -25,7 +25,9 @@ export async function convertMentionUsernamesToIds({
   }[];
 }> {
   const pattern = /(^|\s)(@)(\w+|\w+)/g;
-  const matches = str.match(pattern)?.map((match) => match.slice(match.charAt(1) === '@' ? 2 : 1));
+  const matches = str
+    .match(pattern)
+    ?.map((match) => match.slice(match.charAt(1) === "@" ? 2 : 1));
 
   // If there are no `@` mentions return the original string
   if (!matches) return { str };
@@ -54,8 +56,12 @@ export async function convertMentionUsernamesToIds({
 
   // Replace the matches with the id/username of the users
   const res = str.replace(pattern, (match, space, char, word) => {
-    const user = usersMentioned.find((um) => (!reverse ? um.username : um.id) === word);
-    return `${space}${char}${user ? (!reverse ? user.id : user.username) : word}`;
+    const user = usersMentioned.find(
+      (um) => (!reverse ? um.username : um.id) === word,
+    );
+    return `${space}${char}${
+      user ? (!reverse ? user.id : user.username) : word
+    }`;
   });
 
   return {

@@ -2,11 +2,11 @@
  * GET /api/users/:userId/notifications
  * - Returns the notifications of an authenticated user.
  */
-import { getServerUser } from '@/lib/getServerUser';
-import prisma from '@/lib/prisma/prisma';
-import { toGetActivities } from '@/lib/prisma/toGetActivities';
-import { NextResponse } from 'next/server';
-import { FindActivityResults } from '@/types/definitions';
+import { getServerUser } from "@/lib/getServerUser";
+import prisma from "@/lib/prisma/prisma";
+import { toGetActivities } from "@/lib/prisma/toGetActivities";
+import { NextResponse } from "next/server";
+import { FindActivityResults } from "@/types/definitions";
 
 export async function GET(request: Request) {
   const [user] = await getServerUser();
@@ -14,9 +14,10 @@ export async function GET(request: Request) {
   const userId = user.id;
 
   const { searchParams } = new URL(request.url);
-  const limit = parseInt(searchParams.get('limit') || '5', 10);
-  const cursor = parseInt(searchParams.get('cursor') || '0', 10);
-  const sortDirection = (searchParams.get('sort-direction') as 'asc' | 'desc') || 'desc';
+  const limit = parseInt(searchParams.get("limit") || "5", 10);
+  const cursor = parseInt(searchParams.get("cursor") || "0", 10);
+  const sortDirection =
+    (searchParams.get("sort-direction") as "asc" | "desc") || "desc";
 
   const selectUser = {
     select: {
@@ -40,10 +41,10 @@ export async function GET(request: Request) {
        */
       ...(cursor && {
         id: {
-          ...(sortDirection === 'desc' && {
+          ...(sortDirection === "desc" && {
             lt: cursor,
           }),
-          ...(sortDirection === 'asc' && {
+          ...(sortDirection === "asc" && {
             gt: cursor,
           }),
         },

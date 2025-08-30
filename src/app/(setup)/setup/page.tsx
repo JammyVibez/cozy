@@ -1,8 +1,8 @@
-import { EditProfileForm } from '@/components/EditProfileForm';
-import { ResponsiveContainer } from '@/components/ui/ResponsiveContainer';
+import { EditProfileForm } from "@/components/EditProfileForm";
+import { ResponsiveContainer } from "@/components/ui/ResponsiveContainer";
 
 export const metadata = {
-  title: 'Cozy | Setup Profile',
+  title: "Cozy | Setup Profile",
 };
 
 export default function Page() {
@@ -10,7 +10,8 @@ export default function Page() {
     <ResponsiveContainer className="mx-auto my-4 px-4 md:px-0">
       <h1 className="mb-1 text-3xl font-bold">Welcome to Cozy!</h1>
       <p className="mb-4 text-muted-foreground">
-        Please setup your profile to proceed, only the <b>name</b> and <b>username</b> fields are required.
+        Please setup your profile to proceed, only the <b>name</b> and{" "}
+        <b>username</b> fields are required.
       </p>
       <EditProfileForm redirectTo="/feed" />
     </ResponsiveContainer>

@@ -2,17 +2,21 @@
  * PATCH /api/users/:userId
  * Allows an authenticated user to update their information.
  */
-import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma/prisma';
-import { Prisma } from '@prisma/client';
-import { getServerUser } from '@/lib/getServerUser';
-import { userAboutSchema } from '@/lib/validations/userAbout';
-import { toGetUser } from '@/lib/prisma/toGetUser';
-import { includeToUser } from '@/lib/prisma/includeToUser';
+import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma/prisma";
+import { Prisma } from "@prisma/client";
+import { getServerUser } from "@/lib/getServerUser";
+import { userAboutSchema } from "@/lib/validations/userAbout";
+import { toGetUser } from "@/lib/prisma/toGetUser";
+import { includeToUser } from "@/lib/prisma/includeToUser";
 
-export async function PATCH(request: Request, { params }: { params: { userId: string } }) {
+export async function PATCH(
+  request: Request,
+  { params }: { params: { userId: string } },
+) {
   const [user] = await getServerUser();
-  if (!user || user.id !== params.userId) return NextResponse.json({}, { status: 401 });
+  if (!user || user.id !== params.userId)
+    return NextResponse.json({}, { status: 401 });
 
   const userAbout = await request.json();
 
@@ -25,7 +29,8 @@ export async function PATCH(request: Request, { params }: { params: { userId: st
         },
         data: {
           ...validate.data,
-          birthDate: validate.data.birthDate && new Date(validate.data.birthDate),
+          birthDate:
+            validate.data.birthDate && new Date(validate.data.birthDate),
         },
         include: includeToUser(user.id),
       });
@@ -33,7 +38,7 @@ export async function PATCH(request: Request, { params }: { params: { userId: st
       return NextResponse.json(toGetUser(res));
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2002') {
+        if (e.code === "P2002") {
           if (e.meta) {
             const field = (e.meta.target as string[])[0];
             const error = {
@@ -43,10 +48,16 @@ export async function PATCH(request: Request, { params }: { params: { userId: st
             return NextResponse.json(error, { status: 409 });
           }
         }
-        return NextResponse.json({ errorMessage: 'Database (prisma) error.' }, { status: 502 });
+        return NextResponse.json(
+          { errorMessage: "Database (prisma) error." },
+          { status: 502 },
+        );
       }
     }
   } else {
-    return NextResponse.json({ errorMessage: validate.error.issues[0].message }, { status: 400 });
+    return NextResponse.json(
+      { errorMessage: validate.error.issues[0].message },
+      { status: 400 },
+    );
   }
 }

@@ -1,11 +1,11 @@
-import NextAuth from 'next-auth';
-import authConfig from '@/auth.config';
-import { PrismaAdapter } from '@auth/prisma-adapter';
-import prisma from '@/lib/prisma/prisma';
-import { createSendEmailCommand } from '@/lib/ses/createSendEmailCommand';
-import { sesClient } from '@/lib/ses/sesClient';
+import NextAuth from "next-auth";
+import authConfig from "@/auth.config";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import prisma from "@/lib/prisma/prisma";
+import { createSendEmailCommand } from "@/lib/ses/createSendEmailCommand";
+import { sesClient } from "@/lib/ses/sesClient";
 
-declare module 'next-auth' {
+declare module "next-auth" {
   interface Session {
     user: { id: string; name: string };
   }
@@ -25,18 +25,18 @@ export const {
     {
       // There's currently an issue with NextAuth that requires all these properties to be specified
       // even if we really only need the `sendVerificationRequest`: https://github.com/nextauthjs/next-auth/issues/8125
-      id: 'email',
-      type: 'email',
-      name: 'Email',
-      from: 'noreply@norcio.dev',
+      id: "email",
+      type: "email",
+      name: "Email",
+      from: "noreply@norcio.dev",
       server: {},
       maxAge: 24 * 60 * 60,
       options: {},
       async sendVerificationRequest({ identifier: email, url }) {
         const sendEmailCommand = createSendEmailCommand(
           email,
-          'noreply@norcio.dev',
-          'Login To Munia',
+          "noreply@norcio.dev",
+          "Login To Munia",
           `<body>
   <table width="100%" border="0" cellspacing="20" cellpadding="0"
     style=" max-width: 600px; margin: auto; border-radius: 10px;">
@@ -72,7 +72,7 @@ export const {
   ],
   adapter: PrismaAdapter(prisma),
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
   },
   callbacks: {
     ...authConfig.callbacks,

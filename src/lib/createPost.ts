@@ -1,4 +1,4 @@
-import { GetVisualMedia } from '@/types/definitions';
+import { GetVisualMedia } from "@/types/definitions";
 
 export interface ToEditValues {
   postId: number;

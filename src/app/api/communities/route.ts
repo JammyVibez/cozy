@@ -1,49 +1,46 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/auth';
-import prisma from '@/lib/prisma/prisma';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import prisma from "@/lib/prisma/prisma";
 
 export async function GET(request: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
-    const category = searchParams.get('category');
-    const search = searchParams.get('search');
-    const sortBy = searchParams.get('sortBy') || 'trending';
+    const category = searchParams.get("category");
+    const search = searchParams.get("search");
+    const sortBy = searchParams.get("sortBy") || "trending";
 
     // Build where clause for filtering
     const where: any = {};
-    
-    if (category && category !== 'ALL') {
+
+    if (category && category !== "ALL") {
       where.category = category;
     }
-    
+
     if (search) {
       where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
+        { name: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } },
       ];
     }
 
     // Build orderBy clause for sorting
     let orderBy: any;
     switch (sortBy) {
-      case 'newest':
-        orderBy = { createdAt: 'desc' };
+      case "newest":
+        orderBy = { createdAt: "desc" };
         break;
-      case 'members':
-        orderBy = { members: { _count: 'desc' } };
+      case "members":
+        orderBy = { members: { _count: "desc" } };
         break;
-      case 'trending':
+      case "trending":
       default:
         // For trending, we'll use a combination of recent activity and member count
-        orderBy = [
-          { updatedAt: 'desc' },
-          { members: { _count: 'desc' } },
-        ];
+        orderBy = [{ updatedAt: "desc" }, { members: { _count: "desc" } }];
         break;
     }
 
@@ -91,10 +88,10 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(transformedCommunities);
   } catch (error) {
-    console.error('Error fetching communities:', error);
+    console.error("Error fetching communities:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }

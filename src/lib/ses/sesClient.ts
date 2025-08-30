@@ -1,4 +1,4 @@
-import 'server-only';
+import "server-only";
 /* Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 SPDX-License-Identifier: Apache-2.0
 ABOUT THIS NODE.JS EXAMPLE: This example works with the AWS SDK for JavaScript version 3 (v3),
@@ -10,7 +10,7 @@ sesClient.js is a helper function that creates an Amazon Simple Email Services (
 
 */
 // snippet-start:[ses.JavaScript.createclientv3]
-import { SESClient } from '@aws-sdk/client-ses';
+import { SESClient } from "@aws-sdk/client-ses";
 
 // Create SES service object.
 const sesClient = new SESClient({

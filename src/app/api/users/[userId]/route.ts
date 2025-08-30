@@ -1,2 +1,2 @@
-export { GET } from './GET';
-export { PATCH } from './PATCH';
+export { GET } from "./GET";
+export { PATCH } from "./PATCH";

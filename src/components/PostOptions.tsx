@@ -1,10 +1,10 @@
-import { Item, Section } from 'react-stately';
-import { useDialogs } from '@/hooks/useDialogs';
-import { GetVisualMedia } from '@/types/definitions';
-import { Key, useCallback } from 'react';
-import { useCreatePostModal } from '@/hooks/useCreatePostModal';
-import { useDeletePostMutation } from '@/hooks/mutations/useDeletePostMutation';
-import { DropdownMenuButton } from './ui/DropdownMenuButton';
+import { Item, Section } from "react-stately";
+import { useDialogs } from "@/hooks/useDialogs";
+import { GetVisualMedia } from "@/types/definitions";
+import { Key, useCallback } from "react";
+import { useCreatePostModal } from "@/hooks/useCreatePostModal";
+import { useDeletePostMutation } from "@/hooks/mutations/useDeletePostMutation";
+import { DropdownMenuButton } from "./ui/DropdownMenuButton";
 
 export function PostOptions({
   postId,
@@ -21,8 +21,8 @@ export function PostOptions({
 
   const handleDeleteClick = useCallback(() => {
     confirm({
-      title: 'Delete Post',
-      message: 'Do you really wish to delete this post?',
+      title: "Delete Post",
+      message: "Do you really wish to delete this post?",
       onConfirm: () => {
         // Wait for the dialog to close before deleting the comment to pass the focus to
         // the next element first, preventing the focus from resetting to the top
@@ -34,14 +34,14 @@ export function PostOptions({
   const handleEditClick = useCallback(() => {
     launchEditPost({
       postId,
-      initialContent: content ?? '',
+      initialContent: content ?? "",
       initialVisualMedia: visualMedia ?? [],
     });
   }, [launchEditPost, postId, content, visualMedia]);
 
   const handleOptionClick = useCallback(
     (key: Key) => {
-      if (key === 'edit') {
+      if (key === "edit") {
         handleEditClick();
       } else {
         handleDeleteClick();
@@ -51,7 +51,11 @@ export function PostOptions({
   );
 
   return (
-    <DropdownMenuButton key={`posts-${postId}-options`} label="Post options" onAction={handleOptionClick}>
+    <DropdownMenuButton
+      key={`posts-${postId}-options`}
+      label="Post options"
+      onAction={handleOptionClick}
+    >
       <Section>
         <Item key="edit">Edit Post</Item>
         <Item key="delete">Delete Post</Item>

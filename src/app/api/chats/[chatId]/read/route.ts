@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/auth';
-import prisma from '@/lib/prisma/prisma';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import prisma from "@/lib/prisma/prisma";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { chatId: string } }
+  { params }: { params: { chatId: string } },
 ) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { chatId } = params;
@@ -25,7 +25,7 @@ export async function POST(
     });
 
     if (!chat) {
-      return NextResponse.json({ error: 'Chat not found' }, { status: 404 });
+      return NextResponse.json({ error: "Chat not found" }, { status: 404 });
     }
 
     // Mark all messages in this chat as read for this user
@@ -43,7 +43,10 @@ export async function POST(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error marking messages as read:', error);
-    return NextResponse.json({ error: 'Failed to mark as read' }, { status: 500 });
+    console.error("Error marking messages as read:", error);
+    return NextResponse.json(
+      { error: "Failed to mark as read" },
+      { status: 500 },
+    );
   }
 }

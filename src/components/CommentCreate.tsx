@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import SvgSend from '@/svg_components/Send';
-import { useCallback, useState } from 'react';
-import { useCreateCommentMutations } from '@/hooks/mutations/useCreateCommentMutations';
-import Button from './ui/Button';
-import { ProfilePhotoOwn } from './ui/ProfilePhotoOwn';
-import { TextAreaWithMentionsAndHashTags } from './TextAreaWithMentionsAndHashTags';
+import SvgSend from "@/svg_components/Send";
+import { useCallback, useState } from "react";
+import { useCreateCommentMutations } from "@/hooks/mutations/useCreateCommentMutations";
+import Button from "./ui/Button";
+import { ProfilePhotoOwn } from "./ui/ProfilePhotoOwn";
+import { TextAreaWithMentionsAndHashTags } from "./TextAreaWithMentionsAndHashTags";
 
 export function CommentCreate({ postId }: { postId: number }) {
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
   const { createCommentMutation } = useCreateCommentMutations();
 
   const handleCreate = useCallback(() => {
@@ -16,7 +16,7 @@ export function CommentCreate({ postId }: { postId: number }) {
       { postId, content },
       {
         onSuccess: () => {
-          setContent('');
+          setContent("");
         },
       },
     );
@@ -41,7 +41,7 @@ export function CommentCreate({ postId }: { postId: number }) {
             onPress={handleCreate}
             mode="ghost"
             size="small"
-            isDisabled={content === ''}
+            isDisabled={content === ""}
             loading={createCommentMutation.isPending}
             Icon={SvgSend}
           />

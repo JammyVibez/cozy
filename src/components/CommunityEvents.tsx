@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { format } from 'date-fns';
-import { cn } from '@/lib/cn';
-import Button from './ui/Button';
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { cn } from "@/lib/cn";
+import Button from "./ui/Button";
 // import { CreateEventModal } from './CreateEventModal';
-import { GenericLoading } from './GenericLoading';
-import { SomethingWentWrong } from './SometingWentWrong';
+import { GenericLoading } from "./GenericLoading";
+import { SomethingWentWrong } from "./SometingWentWrong";
 
 interface CommunityEventsProps {
   communityId: string;
@@ -15,39 +15,44 @@ interface CommunityEventsProps {
 }
 
 const eventTypes = [
-  { value: 'ALL', label: 'All Events', emoji: '📅' },
-  { value: 'DISCUSSION', label: 'Discussions', emoji: '💬' },
-  { value: 'AMA', label: 'Ask Me Anything', emoji: '❓' },
-  { value: 'TOURNAMENT', label: 'Tournaments', emoji: '🏆' },
-  { value: 'WORKSHOP', label: 'Workshops', emoji: '🛠️' },
-  { value: 'SOCIAL', label: 'Social Events', emoji: '🎉' },
-  { value: 'OTHER', label: 'Other', emoji: '📝' },
+  { value: "ALL", label: "All Events", emoji: "📅" },
+  { value: "DISCUSSION", label: "Discussions", emoji: "💬" },
+  { value: "AMA", label: "Ask Me Anything", emoji: "❓" },
+  { value: "TOURNAMENT", label: "Tournaments", emoji: "🏆" },
+  { value: "WORKSHOP", label: "Workshops", emoji: "🛠️" },
+  { value: "SOCIAL", label: "Social Events", emoji: "🎉" },
+  { value: "OTHER", label: "Other", emoji: "📝" },
 ];
 
 const typeEmojis = {
-  DISCUSSION: '💬',
-  AMA: '❓',
-  TOURNAMENT: '🏆',
-  WORKSHOP: '🛠️',
-  SOCIAL: '🎉',
-  OTHER: '📝',
+  DISCUSSION: "💬",
+  AMA: "❓",
+  TOURNAMENT: "🏆",
+  WORKSHOP: "🛠️",
+  SOCIAL: "🎉",
+  OTHER: "📝",
 };
 
-export function CommunityEvents({ communityId, canCreateEvents = false }: CommunityEventsProps) {
-  const [selectedType, setSelectedType] = useState('ALL');
+export function CommunityEvents({
+  communityId,
+  canCreateEvents = false,
+}: CommunityEventsProps) {
+  const [selectedType, setSelectedType] = useState("ALL");
   const [showUpcoming, setShowUpcoming] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['community-events', communityId, selectedType, showUpcoming],
+    queryKey: ["community-events", communityId, selectedType, showUpcoming],
     queryFn: async () => {
       const params = new URLSearchParams({
-        ...(selectedType !== 'ALL' && { type: selectedType }),
-        ...(showUpcoming && { upcoming: 'true' }),
+        ...(selectedType !== "ALL" && { type: selectedType }),
+        ...(showUpcoming && { upcoming: "true" }),
       });
-      
-      const response = await fetch(`/api/communities/${communityId}/events?${params}`);
-      if (!response.ok) throw new Error('Failed to fetch events');
+
+      const response = await fetch(
+        `/api/communities/${communityId}/events?${params}`,
+      );
+      if (!response.ok) throw new Error("Failed to fetch events");
       return response.json();
     },
   });
@@ -67,7 +72,7 @@ export function CommunityEvents({ communityId, canCreateEvents = false }: Commun
             Join discussions, workshops, and social events
           </p>
         </div>
-        
+
         {canCreateEvents && (
           <Button
             onPress={() => setShowCreateModal(true)}
@@ -89,10 +94,10 @@ export function CommunityEvents({ communityId, canCreateEvents = false }: Commun
                 key={type.value}
                 onClick={() => setSelectedType(type.value)}
                 className={cn(
-                  'flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors text-sm',
+                  "flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors text-sm",
                   selectedType === type.value
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'hover:bg-muted border-input'
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "hover:bg-muted border-input",
                 )}
               >
                 <span>{type.emoji}</span>
@@ -109,10 +114,10 @@ export function CommunityEvents({ communityId, canCreateEvents = false }: Commun
             <button
               onClick={() => setShowUpcoming(true)}
               className={cn(
-                'px-4 py-2 rounded-lg border transition-colors text-sm',
+                "px-4 py-2 rounded-lg border transition-colors text-sm",
                 showUpcoming
-                  ? 'bg-primary text-primary-foreground border-primary'
-                  : 'hover:bg-muted border-input'
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "hover:bg-muted border-input",
               )}
             >
               📅 Upcoming
@@ -120,10 +125,10 @@ export function CommunityEvents({ communityId, canCreateEvents = false }: Commun
             <button
               onClick={() => setShowUpcoming(false)}
               className={cn(
-                'px-4 py-2 rounded-lg border transition-colors text-sm',
+                "px-4 py-2 rounded-lg border transition-colors text-sm",
                 !showUpcoming
-                  ? 'bg-primary text-primary-foreground border-primary'
-                  : 'hover:bg-muted border-input'
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "hover:bg-muted border-input",
               )}
             >
               📚 All Events
@@ -137,12 +142,12 @@ export function CommunityEvents({ communityId, canCreateEvents = false }: Commun
         <div className="text-center py-12">
           <div className="text-6xl mb-4">📅</div>
           <h3 className="text-lg font-medium mb-2">
-            {showUpcoming ? 'No Upcoming Events' : 'No Events Yet'}
+            {showUpcoming ? "No Upcoming Events" : "No Events Yet"}
           </h3>
           <p className="text-muted-foreground">
             {canCreateEvents
-              ? 'Create the first event to get the community engaged!'
-              : 'Check back later for community events and activities.'}
+              ? "Create the first event to get the community engaged!"
+              : "Check back later for community events and activities."}
           </p>
         </div>
       ) : (
@@ -159,11 +164,10 @@ export function CommunityEvents({ communityId, canCreateEvents = false }: Commun
           <div className="bg-background rounded-xl p-6 max-w-md">
             <h3 className="text-lg font-bold mb-4">Create Event Feature</h3>
             <p className="text-muted-foreground mb-4">
-              Event creation modal is being finalized. This feature will be available soon!
+              Event creation modal is being finalized. This feature will be
+              available soon!
             </p>
-            <Button onPress={() => setShowCreateModal(false)}>
-              Close
-            </Button>
+            <Button onPress={() => setShowCreateModal(false)}>Close</Button>
           </div>
         </div>
       )}
@@ -177,7 +181,7 @@ interface EventCardProps {
 
 function EventCard({ event }: EventCardProps) {
   const isUpcoming = new Date(event.startTime) > new Date();
-  const typeEmoji = typeEmojis[event.type as keyof typeof typeEmojis] || '📝';
+  const typeEmoji = typeEmojis[event.type as keyof typeof typeEmojis] || "📝";
 
   return (
     <div className="bg-card border rounded-xl p-6 hover:shadow-md transition-shadow">
@@ -187,7 +191,7 @@ function EventCard({ event }: EventCardProps) {
           <div className="flex items-center gap-2 mb-2">
             <span className="text-lg">{typeEmoji}</span>
             <span className="text-sm font-medium text-primary">
-              {event.type.replace('_', ' ')}
+              {event.type.replace("_", " ")}
             </span>
             {!isUpcoming && (
               <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded">
@@ -195,9 +199,9 @@ function EventCard({ event }: EventCardProps) {
               </span>
             )}
           </div>
-          
+
           <h3 className="text-xl font-semibold mb-2">{event.title}</h3>
-          
+
           {event.description && (
             <p className="text-muted-foreground mb-3 line-clamp-2">
               {event.description}
@@ -207,22 +211,22 @@ function EventCard({ event }: EventCardProps) {
           <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
               <span>🕒</span>
-              {format(new Date(event.startTime), 'MMM d, yyyy at h:mm a')}
+              {format(new Date(event.startTime), "MMM d, yyyy at h:mm a")}
             </div>
-            
+
             {event.location && (
               <div className="flex items-center gap-1">
                 <span>📍</span>
                 {event.location}
               </div>
             )}
-            
+
             <div className="flex items-center gap-1">
               <span>👥</span>
               {event._count.attendees} attending
               {event.maxAttendees && ` / ${event.maxAttendees}`}
             </div>
-            
+
             <div className="flex items-center gap-1">
               <span>👤</span>
               by @{event.creator.username}

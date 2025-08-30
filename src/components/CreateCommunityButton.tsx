@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Button from './ui/Button';
-import { ActionsPlus } from '@/svg_components';
-import { CreateCommunityModal } from './CreateCommunityModal';
+import { useState } from "react";
+import Button from "./ui/Button";
+import { ActionsPlus } from "@/svg_components";
+import { CreateCommunityModal } from "./CreateCommunityModal";
 
 export function CreateCommunityButton() {
   const [showModal, setShowModal] = useState(false);
@@ -18,7 +18,7 @@ export function CreateCommunityButton() {
       >
         Create Community
       </Button>
-      
+
       {showModal && (
         <CreateCommunityModal onClose={() => setShowModal(false)} />
       )}

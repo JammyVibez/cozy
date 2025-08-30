@@ -1,9 +1,9 @@
-'use client';
-import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
-import { cn } from '@/lib/cn';
-import { Close, ArrowChevronBack, ArrowChevronForward } from '@/svg_components';
+"use client";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { cn } from "@/lib/cn";
+import { Close, ArrowChevronBack, ArrowChevronForward } from "@/svg_components";
 
 interface Story {
   id: string;
@@ -11,7 +11,7 @@ interface Story {
   userName: string;
   userAvatar: string;
   mediaUrl: string;
-  mediaType: 'image' | 'video';
+  mediaType: "image" | "video";
   createdAt: string;
   expiresAt: string;
   viewers: number;
@@ -24,12 +24,17 @@ interface StoryViewerProps {
   onClose: () => void;
 }
 
-export function StoryViewer({ stories, initialStoryIndex = 0, isOpen, onClose }: StoryViewerProps) {
+export function StoryViewer({
+  stories,
+  initialStoryIndex = 0,
+  isOpen,
+  onClose,
+}: StoryViewerProps) {
   const [currentStoryIndex, setCurrentStoryIndex] = useState(initialStoryIndex);
   const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const progressRef = useRef<NodeJS.Timeout>();
-  
+
   const currentStory = stories[currentStoryIndex];
   const duration = 5000; // 5 seconds per story
 
@@ -71,10 +76,10 @@ export function StoryViewer({ stories, initialStoryIndex = 0, isOpen, onClose }:
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') onClose();
-    if (e.key === 'ArrowRight') goToNextStory();
-    if (e.key === 'ArrowLeft') goToPrevStory();
-    if (e.key === ' ') {
+    if (e.key === "Escape") onClose();
+    if (e.key === "ArrowRight") goToNextStory();
+    if (e.key === "ArrowLeft") goToPrevStory();
+    if (e.key === " ") {
       e.preventDefault();
       setIsPaused(!isPaused);
     }
@@ -82,8 +87,8 @@ export function StoryViewer({ stories, initialStoryIndex = 0, isOpen, onClose }:
 
   useEffect(() => {
     if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-      return () => document.removeEventListener('keydown', handleKeyDown);
+      document.addEventListener("keydown", handleKeyDown);
+      return () => document.removeEventListener("keydown", handleKeyDown);
     }
   }, [isOpen, isPaused, currentStoryIndex]);
 
@@ -107,13 +112,20 @@ export function StoryViewer({ stories, initialStoryIndex = 0, isOpen, onClose }:
             >
               <div
                 className={cn(
-                  'h-full bg-white transition-all duration-75',
-                  index < currentStoryIndex ? 'w-full' : 
-                  index === currentStoryIndex ? `w-[${progress}%]` : 'w-0'
+                  "h-full bg-white transition-all duration-75",
+                  index < currentStoryIndex
+                    ? "w-full"
+                    : index === currentStoryIndex
+                    ? `w-[${progress}%]`
+                    : "w-0",
                 )}
                 style={{
-                  width: index < currentStoryIndex ? '100%' : 
-                         index === currentStoryIndex ? `${progress}%` : '0%'
+                  width:
+                    index < currentStoryIndex
+                      ? "100%"
+                      : index === currentStoryIndex
+                      ? `${progress}%`
+                      : "0%",
                 }}
               />
             </div>
@@ -123,7 +135,7 @@ export function StoryViewer({ stories, initialStoryIndex = 0, isOpen, onClose }:
         {/* User info */}
         <div className="absolute top-16 left-4 right-4 flex items-center gap-3 z-10">
           <Image
-            src={currentStory.userAvatar || '/default-avatar.png'}
+            src={currentStory.userAvatar || "/default-avatar.png"}
             alt={currentStory.userName}
             width={40}
             height={40}
@@ -152,7 +164,7 @@ export function StoryViewer({ stories, initialStoryIndex = 0, isOpen, onClose }:
           onTouchStart={() => setIsPaused(true)}
           onTouchEnd={() => setIsPaused(false)}
         >
-          {currentStory.mediaType === 'image' ? (
+          {currentStory.mediaType === "image" ? (
             <Image
               src={currentStory.mediaUrl}
               alt="Story"

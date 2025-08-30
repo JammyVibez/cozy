@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { createContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useEffect, useMemo, useState } from "react";
 
 /**
  * This context detects browser's back button click,
@@ -13,16 +13,23 @@ export const ShouldAnimateContext = createContext<{
   setShouldAnimate: React.Dispatch<React.SetStateAction<boolean>>;
 }>({ shouldAnimate: true, setShouldAnimate: () => {} });
 
-export function ShouldAnimateContextProvider({ children }: { children: React.ReactNode }) {
+export function ShouldAnimateContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [shouldAnimate, setShouldAnimate] = useState(true);
-  const value = useMemo(() => ({ shouldAnimate, setShouldAnimate }), [shouldAnimate]);
+  const value = useMemo(
+    () => ({ shouldAnimate, setShouldAnimate }),
+    [shouldAnimate],
+  );
 
   useEffect(() => {
     const onPop = () => {
       setShouldAnimate(false);
     };
-    window.addEventListener('popstate', onPop);
-    return () => window.removeEventListener('popstate', onPop);
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
   }, []);
 
   useEffect(() => {
@@ -32,5 +39,9 @@ export function ShouldAnimateContextProvider({ children }: { children: React.Rea
       }, 200);
   }, [shouldAnimate]);
 
-  return <ShouldAnimateContext.Provider value={value}>{children}</ShouldAnimateContext.Provider>;
+  return (
+    <ShouldAnimateContext.Provider value={value}>
+      {children}
+    </ShouldAnimateContext.Provider>
+  );
 }

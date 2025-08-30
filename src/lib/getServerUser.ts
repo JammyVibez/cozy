@@ -1,5 +1,5 @@
-import 'server-only';
-import { auth } from '@/auth';
+import "server-only";
+import { auth } from "@/auth";
 
 export async function getServerUser() {
   const session = await auth();

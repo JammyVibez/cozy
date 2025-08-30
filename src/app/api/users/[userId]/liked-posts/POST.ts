@@ -8,13 +8,17 @@
  * }
  */
 
-import { getServerUser } from '@/lib/getServerUser';
-import prisma from '@/lib/prisma/prisma';
-import { NextResponse } from 'next/server';
+import { getServerUser } from "@/lib/getServerUser";
+import prisma from "@/lib/prisma/prisma";
+import { NextResponse } from "next/server";
 
-export async function POST(request: Request, { params }: { params: { userId: string } }) {
+export async function POST(
+  request: Request,
+  { params }: { params: { userId: string } },
+) {
   const [user] = await getServerUser();
-  if (!user || params.userId !== user.id) return NextResponse.json({}, { status: 401 });
+  if (!user || params.userId !== user.id)
+    return NextResponse.json({}, { status: 401 });
   const userId = user.id;
 
   const { postId } = await request.json();
@@ -52,7 +56,7 @@ export async function POST(request: Request, { params }: { params: { userId: str
   if (postOwner) {
     await prisma.activity.create({
       data: {
-        type: 'POST_LIKE',
+        type: "POST_LIKE",
         sourceId: res.id,
         sourceUserId: userId,
         targetId: postId,

@@ -1,12 +1,12 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import Link from 'next/link';
-import { cn } from '@/lib/cn';
-import { Search, TwoPeople, Heart, GridFeedCards } from '@/svg_components';
-import Button from '@/components/ui/Button';
-import { TextInput } from '@/components/ui/TextInput';
+"use client";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { cn } from "@/lib/cn";
+import { Search, TwoPeople, Heart, GridFeedCards } from "@/svg_components";
+import Button from "@/components/ui/Button";
+import { TextInput } from "@/components/ui/TextInput";
 
 interface TrendingHashtag {
   tag: string;
@@ -30,7 +30,7 @@ interface TrendingPost {
   };
   media?: {
     url: string;
-    type: 'image' | 'video';
+    type: "image" | "video";
   };
 }
 
@@ -46,10 +46,14 @@ interface SuggestedUser {
 }
 
 export function DiscoverPage() {
-  const [activeTab, setActiveTab] = useState<'trending' | 'people' | 'hashtags'>('trending');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState<
+    "trending" | "people" | "hashtags"
+  >("trending");
+  const [searchQuery, setSearchQuery] = useState("");
   const [trendingPosts, setTrendingPosts] = useState<TrendingPost[]>([]);
-  const [trendingHashtags, setTrendingHashtags] = useState<TrendingHashtag[]>([]);
+  const [trendingHashtags, setTrendingHashtags] = useState<TrendingHashtag[]>(
+    [],
+  );
   const [suggestedUsers, setSuggestedUsers] = useState<SuggestedUser[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -63,20 +67,20 @@ export function DiscoverPage() {
       const endpoint = `/api/discover/${activeTab}`;
       const response = await fetch(endpoint);
       const data = await response.json();
-      
+
       switch (activeTab) {
-        case 'trending':
+        case "trending":
           setTrendingPosts(data.posts || []);
           break;
-        case 'hashtags':
+        case "hashtags":
           setTrendingHashtags(data.hashtags || []);
           break;
-        case 'people':
+        case "people":
           setSuggestedUsers(data.users || []);
           break;
       }
     } catch (error) {
-      console.error('Error fetching discover data:', error);
+      console.error("Error fetching discover data:", error);
     } finally {
       setLoading(false);
     }
@@ -84,42 +88,44 @@ export function DiscoverPage() {
 
   const handleSearch = async (query: string) => {
     if (!query.trim()) return;
-    
+
     try {
-      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}&type=${activeTab}`);
+      const response = await fetch(
+        `/api/search?q=${encodeURIComponent(query)}&type=${activeTab}`,
+      );
       const data = await response.json();
-      
+
       switch (activeTab) {
-        case 'trending':
+        case "trending":
           setTrendingPosts(data.posts || []);
           break;
-        case 'hashtags':
+        case "hashtags":
           setTrendingHashtags(data.hashtags || []);
           break;
-        case 'people':
+        case "people":
           setSuggestedUsers(data.users || []);
           break;
       }
     } catch (error) {
-      console.error('Error searching:', error);
+      console.error("Error searching:", error);
     }
   };
 
   const followUser = async (userId: string) => {
     try {
       await fetch(`/api/users/${userId}/following`, {
-        method: 'POST',
+        method: "POST",
       });
       // Update local state
-      setSuggestedUsers(users => 
-        users.map(user => 
-          user.id === userId 
+      setSuggestedUsers((users) =>
+        users.map((user) =>
+          user.id === userId
             ? { ...user, followers: user.followers + 1 }
-            : user
-        )
+            : user,
+        ),
       );
     } catch (error) {
-      console.error('Error following user:', error);
+      console.error("Error following user:", error);
     }
   };
 
@@ -140,7 +146,7 @@ export function DiscoverPage() {
           placeholder={`Search ${activeTab}...`}
           value={searchQuery}
           onChange={(value) => setSearchQuery(value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSearch(searchQuery)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch(searchQuery)}
           className="pl-10 w-full"
         />
       </div>
@@ -148,15 +154,15 @@ export function DiscoverPage() {
       {/* Tabs */}
       <div className="flex justify-center">
         <div className="flex bg-muted rounded-lg p-1">
-          {(['trending', 'people', 'hashtags'] as const).map((tab) => (
+          {(["trending", "people", "hashtags"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={cn(
-                'px-6 py-2 rounded-md transition-all duration-200 font-medium capitalize',
+                "px-6 py-2 rounded-md transition-all duration-200 font-medium capitalize",
                 activeTab === tab
-                  ? 'bg-white dark:bg-gray-700 shadow-sm'
-                  : 'hover:bg-white/50 dark:hover:bg-gray-600'
+                  ? "bg-white dark:bg-gray-700 shadow-sm"
+                  : "hover:bg-white/50 dark:hover:bg-gray-600",
               )}
             >
               {tab}
@@ -179,7 +185,7 @@ export function DiscoverPage() {
         ) : (
           <>
             {/* Trending Posts */}
-            {activeTab === 'trending' && (
+            {activeTab === "trending" && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {trendingPosts.map((post) => (
                   <Link
@@ -201,7 +207,9 @@ export function DiscoverPage() {
                       <div className="p-4 space-y-3">
                         <div className="flex items-center gap-3">
                           <Image
-                            src={post.user.profilePhoto || '/default-avatar.png'}
+                            src={
+                              post.user.profilePhoto || "/default-avatar.png"
+                            }
                             alt={post.user.name}
                             width={32}
                             height={32}
@@ -235,7 +243,7 @@ export function DiscoverPage() {
             )}
 
             {/* Trending Hashtags */}
-            {activeTab === 'hashtags' && (
+            {activeTab === "hashtags" && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {trendingHashtags.map((hashtag, index) => (
                   <Link
@@ -256,15 +264,22 @@ export function DiscoverPage() {
                         {hashtag.count.toLocaleString()} posts
                       </p>
                       <div className="flex items-center gap-2">
-                        <div className={cn(
-                          'w-2 h-2 rounded-full',
-                          hashtag.growth > 0 ? 'bg-green-500' : 'bg-red-500'
-                        )} />
-                        <span className={cn(
-                          'text-sm font-medium',
-                          hashtag.growth > 0 ? 'text-green-600' : 'text-red-600'
-                        )}>
-                          {hashtag.growth > 0 ? '+' : ''}{hashtag.growth}% this week
+                        <div
+                          className={cn(
+                            "w-2 h-2 rounded-full",
+                            hashtag.growth > 0 ? "bg-green-500" : "bg-red-500",
+                          )}
+                        />
+                        <span
+                          className={cn(
+                            "text-sm font-medium",
+                            hashtag.growth > 0
+                              ? "text-green-600"
+                              : "text-red-600",
+                          )}
+                        >
+                          {hashtag.growth > 0 ? "+" : ""}
+                          {hashtag.growth}% this week
                         </span>
                       </div>
                     </div>
@@ -274,7 +289,7 @@ export function DiscoverPage() {
             )}
 
             {/* Suggested People */}
-            {activeTab === 'people' && (
+            {activeTab === "people" && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {suggestedUsers.map((user) => (
                   <div
@@ -283,7 +298,7 @@ export function DiscoverPage() {
                   >
                     <Link href={`/${user.username}`} className="block">
                       <Image
-                        src={user.profilePhoto || '/default-avatar.png'}
+                        src={user.profilePhoto || "/default-avatar.png"}
                         alt={user.name}
                         width={80}
                         height={80}
